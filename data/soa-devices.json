@@ -1,0 +1,17 @@
+[
+  {
+    "id": "magnachip-amdta080n017rh",
+    "manufacturer": "MagnaChip",
+    "partNumber": "AMDTA080N017RH",
+    "technology": "Si",
+    "package": "TOLL",
+    "description": "80V 1.7mΩ N-channel MOSFET with datasheet Zth table.",
+    "BV": 80,
+    "ID_max": 230,
+    "IDM": 690,
+    "RDS": 0.0017,
+    "Tj_max": 150,
+    "Rjc": 0.32,
+    "verifiedAt": "2026-07-30"
+  }
+]
