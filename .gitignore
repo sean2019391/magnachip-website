@@ -23,3 +23,22 @@ next-env.d.ts
 
 # debug
 npm-debug.log*
+
+# IDE / tooling
+.vscode/
+.idea/
+
+# Session / temporary files
+.omo/
+.omo/**
+
+# Codegraph / profiling
+.codegraph/
+
+# Build info
+tsconfig.tsbuildinfo
+
+# Logs
+*.log
+
+# Note: public/soa-deployment is a gitlink (submodule or embedded repo) — keep or convert to submodule if intended
