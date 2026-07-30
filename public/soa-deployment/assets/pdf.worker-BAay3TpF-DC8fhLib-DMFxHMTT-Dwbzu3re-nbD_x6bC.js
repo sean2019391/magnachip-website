@@ -1,0 +1,1 @@
+const r=""+new URL(""+new URL(""+new URL(""+new URL(""+new URL("pdf.worker-BgryrOlp-BgryrOlp-BgryrOlp-BgryrOlp-BgryrOlp.mjs",import.meta.url).href,import.meta.url).href,import.meta.url).href,import.meta.url).href,import.meta.url).href;export{r as default};

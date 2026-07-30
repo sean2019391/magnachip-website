@@ -1,0 +1,199 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - heading [level=1] [ref=e5]:
+        - img "MagnaChip" [ref=e6]
+        - text: Safe Operating Area Calculator
+      - generic [ref=e7]:
+        - button "Device DB" [ref=e8] [cursor=pointer]
+        - button "Import" [ref=e9] [cursor=pointer]
+        - button "Save" [ref=e10] [cursor=pointer]
+        - button "Load" [ref=e11] [cursor=pointer]
+    - navigation [ref=e12]:
+      - button "SOA Check" [ref=e13] [cursor=pointer]
+      - button "Protection" [ref=e14] [cursor=pointer]
+    - main [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - complementary [ref=e18]:
+            - generic [ref=e19]:
+              - generic [ref=e20]: Mode
+              - generic [ref=e22]:
+                - button "Switching" [ref=e23] [cursor=pointer]
+                - button "Linear" [ref=e24] [cursor=pointer]
+            - generic [ref=e25]:
+              - generic [ref=e26]: Device Parameters
+              - table [ref=e28]:
+                - rowgroup [ref=e29]:
+                  - row [ref=e30]:
+                    - columnheader "Parameter" [ref=e31]
+                    - columnheader "Value" [ref=e32]
+                    - columnheader "Unit" [ref=e33]
+                - rowgroup [ref=e34]:
+                  - row [ref=e35]:
+                    - cell [ref=e36]:
+                      - generic "Breakdown voltage BVDSS (datasheet Absolute Max). Pick BV >= 1.25 x Vbus." [ref=e37]:
+                        - text: BV
+                        - subscript [ref=e38]: DSS
+                    - cell [ref=e39]:
+                      - textbox [ref=e40]: "650"
+                    - cell "V" [ref=e41]
+                  - row [ref=e43]:
+                    - cell [ref=e44]:
+                      - generic "Max continuous drain current ID (datasheet, package limit)." [ref=e45]:
+                        - text: I
+                        - subscript [ref=e46]: D
+                        - text: (max)
+                    - cell [ref=e47]:
+                      - textbox [ref=e48]: "36"
+                    - cell "A" [ref=e49]
+                  - row [ref=e51]:
+                    - cell [ref=e52]:
+                      - generic "Pulsed drain current IDM (datasheet). Sets the SOA plateau for pulsed curves; blank = use ID_max." [ref=e53]:
+                        - text: I
+                        - subscript [ref=e54]: DM
+                    - cell [ref=e55]:
+                      - textbox "blank = use default" [ref=e56]: "144"
+                    - cell "A" [ref=e57]
+                  - row [ref=e59]:
+                    - cell [ref=e60]:
+                      - generic "RDS(on) at operating Tj (ohm). 10 mOhm = 0.010." [ref=e61]:
+                        - text: R
+                        - subscript [ref=e62]: DS
+                        - text: (on)
+                    - cell [ref=e63]:
+                      - textbox [ref=e64]: "0.020"
+                    - cell "Ω" [ref=e65]
+                  - row [ref=e67]:
+                    - cell [ref=e68]:
+                      - generic "Max rated junction temperature (datasheet abs-max)." [ref=e69]:
+                        - text: T
+                        - subscript [ref=e70]: J
+                        - text: (max)
+                    - cell [ref=e71]:
+                      - textbox [ref=e72]: "150"
+                    - cell "°C" [ref=e73]
+            - generic [ref=e75]:
+              - generic [ref=e76]: Operating Point — Switching
+              - table [ref=e78]:
+                - rowgroup [ref=e79]:
+                  - row [ref=e80]:
+                    - columnheader "Parameter" [ref=e81]
+                    - columnheader "Value" [ref=e82]
+                    - columnheader "Unit" [ref=e83]
+                - rowgroup [ref=e84]:
+                  - row [ref=e85]:
+                    - cell [ref=e86]:
+                      - generic "DC bus voltage the switch blocks when OFF." [ref=e87]:
+                        - text: V
+                        - subscript [ref=e88]: Bus
+                    - cell [ref=e89]:
+                      - textbox [ref=e90]: "400"
+                    - cell "V" [ref=e91]
+                  - row [ref=e93]:
+                    - cell [ref=e94]:
+                      - 'generic "Operating drain current (switching: the conducted current; linear: the current while dropping VDS)." [ref=e95]':
+                        - text: I
+                        - subscript [ref=e96]: D
+                    - cell [ref=e97]:
+                      - textbox [ref=e98]: "20"
+                    - cell "A" [ref=e99]
+                  - row [ref=e101]:
+                    - cell [ref=e102]:
+                      - generic "Turn-off voltage overshoot from ringing (%). 30 means peak VDS = 1.3 x Vbus." [ref=e103]:
+                        - text: V
+                        - subscript [ref=e104]: OS
+                        - text: "%"
+                    - cell [ref=e105]:
+                      - textbox [ref=e106]: "30"
+                    - cell "%" [ref=e107]
+                  - row [ref=e109]:
+                    - cell [ref=e110]:
+                      - generic "Average power dissipated in the device (W). From a loss calculation or measurement." [ref=e111]:
+                        - text: P
+                        - subscript [ref=e112]: loss
+                    - cell [ref=e113]:
+                      - textbox [ref=e114]: "8"
+                    - cell "W" [ref=e115]
+                  - row [ref=e117]:
+                    - cell [ref=e118]:
+                      - generic "Ambient temperature (degC)." [ref=e119]:
+                        - text: T
+                        - subscript [ref=e120]: A
+                    - cell [ref=e121]:
+                      - textbox [ref=e122]: "25"
+                    - cell "°C" [ref=e123]
+                  - row [ref=e125]:
+                    - cell [ref=e126]:
+                      - generic "Total junction-to-ambient thermal resistance (degC/W) including heatsink." [ref=e127]:
+                        - text: R
+                        - subscript [ref=e128]: θJA
+                    - cell [ref=e129]:
+                      - textbox [ref=e130]: "5"
+                    - cell "°C/W" [ref=e131]
+            - button "Run SOA Check" [ref=e133] [cursor=pointer]
+          - generic [ref=e134]:
+            - generic [ref=e135]: SOA Diagram
+            - generic [ref=e136]:
+              - button "Export SVG" [ref=e137] [cursor=pointer]: SVG
+              - img [ref=e141]:
+                - generic [ref=e142]:
+                  - generic [ref=e146]:
+                    - generic [ref=e153]: BVDSS = 650V
+                    - generic [ref=e154]: IDM = 144A
+                    - generic [ref=e155]: 80% derating
+                  - generic [ref=e158]:
+                    - generic [ref=e160]: "0"
+                    - generic [ref=e162]: "100"
+                    - generic [ref=e164]: "200"
+                    - generic [ref=e166]: "300"
+                    - generic [ref=e168]: "400"
+                    - generic [ref=e170]: "500"
+                    - generic [ref=e172]: "600"
+                    - generic [ref=e174]: "700"
+                  - generic [ref=e176]:
+                    - generic [ref=e178]: "0"
+                    - generic [ref=e180]: "20"
+                    - generic [ref=e182]: "40"
+                    - generic [ref=e184]: "60"
+                    - generic [ref=e186]: "80"
+                    - generic [ref=e188]: "100"
+                    - generic [ref=e190]: "120"
+                    - generic [ref=e192]: "140"
+                    - generic [ref=e194]: "160"
+                - generic [ref=e196]: VDS (V)
+                - generic [ref=e197]: ID (A)
+        - generic [ref=e199]:
+          - generic [ref=e200]:
+            - generic [ref=e201]: PASS
+            - button "Copy results to clipboard" [ref=e202] [cursor=pointer]: 📋
+          - generic [ref=e203]:
+            - generic "Drain-source voltage stress relative to BVDSS rating" [ref=e204]:
+              - generic [ref=e205]:
+                - text: V
+                - subscript [ref=e206]: DS
+              - generic [ref=e207]:
+                - text: peak 520V
+                - generic [ref=e208]: (80% of BVDSS 650V)
+              - generic [ref=e209]: PASS
+            - generic "Drain current stress relative to ID(max) / IDM rating" [ref=e210]:
+              - generic [ref=e211]:
+                - text: I
+                - subscript [ref=e212]: D
+              - generic [ref=e213]:
+                - text: 20.0A
+                - generic [ref=e214]: (14% of IDM 144A)
+              - generic [ref=e215]: PASS
+            - generic "Junction temperature rise relative to TJ(max) rating" [ref=e216]:
+              - generic [ref=e217]:
+                - text: T
+                - subscript [ref=e218]: J
+              - generic [ref=e219]:
+                - text: 65°C
+                - generic [ref=e220]: (43% of TJ(max) 150°C)
+              - generic [ref=e221]: PASS
+            - generic [ref=e222]:
+              - generic [ref=e223]: OVERALL
+              - generic [ref=e224]: PASS
+    - contentinfo [ref=e225]: MOSFET SOA Calculator · all computation is local.
+  - status
