@@ -1,0 +1,35 @@
+[
+    {
+        "published":  true,
+        "slug":  "navitas-magnachip-strategic-partnership-sic",
+        "id":  "1",
+        "excerpt":  "License agreement provides Magnachip access to Navitas' GeneSiC Gen 4 and Gen 5 SiC technologies spanning 1200 V, 2300 V, 3300 V and higher voltages, supported by Navitas' supply chain and materials ecosystem.",
+        "createdAt":  "2026-07-24T00:00:00.000Z",
+        "content":  "(Full press release content omitted for brevity)",
+        "date":  "2026-07-24T00:00:00.000Z",
+        "updatedAt":  "2026-07-24T00:00:00.000Z",
+        "title":  "Navitas and Magnachip Announce Strategic Partnership to Accelerate High-Voltage and Ultra-High-Voltage Silicon Carbide Adoption"
+    },
+    {
+        "published":  true,
+        "slug":  "magnachip-appoints-chae-lee-ceo",
+        "id":  "2",
+        "excerpt":  "Camillo Martino to Continue as Chairman of the Board",
+        "createdAt":  "2026-06-30T00:00:00.000Z",
+        "content":  "(Full press release content omitted for brevity)",
+        "date":  "2026-06-30T00:00:00.000Z",
+        "updatedAt":  "2026-06-30T00:00:00.000Z",
+        "title":  "Magnachip Appoints Chae Lee as Chief Executive Officer"
+    },
+    {
+        "published": true,
+        "slug": "soa-calculator-added-to-website",
+        "id": "3",
+        "excerpt": "Safe Operating Area (SOA) calculator now available as a demo.",
+        "createdAt": "2026-07-30T00:00:00.000Z",
+        "content": "A lightweight SOA calculator demo has been added and is accessible from the Design Resources -> Tools section. This is a demo for testing purposes.",
+        "date": "2026-07-30T00:00:00.000Z",
+        "updatedAt": "2026-07-30T00:00:00.000Z",
+        "title": "SOA Calculator Demo Added"
+    }
+]
