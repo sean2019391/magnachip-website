@@ -42,3 +42,11 @@ tsconfig.tsbuildinfo
 *.log
 
 # Note: public/soa-deployment is a gitlink (submodule or embedded repo) — keep or convert to submodule if intended
+# Ignore soa-deployment build artifacts
+soa-deployment/assets/
+soa-deployment/dist/
+public/soa-deployment/assets/
+original-sources/*
+# Ignore generated PDFs / workers
+soa-deployment/assets/*.js
+soa-deployment/assets/*.css
