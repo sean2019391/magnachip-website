@@ -1,40 +1,102 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import FadeIn from '@/components/FadeIn'
 import { DatasheetViewer } from '@/components/datasheet/DatasheetViewer'
+import selectionData from '@/data/selection-guide.json'
 import type { DatasheetRecord } from '@/types/datasheet'
 
+type SG = typeof selectionData
+
+function downloadCSV(rows: any[], filename = 'selection-guide.csv') {
+  if (!rows.length) return
+  const keys = Object.keys(rows[0])
+  const lines = [keys.join(',')].concat(rows.map(r => keys.map(k => `"${String(r[k] ?? '')}"`).join(',')))
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url)
+}
+
 export default function DesignDigitalDatasheetPage() {
-  const [datasheets, setDatasheets] = useState<DatasheetRecord[]>([])
-  const [selected, setSelected] = useState<DatasheetRecord | null>(null)
-  const [loading, setLoading] = useState(true)
-  
+  const [query, setQuery] = useState('')
+  const [selectedPn, setSelectedPn] = useState<string | null>(null)
+  const [sortKey, setSortKey] = useState<string | null>(null)
+  const [sortDir, setSortDir] = useState<'asc'|'desc'>('asc')
+  const [showOnlyWithPdf, setShowOnlyWithPdf] = useState(false)
+
+  const meta = (selectionData as SG).meta
+  const products = (selectionData as SG).products as any[]
+
   useEffect(() => {
-    let cancelled = false
-    fetch('/api/datasheets?published=true')
-      .then((r) => r.ok ? r.json() : Promise.reject(new Error('fetch failed')))
-      .then((json) => {
-        if (cancelled) return
-        const list: DatasheetRecord[] = json.datasheets ?? []
-        setDatasheets(list)
-        // Try to read partNumber from URL to preselect
-        try {
-          const qp = new URLSearchParams(window.location.search)
-          const part = qp.get('partNumber')
-          if (part) {
-            const found = list.find((d) => d.meta.partNumber.toLowerCase() === part.toLowerCase())
-            if (found) setSelected(found)
-          }
-        } catch {}
-        if (!selected && list.length) setSelected(list[0])
-        setLoading(false)
-      })
-      .catch(() => { if (!cancelled) setLoading(false) })
-    return () => { cancelled = true }
+    // read partNumber param
+    try {
+      const qp = new URLSearchParams(window.location.search)
+      const p = qp.get('partNumber')
+      if (p) setSelectedPn(p)
+    } catch {}
   }, [])
+
+  const rows = useMemo(() => {
+    let list = products.slice()
+    if (query) {
+      const q = query.trim().toLowerCase()
+      list = list.filter(p => (p.pn + ' ' + (p.fam||'') + ' ' + (p.pkg||'')).toLowerCase().includes(q))
+    }
+    if (showOnlyWithPdf) list = list.filter(p => p.ds && p.ds.length)
+    if (sortKey) {
+      list.sort((a,b) => {
+        const av = a.vals?.[sortKey]?.n ?? null
+        const bv = b.vals?.[sortKey]?.n ?? null
+        if (av === null && bv === null) return 0
+        if (av === null) return 1
+        if (bv === null) return -1
+        return sortDir === 'asc' ? av - bv : bv - av
+      })
+    }
+    return list
+  }, [products, query, showOnlyWithPdf, sortKey, sortDir])
+
+  const selectedProduct = useMemo(() => {
+    if (!selectedPn) return null
+    return products.find(p => p.pn.toLowerCase() === selectedPn.toLowerCase()) || null
+  }, [selectedPn, products])
+
+  // If a published datasheet exists in site's API, prefer that. Otherwise create a minimal DatasheetRecord
+  const toDatasheetRecord = async (pn: string): Promise<DatasheetRecord> => {
+    // try fetch from /api/datasheets
+    try {
+      const res = await fetch('/api/datasheets?partNumber=' + encodeURIComponent(pn))
+      if (res.ok) {
+        const j = await res.json()
+        const found = (j.datasheets ?? []).find((d: any) => d.meta.partNumber.toLowerCase() === pn.toLowerCase())
+        if (found) return found as DatasheetRecord
+      }
+    } catch {}
+    // fallback using selection data
+    const p = products.find(x => x.pn.toLowerCase() === pn.toLowerCase())
+    const id = p ? p.pn.toLowerCase() : pn.toLowerCase()
+    const metaRec: any = {
+      title: p?.pn ?? pn,
+      partNumber: p?.pn ?? pn,
+      version: '1.0',
+      date: new Date().toISOString().slice(0,10),
+      company: 'Magnachip Semiconductor',
+      classification: 'Selection Guide'
+    }
+    return { id, published: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), schemaVersion: 1, meta: metaRec, cover: {}, sections: [], datas: {} } as unknown as DatasheetRecord
+  }
+
+  const handleExportXlsx = async () => {
+    const { utils, writeFile } = await import('xlsx')
+    const flat = rows.map(r => ({ pn: r.pn, family: r.fam, pkg: r.pkg, vds: r.vals?.vds?.d ?? '', id: r.vals?.id?.d ?? '', rds_on: r.vals?.rmax10?.d ?? '', ds: r.ds ?? '' }))
+    const ws = utils.json_to_sheet(flat)
+    const wb = utils.book_new()
+    utils.book_append_sheet(wb, ws, 'SelectionGuide')
+    writeFile(wb, 'selection-guide.xlsx')
+  }
 
   return (
     <main className="min-h-screen">
@@ -44,41 +106,45 @@ export default function DesignDigitalDatasheetPage() {
           <FadeIn>
             <div className="mb-6">
               <h1 className="text-2xl font-semibold">Design resources / Tools</h1>
-              <p className="text-sm text-gray-500">Digital Datasheet — integrated and unified with site UI/UX</p>
+              <p className="text-sm text-gray-500">Digital Datasheet — Selection Guide integrated into site</p>
             </div>
           </FadeIn>
 
           <div className="flex gap-6">
-            <div className="w-64">
-              <div className="rounded-xl border bg-white p-4">
-                <h3 className="font-medium mb-2">Available datasheets</h3>
-                {loading ? (
-                  <p className="text-sm text-gray-400">Loading…</p>
-                ) : (
-                  <ul className="space-y-2 max-h-[60vh] overflow-auto">
-                    {datasheets.map((d) => (
-                      <li key={d.id}>
-                        <button
-                          className={`w-full text-left px-3 py-2 rounded ${selected?.id === d.id ? 'bg-black text-white' : 'hover:bg-gray-50'}`}
-                          onClick={() => setSelected(d)}
-                        >
-                          {d.meta.partNumber}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+            <aside className="w-72">
+              <div className="rounded-xl border bg-white p-4 mb-4">
+                <input className="w-full border px-3 py-2 rounded" placeholder="Search part, family, package..." value={query} onChange={e=>setQuery(e.target.value)} />
+                <div className="flex gap-2 mt-3">
+                  <button className="btn" onClick={()=>{ setQuery(''); setShowOnlyWithPdf(false); setSortKey(null)}}>Reset</button>
+                  <button className="btn" onClick={()=>downloadCSV(rows.map(r=>({pn:r.pn, family:r.fam, pkg:r.pkg, vds:r.vals?.vds?.d, id:r.vals?.id?.d, ds:r.ds})))}>CSV</button>
+                  <button className="btn primary" onClick={handleExportXlsx}>Excel (.xlsx)</button>
+                </div>
+                <div className="mt-3 text-sm text-gray-600">
+                  <label className="flex items-center gap-2"><input type="checkbox" checked={showOnlyWithPdf} onChange={e=>setShowOnlyWithPdf(e.target.checked)} /> Show only with PDF</label>
+                </div>
               </div>
-            </div>
+
+              <div className="rounded-xl border bg-white p-4 max-h-[60vh] overflow-auto">
+                <h3 className="font-medium mb-2">Products ({rows.length})</h3>
+                <ul className="space-y-1">
+                  {rows.map(p=> (
+                    <li key={p.pn}>
+                      <button className={`w-full text-left px-3 py-2 rounded ${selectedPn===p.pn? 'bg-black text-white':''}`} onClick={()=>setSelectedPn(p.pn)}>
+                        <div className="flex justify-between"><div className="font-medium">{p.pn}</div><div className="text-xs text-gray-500">{p.pkg}</div></div>
+                        <div className="text-xs text-gray-500">{p.fam}</div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
 
             <div className="flex-1">
-              <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-                {loading ? (
-                  <div className="p-12 text-center text-gray-400">Loading datasheet…</div>
-                ) : selected ? (
-                  <DatasheetViewer d={selected} />
+              <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden p-4">
+                {selectedPn ? (
+                  <SelectedViewer pn={selectedPn} toDatasheetRecord={toDatasheetRecord} />
                 ) : (
-                  <div className="p-12 text-center text-gray-400">No datasheet selected</div>
+                  <div className="p-12 text-center text-gray-400">Select a product to view its digital datasheet</div>
                 )}
               </div>
             </div>
@@ -88,4 +154,15 @@ export default function DesignDigitalDatasheetPage() {
       <Footer />
     </main>
   )
+}
+
+function SelectedViewer({ pn, toDatasheetRecord }: { pn: string, toDatasheetRecord: (pn:string)=>Promise<DatasheetRecord> }) {
+  const [rec, setRec] = useState<DatasheetRecord | null>(null)
+  useEffect(()=>{
+    let mounted = true
+    toDatasheetRecord(pn).then(r=>{ if (mounted) setRec(r) }).catch(()=>{})
+    return ()=>{ mounted=false }
+  },[pn])
+  if (!rec) return <div className="p-12 text-center text-gray-400">Loading datasheet…</div>
+  return <DatasheetViewer d={rec} />
 }
