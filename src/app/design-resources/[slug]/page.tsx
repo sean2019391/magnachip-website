@@ -95,11 +95,6 @@ export default function DesignResourceCategoryPage() {
                         );
                       }
 
-                      // Don't render a standalone card for Digital Datasheet when it's shown nested under SOA
-                      if (category === 'Tools' && item === 'Digital Datasheet') {
-                        return null;
-                      }
-
                       const href =
                         item === 'Digital Datasheet'
                           ? `/design-resources/tool/digital-datasheet`

@@ -122,7 +122,7 @@ export const designResourcesData: Record<string, string[]> = {
   'Boards & Kit': [],
   'Simulation & Modeling': [],
   Software: [],
-  Tools: ['Safe Operating Area (SOA)'],
+  Tools: ['Safe Operating Area (SOA)', 'Digital Datasheet'],
   Partners: [],
   'University Alliance Program': [],
 };
