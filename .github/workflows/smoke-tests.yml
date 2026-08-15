@@ -1,0 +1,25 @@
+name: Smoke tests
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for deployment
+        run: sleep 10
+      - name: Check root
+        run: |
+          echo 'Checking root URL'
+          curl -sfS https://magnachip-website.vercel.app/ -o /dev/null || (echo 'Root URL failed' && exit 1)
+      - name: Check Digital Datasheet page
+        run: |
+          echo 'Checking digital datasheet page'
+          curl -sfS https://magnachip-website.vercel.app/design-resources/tool/digital-datasheet -o /dev/null || (echo 'Datasheet page failed' && exit 1)
+      - name: Check Products overview
+        run: |
+          echo 'Checking products overview'
+          curl -sfS https://magnachip-website.vercel.app/products/overview -o /dev/null || (echo 'Products overview failed' && exit 1)
