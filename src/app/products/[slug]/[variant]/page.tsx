@@ -15,6 +15,7 @@ import {
 } from '@/lib/product-db'
 import ProductsSidebar from '@/components/ProductsSidebar'
 import FadeIn from '@/components/FadeIn'
+import { hasDigitalDatasheet } from '@/lib/digital-datasheet-registry'
 
 export default function ProductVariantPage() {
   const params = useParams()
@@ -167,16 +168,30 @@ export default function ProductVariantPage() {
                               </div>
                             </td>
                             <td className="px-4 py-3 text-center whitespace-nowrap">
-                              {product.ds ? (
-                                <a href={product.ds} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors">
-                                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                  </svg>
-                                  PDF
-                                </a>
-                              ) : (
-                                <span className="text-gray-300 text-xs">—</span>
-                              )}
+                              <div className="flex items-center justify-center gap-3">
+                                {product.ds ? (
+                                  <a href={product.ds} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    PDF
+                                  </a>
+                                ) : (
+                                  <span className="text-gray-300 text-xs">—</span>
+                                )}
+                                {hasDigitalDatasheet(product.pn) && (
+                                  <Link
+                                    href={`/products/overview?partNumber=${encodeURIComponent(product.pn)}`}
+                                    className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                                    title="View interactive digital datasheet"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    Digital
+                                  </Link>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         ))}

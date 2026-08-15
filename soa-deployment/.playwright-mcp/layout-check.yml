@@ -1,0 +1,20 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - heading "MagnaChip Safe Operating Area Calculator" [level=1] [ref=e5]:
+        - img "MagnaChip" [ref=e6]
+        - text: Safe Operating Area Calculator
+      - generic [ref=e7]:
+        - button "Device DB" [ref=e8] [cursor=pointer]
+        - button "Import" [ref=e9] [cursor=pointer]
+        - button "Save" [ref=e10] [cursor=pointer]
+        - button "Load" [ref=e11] [cursor=pointer]
+    - navigation [ref=e12]:
+      - button "SOA Check" [ref=e13] [cursor=pointer]
+      - button "Protection" [ref=e14] [cursor=pointer]
+    - main [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]
+        - generic [ref=e197]
+    - contentinfo [ref=e305]: MOSFET SOA Calculator · all computation is local.
+  - status

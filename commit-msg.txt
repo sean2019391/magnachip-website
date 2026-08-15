@@ -1,0 +1,7 @@
+﻿Consolidate repositories and reference sources
+
+- Move digital-datasheet into original-sources/digital-datasheet for reference
+- Remove sibling magnachip-website-admin (node_modules-only)
+- Remove nested .git directories from admin-repo and soa-deployment
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>

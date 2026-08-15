@@ -1,0 +1,66 @@
+﻿name: Create PR to Website from pending changes
+
+on:
+  push:
+    paths:
+      - 'pending/**'
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout admin repo
+        uses: actions/checkout@v4
+
+      - name: Prepare variables
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
+          TARGET_REPO: 'sean2019391/magnachip-website'
+        run: |
+          echo "REPO_TOKEN is set: ${REPO_TOKEN:+yes}"
+          echo "TARGET_REPO=$TARGET_REPO" > vars.env
+
+      - name: Clone target repo
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git clone https://x-access-token:${REPO_TOKEN}@github.com/${{ env.TARGET_REPO }} target-repo
+          cd target-repo
+          git checkout -b admin-updates-$(date +%s)
+
+      - name: Apply pending changes to target repo
+        run: |
+          # Copy pending files into the target repo root (preserve relative paths)
+          shopt -s globstar || true
+          for f in ../pending/** ; do
+            if [ -f "$f" ]; then
+              rel=${f#../pending/}
+              dirname=$(dirname "$rel")
+              mkdir -p "target-repo/$dirname"
+              cp "$f" "target-repo/$rel"
+            fi
+          done
+          cd target-repo
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore(admin): apply pending updates from magnachip-website-admin"
+          git push origin HEAD
+          echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" > ../branch.env
+
+      - name: Create Pull Request
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_WRITE_TOKEN }}
+        run: |
+          BRANCH=$(cat branch.env | sed -n 's/BRANCH_NAME=//p')
+          TITLE="Admin updates: $(date -u +"%Y-%m-%d %H:%M UTC")"
+          BODY="Automated updates from magnachip-website-admin pending/ -> Apply these changes to the site."
+          curl -X POST -H "Authorization: token ${REPO_TOKEN}" -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ env.TARGET_REPO }}/pulls \
+            -d "{\"title\": \"${TITLE}\", \"head\": \"${BRANCH}\", \"base\": \"main\", \"body\": \"${BODY}\"}"

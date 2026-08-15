@@ -31,7 +31,7 @@ export default function ProductsSidebar({ activeFamily, activeVariant }: Props) 
                     <div key={fam}>
                       {/* Family link */}
                       <Link
-                        href={fam === 'Overview' ? '/products' : `/products/${toSlug(fam)}`}
+                        href={fam === 'Overview' ? '/products/overview' : `/products/${toSlug(fam)}`}
                         className={`block px-3 py-2 rounded-lg text-sm transition-all ${
                           isFamilyActive
                             ? 'bg-black/10 text-black font-medium'

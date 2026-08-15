@@ -31,7 +31,7 @@ export default function ProductsPage() {
                     return (
                       <Link
                         key={fam}
-                        href={items.length > 0 ? `/products/${toSlug(fam)}` : '#'}
+                        href={fam === 'Overview' ? '/products/overview' : items.length > 0 ? `/products/${toSlug(fam)}` : '#'}
                         className="block p-5 rounded-xl bg-white border border-gray-200 hover:border-black/30 hover:shadow-sm transition-all"
                       >
                         <h3 className="text-base font-semibold text-gray-900 mb-1">{fam}</h3>

@@ -1,0 +1,1730 @@
+[
+  {
+    "id": "amdta080n017rh",
+    "published": true,
+    "createdAt": "2026-04-29T00:00:00.000Z",
+    "updatedAt": "2026-04-29T00:00:00.000Z",
+    "schemaVersion": 1,
+    "meta": {
+      "title": "AMDTA080N017RH",
+      "partNumber": "AMDTA080N017RH",
+      "version": "1.0",
+      "date": "2026-04-29",
+      "company": "Magnachip Semiconductor",
+      "classification": "Product Data Sheet",
+      "disclaimer": "The information in this document is subject to change without notice. Magnachip reserves the right to make changes to improve reliability, function or design. Magnachip does not assume any liability arising out of the application or use of any product or circuit described herein; neither does it convey any license under its patent rights, nor the rights of others."
+    },
+    "cover": {
+      "subtitle": "Single N-channel Trench MOSFET 80V 1.7mΩ",
+      "features": [
+        {
+          "text": "Trench power MOSFET technology"
+        },
+        {
+          "text": "Single N-channel trench, normal gate level"
+        },
+        {
+          "text": "Enhanced avalanche ruggedness"
+        },
+        {
+          "text": "100% Avalanche tested"
+        },
+        {
+          "text": "Maximum 175°C junction temperature"
+        }
+      ],
+      "validation": [
+        {
+          "text": "Qualified according to AEC-Q101 Standard"
+        }
+      ],
+      "keyPerformance": [
+        {
+          "label": "VDS",
+          "value": "80",
+          "unit": "V",
+          "highlight": true
+        },
+        {
+          "label": "RDS(on), max.",
+          "value": "1.7",
+          "unit": "mΩ",
+          "highlight": true
+        },
+        {
+          "label": "ID",
+          "value": "300",
+          "unit": "A",
+          "highlight": true
+        },
+        {
+          "label": "Qg",
+          "value": "183",
+          "unit": "nC"
+        },
+        {
+          "label": "TJ, max",
+          "value": "175",
+          "unit": "°C"
+        }
+      ],
+      "ordering": {
+        "type": "AMDTA080N017RH",
+        "package": "TOLL",
+        "marking": "AMDTA080N017",
+        "packing": "Tape & Reel",
+        "rohs": "Halogen Free",
+        "url": "http://www.magnachip.com/"
+      }
+    },
+    "sections": [
+      {
+        "id": "abs-max",
+        "type": "absoluteMax",
+        "title": "Absolute Maximum Ratings",
+        "subtitle": "at TC = 25°C unless otherwise specified",
+        "columns": [
+          {
+            "id": "param",
+            "header": "Parameter",
+            "type": "text"
+          },
+          {
+            "id": "sym",
+            "header": "Symbol",
+            "type": "text",
+            "width": 8
+          },
+          {
+            "id": "rating",
+            "header": "Rating",
+            "type": "text"
+          },
+          {
+            "id": "unit",
+            "header": "Unit",
+            "type": "text",
+            "width": 6
+          }
+        ],
+        "rows": [
+          {
+            "id": "vds",
+            "cells": [
+              "Drain-source Voltage",
+              "VDS",
+              "80",
+              "V"
+            ],
+            "notes": []
+          },
+          {
+            "id": "vgs",
+            "cells": [
+              "Gate-source Voltage",
+              "VGS",
+              "±20",
+              "V"
+            ],
+            "notes": []
+          },
+          {
+            "id": "id25s",
+            "cells": [
+              "Drain current  (Tc=25°C, Silicon Limited)",
+              "ID",
+              "340",
+              "A"
+            ],
+            "notes": []
+          },
+          {
+            "id": "id25p",
+            "cells": [
+              "Drain current  (Tc=25°C, Package Limited)",
+              "ID",
+              "300",
+              "A"
+            ],
+            "notes": []
+          },
+          {
+            "id": "id100s",
+            "cells": [
+              "Drain current  (Tc=100°C, Silicon Limited)",
+              "ID",
+              "240",
+              "A"
+            ],
+            "notes": []
+          },
+          {
+            "id": "idm",
+            "cells": [
+              "Pulsed drain current  (Tc=25°C, tp ≤ 100 µs)",
+              "IDM",
+              "1200",
+              "A"
+            ],
+            "notes": [
+              "1)"
+            ]
+          },
+          {
+            "id": "ptot25",
+            "cells": [
+              "Total power dissipation  (Tc=25°C)",
+              "Ptot",
+              "468.75",
+              "W"
+            ],
+            "notes": []
+          },
+          {
+            "id": "ptot100",
+            "cells": [
+              "Total power dissipation  (Tc=100°C)",
+              "Ptot",
+              "234.375",
+              "W"
+            ],
+            "notes": []
+          },
+          {
+            "id": "eas",
+            "cells": [
+              "Avalanche energy, single pulse",
+              "EAS",
+              "578",
+              "mJ"
+            ],
+            "notes": [
+              "2)"
+            ]
+          },
+          {
+            "id": "tj",
+            "cells": [
+              "Operating and storage temperature",
+              "TJ, Tstg",
+              "-55 ~ 175",
+              "°C"
+            ],
+            "notes": []
+          }
+        ],
+        "notes": [
+          {
+            "label": "1)",
+            "text": "Pulse width limited by TJmax"
+          },
+          {
+            "label": "2)",
+            "text": "Starting TJ=25°C, L=1mH, IAS=34A, VDD=50V, VGS=10V"
+          }
+        ]
+      },
+      {
+        "id": "ther",
+        "type": "thermal",
+        "title": "Thermal Characteristics",
+        "columns": [
+          {
+            "id": "param",
+            "header": "Parameter",
+            "type": "text"
+          },
+          {
+            "id": "sym",
+            "header": "Symbol",
+            "type": "text",
+            "width": 8
+          },
+          {
+            "id": "rating",
+            "header": "Rating",
+            "type": "text"
+          },
+          {
+            "id": "unit",
+            "header": "Unit",
+            "type": "text",
+            "width": 8
+          }
+        ],
+        "rows": [
+          {
+            "id": "rthjc",
+            "cells": [
+              "Thermal resistance, junction - case",
+              "RθJC",
+              "0.32",
+              "°C/W"
+            ],
+            "notes": []
+          },
+          {
+            "id": "rthja",
+            "cells": [
+              "Thermal resistance, junction - ambient",
+              "RθJA",
+              "40",
+              "°C/W"
+            ],
+            "notes": [
+              "3)"
+            ]
+          }
+        ],
+        "notes": [
+          {
+            "label": "3)",
+            "text": "Surface mounted FR-4 board by JEDEC (jesd51-7)"
+          }
+        ]
+      },
+      {
+        "id": "static",
+        "type": "static",
+        "title": "Static Characteristics",
+        "subtitle": "TJ = 25°C unless otherwise specified",
+        "columns": [
+          {
+            "id": "param",
+            "header": "Parameter",
+            "type": "text"
+          },
+          {
+            "id": "sym",
+            "header": "Symbol",
+            "type": "text",
+            "width": 10
+          },
+          {
+            "id": "min",
+            "header": "Min.",
+            "type": "text"
+          },
+          {
+            "id": "typ",
+            "header": "Typ.",
+            "type": "text"
+          },
+          {
+            "id": "max",
+            "header": "Max.",
+            "type": "text"
+          },
+          {
+            "id": "unit",
+            "header": "Unit",
+            "type": "text",
+            "width": 6
+          },
+          {
+            "id": "cond",
+            "header": "Conditions / Note",
+            "type": "text"
+          }
+        ],
+        "rows": [
+          {
+            "id": "vbr",
+            "cells": [
+              "Drain-source breakdown voltage",
+              "V(BR)DSS",
+              "80",
+              "—",
+              "—",
+              "V",
+              "VGS=0V, ID=250µA"
+            ],
+            "notes": []
+          },
+          {
+            "id": "vth",
+            "cells": [
+              "Gate threshold voltage",
+              "VGS(th)",
+              "2.4",
+              "—",
+              "3.8",
+              "V",
+              "VDS=VGS, ID=250µA"
+            ],
+            "notes": []
+          },
+          {
+            "id": "idss",
+            "cells": [
+              "Zero gate voltage drain current",
+              "IDSS",
+              "—",
+              "—",
+              "1",
+              "µA",
+              "VDS=80V, VGS=0V"
+            ],
+            "notes": []
+          },
+          {
+            "id": "igss",
+            "cells": [
+              "Gate-source leakage current",
+              "IGSS",
+              "—",
+              "—",
+              "±100",
+              "nA",
+              "VGS=±20V, VDS=0V"
+            ],
+            "notes": []
+          },
+          {
+            "id": "rdson",
+            "cells": [
+              "Drain-source on-state resistance",
+              "RDS(on)",
+              "—",
+              "1.3",
+              "1.7",
+              "mΩ",
+              "VGS=10V, ID=100A"
+            ],
+            "notes": []
+          },
+          {
+            "id": "rg",
+            "cells": [
+              "Gate resistance",
+              "Rg",
+              "—",
+              "3",
+              "—",
+              "Ω",
+              "f=1MHz"
+            ],
+            "notes": [
+              "4)"
+            ]
+          },
+          {
+            "id": "gfs",
+            "cells": [
+              "Transconductance",
+              "gfs",
+              "—",
+              "120",
+              "—",
+              "S",
+              "VDS=10V, ID=100A"
+            ],
+            "notes": [
+              "4)"
+            ]
+          }
+        ],
+        "notes": [
+          {
+            "label": "4)",
+            "text": "The parameter is not subject to production testing — guaranteed by design."
+          }
+        ]
+      },
+      {
+        "id": "dynamic",
+        "type": "dynamic",
+        "title": "Dynamic Characteristics",
+        "columns": [
+          {
+            "id": "param",
+            "header": "Parameter",
+            "type": "text"
+          },
+          {
+            "id": "sym",
+            "header": "Symbol",
+            "type": "text",
+            "width": 10
+          },
+          {
+            "id": "min",
+            "header": "Min.",
+            "type": "text"
+          },
+          {
+            "id": "typ",
+            "header": "Typ.",
+            "type": "text"
+          },
+          {
+            "id": "max",
+            "header": "Max.",
+            "type": "text"
+          },
+          {
+            "id": "unit",
+            "header": "Unit",
+            "type": "text",
+            "width": 6
+          },
+          {
+            "id": "cond",
+            "header": "Conditions / Note",
+            "type": "text"
+          }
+        ],
+        "rows": [
+          {
+            "id": "ciss",
+            "cells": [
+              "Input capacitance",
+              "Ciss",
+              "—",
+              "11582",
+              "—",
+              "pF",
+              "VGS=0V, VDS=40V, f=1MHz"
+            ],
+            "notes": []
+          },
+          {
+            "id": "coss",
+            "cells": [
+              "Output capacitance",
+              "Coss",
+              "—",
+              "3081",
+              "—",
+              "pF",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "crss",
+            "cells": [
+              "Reverse transfer capacitance",
+              "Crss",
+              "—",
+              "73",
+              "—",
+              "pF",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "tdon",
+            "cells": [
+              "Turn-on delay time",
+              "td(on)",
+              "—",
+              "35",
+              "—",
+              "ns",
+              "VDD=40V, VGS=10V, ID=100A, RG,ext=3.0Ω"
+            ],
+            "notes": []
+          },
+          {
+            "id": "tr",
+            "cells": [
+              "Rise time",
+              "tr",
+              "—",
+              "27",
+              "—",
+              "ns",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "tdoff",
+            "cells": [
+              "Turn-off delay time",
+              "td(off)",
+              "—",
+              "132",
+              "—",
+              "ns",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "tf",
+            "cells": [
+              "Fall time",
+              "tf",
+              "—",
+              "67",
+              "—",
+              "ns",
+              ""
+            ],
+            "notes": []
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "gateq",
+        "type": "gateCharge",
+        "title": "Gate Charge Characteristics",
+        "columns": [
+          {
+            "id": "param",
+            "header": "Parameter",
+            "type": "text"
+          },
+          {
+            "id": "sym",
+            "header": "Symbol",
+            "type": "text",
+            "width": 10
+          },
+          {
+            "id": "min",
+            "header": "Min.",
+            "type": "text"
+          },
+          {
+            "id": "typ",
+            "header": "Typ.",
+            "type": "text"
+          },
+          {
+            "id": "max",
+            "header": "Max.",
+            "type": "text"
+          },
+          {
+            "id": "unit",
+            "header": "Unit",
+            "type": "text",
+            "width": 6
+          },
+          {
+            "id": "cond",
+            "header": "Conditions / Note",
+            "type": "text"
+          }
+        ],
+        "rows": [
+          {
+            "id": "qgs",
+            "cells": [
+              "Gate to source charge",
+              "Qgs",
+              "—",
+              "57",
+              "—",
+              "nC",
+              "VDD=40V, ID=100A, VGS=0 to 10V"
+            ],
+            "notes": []
+          },
+          {
+            "id": "qgsth",
+            "cells": [
+              "Gate charge at threshold",
+              "Qg(th)",
+              "—",
+              "36",
+              "—",
+              "nC",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "qgd",
+            "cells": [
+              "Gate to drain charge",
+              "Qgd",
+              "—",
+              "40",
+              "—",
+              "nC",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "qsw",
+            "cells": [
+              "Switching charge",
+              "Qsw",
+              "—",
+              "61",
+              "—",
+              "nC",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "qg",
+            "cells": [
+              "Gate charge total",
+              "Qg",
+              "—",
+              "183",
+              "—",
+              "nC",
+              ""
+            ],
+            "notes": []
+          },
+          {
+            "id": "vplat",
+            "cells": [
+              "Gate plateau voltage",
+              "Vplateau",
+              "—",
+              "4.7",
+              "—",
+              "V",
+              ""
+            ],
+            "notes": []
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "diode",
+        "type": "diode",
+        "title": "Source-Drain Diode",
+        "columns": [
+          {
+            "id": "param",
+            "header": "Parameter",
+            "type": "text"
+          },
+          {
+            "id": "sym",
+            "header": "Symbol",
+            "type": "text",
+            "width": 10
+          },
+          {
+            "id": "min",
+            "header": "Min.",
+            "type": "text"
+          },
+          {
+            "id": "typ",
+            "header": "Typ.",
+            "type": "text"
+          },
+          {
+            "id": "max",
+            "header": "Max.",
+            "type": "text"
+          },
+          {
+            "id": "unit",
+            "header": "Unit",
+            "type": "text",
+            "width": 6
+          },
+          {
+            "id": "cond",
+            "header": "Conditions / Note",
+            "type": "text"
+          }
+        ],
+        "rows": [
+          {
+            "id": "is",
+            "cells": [
+              "Diode continuous forward current",
+              "IS",
+              "—",
+              "—",
+              "300",
+              "A",
+              ""
+            ],
+            "notes": [
+              "4)"
+            ]
+          },
+          {
+            "id": "ispulse",
+            "cells": [
+              "Diode pulse current",
+              "IS,pulse",
+              "—",
+              "—",
+              "720",
+              "A",
+              "pulsed; tp ≤ 100µs"
+            ],
+            "notes": [
+              "4)"
+            ]
+          },
+          {
+            "id": "vsd",
+            "cells": [
+              "Diode forward voltage",
+              "VSD",
+              "—",
+              "0.8",
+              "1.2",
+              "V",
+              "VGS=0V, IF=100A"
+            ],
+            "notes": []
+          },
+          {
+            "id": "trr",
+            "cells": [
+              "Reverse recovery time",
+              "trr",
+              "—",
+              "151",
+              "—",
+              "ns",
+              "IF=100A, diF/dt=100A/µs"
+            ],
+            "notes": [
+              "4)"
+            ]
+          },
+          {
+            "id": "qrr",
+            "cells": [
+              "Reverse recovery charge",
+              "Qrr",
+              "—",
+              "497",
+              "—",
+              "nC",
+              ""
+            ],
+            "notes": [
+              "4)"
+            ]
+          }
+        ],
+        "notes": []
+      }
+    ],
+    "curves": [
+      {
+        "id": "fig1",
+        "figure": "Fig. 1",
+        "title": "Typical Output Characteristics",
+        "xLabel": "VDS",
+        "yLabel": "ID",
+        "xUnit": "V",
+        "yUnit": "A",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "VGS = 4V",
+            "condition": "VGS = 4V",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                0.294,
+                2.5025
+              ],
+              [
+                0.8466,
+                2.912
+              ],
+              [
+                1.4234,
+                3.157
+              ],
+              [
+                2.0036,
+                3.355
+              ]
+            ]
+          },
+          {
+            "id": "s2",
+            "name": "VGS = 5V",
+            "condition": "VGS = 5V",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                0.2485,
+                4.987
+              ],
+              [
+                0.717,
+                9.4405
+              ],
+              [
+                1.2003,
+                13.979
+              ],
+              [
+                1.6654,
+                18.546
+              ]
+            ]
+          },
+          {
+            "id": "s3",
+            "name": "VGS = 6V",
+            "condition": "VGS = 6V",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                0.5,
+                14.9265
+              ],
+              [
+                1.4,
+                39.558
+              ],
+              [
+                2,
+                60.6
+              ]
+            ]
+          },
+          {
+            "id": "s4",
+            "name": "VGS = 8V",
+            "condition": "VGS = 8V",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                88.8
+              ],
+              [
+                2,
+                168.4
+              ]
+            ]
+          },
+          {
+            "id": "s5",
+            "name": "VGS = 10V",
+            "condition": "VGS = 10V",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                200.6
+              ],
+              [
+                2,
+                295.9
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig2",
+        "figure": "Fig. 2",
+        "title": "On-Resistance vs. Gate to Source Voltage",
+        "xLabel": "VGS",
+        "yLabel": "RDS(on)",
+        "xUnit": "V",
+        "yUnit": "mΩ",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Tc = -55°C",
+            "points": [
+              [
+                4,
+                0.07
+              ],
+              [
+                6,
+                0.92
+              ],
+              [
+                8,
+                1.4
+              ],
+              [
+                10,
+                1.6
+              ],
+              [
+                15,
+                1.8
+              ]
+            ]
+          },
+          {
+            "id": "s2",
+            "name": "Tc = 25°C",
+            "points": [
+              [
+                4,
+                0.07
+              ],
+              [
+                6,
+                1.27
+              ],
+              [
+                8,
+                1.4
+              ],
+              [
+                10,
+                1.5
+              ],
+              [
+                15,
+                1.7
+              ]
+            ]
+          },
+          {
+            "id": "s3",
+            "name": "Tc = 175°C",
+            "points": [
+              [
+                4,
+                0.07
+              ],
+              [
+                6,
+                1.28
+              ],
+              [
+                8,
+                1.5
+              ],
+              [
+                10,
+                1.7
+              ],
+              [
+                15,
+                1.8
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig3",
+        "figure": "Fig. 3",
+        "title": "On-Resistance vs. Junction Temperature (Normalized)",
+        "xLabel": "TJ",
+        "yLabel": "RDS(on) / RDS(on)@25°C",
+        "xUnit": "°C",
+        "yUnit": "",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Normalized RDS(on)",
+            "points": [
+              [
+                -55,
+                0.69
+              ],
+              [
+                -25,
+                0.84
+              ],
+              [
+                0,
+                0.95
+              ],
+              [
+                25,
+                1
+              ],
+              [
+                75,
+                1.27
+              ],
+              [
+                125,
+                1.55
+              ],
+              [
+                175,
+                1.84
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig4",
+        "figure": "Fig. 4",
+        "title": "Transfer Characteristics",
+        "xLabel": "VGS",
+        "yLabel": "ID",
+        "xUnit": "V",
+        "yUnit": "A",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Tc = 25°C",
+            "points": [
+              [
+                2,
+                0
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                60
+              ],
+              [
+                5,
+                145
+              ],
+              [
+                6,
+                200
+              ],
+              [
+                8,
+                250
+              ],
+              [
+                10,
+                300
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig5",
+        "figure": "Fig. 5",
+        "title": "Forward Characteristics of Body Diode",
+        "xLabel": "VSD",
+        "yLabel": "IS",
+        "xUnit": "V",
+        "yUnit": "A",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Tc = 25°C",
+            "points": [
+              [
+                0.2,
+                0.01
+              ],
+              [
+                0.4,
+                0.1
+              ],
+              [
+                0.6,
+                1
+              ],
+              [
+                0.8,
+                5
+              ],
+              [
+                1,
+                30
+              ],
+              [
+                1.2,
+                100
+              ]
+            ]
+          },
+          {
+            "id": "s2",
+            "name": "Tc = 175°C",
+            "points": [
+              [
+                0.2,
+                0.02
+              ],
+              [
+                0.4,
+                0.2
+              ],
+              [
+                0.6,
+                3
+              ],
+              [
+                0.8,
+                30
+              ],
+              [
+                1,
+                100
+              ],
+              [
+                1.2,
+                250
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig6",
+        "figure": "Fig. 6",
+        "title": "Gate Charge Characteristics",
+        "xLabel": "Qg",
+        "yLabel": "VGS",
+        "xUnit": "nC",
+        "yUnit": "V",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Gate Charge",
+            "points": [
+              [
+                0,
+                0
+              ],
+              [
+                20,
+                2.5
+              ],
+              [
+                57,
+                4.7
+              ],
+              [
+                97,
+                5
+              ],
+              [
+                183,
+                10
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig7",
+        "figure": "Fig. 7",
+        "title": "Capacitance Characteristics",
+        "xLabel": "VDS",
+        "yLabel": "C",
+        "xUnit": "V",
+        "yUnit": "pF",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "ciss",
+            "name": "Ciss",
+            "points": [
+              [
+                0,
+                13457
+              ],
+              [
+                10,
+                11900
+              ],
+              [
+                20,
+                11582
+              ],
+              [
+                40,
+                11000
+              ],
+              [
+                80,
+                9500
+              ]
+            ]
+          },
+          {
+            "id": "coss",
+            "name": "Coss",
+            "points": [
+              [
+                0,
+                10168
+              ],
+              [
+                10,
+                7600
+              ],
+              [
+                20,
+                5042
+              ],
+              [
+                40,
+                2700
+              ],
+              [
+                80,
+                1200
+              ]
+            ]
+          },
+          {
+            "id": "crss",
+            "name": "Crss",
+            "points": [
+              [
+                0,
+                1812
+              ],
+              [
+                10,
+                500
+              ],
+              [
+                20,
+                340
+              ],
+              [
+                40,
+                200
+              ],
+              [
+                80,
+                100
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig8",
+        "figure": "Fig. 8",
+        "title": "Maximum Safe Operating Area",
+        "xLabel": "VDS",
+        "yLabel": "ID",
+        "xUnit": "V",
+        "yUnit": "A",
+        "xScale": "log",
+        "yScale": "log",
+        "series": [
+          {
+            "id": "dc",
+            "name": "DC",
+            "points": [
+              [
+                0.1,
+                600
+              ],
+              [
+                1,
+                600
+              ],
+              [
+                10,
+                340
+              ],
+              [
+                40,
+                83
+              ],
+              [
+                80,
+                2.4
+              ]
+            ]
+          },
+          {
+            "id": "1ms",
+            "name": "1ms",
+            "points": [
+              [
+                0.1,
+                600
+              ],
+              [
+                1,
+                600
+              ],
+              [
+                10,
+                600
+              ],
+              [
+                40,
+                130
+              ],
+              [
+                80,
+                5.2
+              ]
+            ]
+          },
+          {
+            "id": "10ms",
+            "name": "10ms",
+            "points": [
+              [
+                0.1,
+                600
+              ],
+              [
+                1,
+                600
+              ],
+              [
+                10,
+                600
+              ],
+              [
+                40,
+                193
+              ],
+              [
+                80,
+                17.3
+              ]
+            ]
+          },
+          {
+            "id": "100us",
+            "name": "100µs",
+            "points": [
+              [
+                0.1,
+                600
+              ],
+              [
+                1,
+                600
+              ],
+              [
+                10,
+                600
+              ],
+              [
+                40,
+                600
+              ],
+              [
+                80,
+                40.9
+              ]
+            ]
+          },
+          {
+            "id": "10us",
+            "name": "10µs",
+            "points": [
+              [
+                0.1,
+                600
+              ],
+              [
+                1,
+                600
+              ],
+              [
+                10,
+                600
+              ],
+              [
+                40,
+                600
+              ],
+              [
+                80,
+                283
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig9",
+        "figure": "Fig. 9",
+        "title": "Maximum Drain Current vs. Case Temperature",
+        "xLabel": "TC",
+        "yLabel": "ID",
+        "xUnit": "°C",
+        "yUnit": "A",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "ID, package limited",
+            "points": [
+              [
+                25,
+                300
+              ],
+              [
+                50,
+                300
+              ],
+              [
+                75,
+                260
+              ],
+              [
+                100,
+                240
+              ],
+              [
+                125,
+                195
+              ],
+              [
+                150,
+                138
+              ],
+              [
+                175,
+                0
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig10",
+        "figure": "Fig. 10",
+        "title": "Transient Thermal Impedance (RθJC)",
+        "xLabel": "Pulse Width",
+        "yLabel": "ZthJC",
+        "xUnit": "s",
+        "yUnit": "°C/W",
+        "xScale": "log",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Single Pulse",
+            "points": [
+              [
+                0.00001,
+                0.011
+              ],
+              [
+                0.0001,
+                0.04
+              ],
+              [
+                0.001,
+                0.13
+              ],
+              [
+                0.01,
+                0.39
+              ],
+              [
+                0.1,
+                0.75
+              ],
+              [
+                1,
+                1.25
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig11",
+        "figure": "Fig. 11",
+        "title": "VGS(th) Variation with Temperature",
+        "xLabel": "TJ",
+        "yLabel": "VGS(th) / VGS(th)@25°C",
+        "xUnit": "°C",
+        "yUnit": "",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Normalized VGS(th)",
+            "points": [
+              [
+                -55,
+                1.13
+              ],
+              [
+                -25,
+                1.07
+              ],
+              [
+                0,
+                1.04
+              ],
+              [
+                25,
+                1
+              ],
+              [
+                75,
+                0.92
+              ],
+              [
+                125,
+                0.84
+              ],
+              [
+                175,
+                0.68
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig12",
+        "figure": "Fig. 12",
+        "title": "BVDSS Variation with Temperature",
+        "xLabel": "TJ",
+        "yLabel": "BVDSS",
+        "xUnit": "°C",
+        "yUnit": "V",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "BVDSS",
+            "points": [
+              [
+                -55,
+                72
+              ],
+              [
+                0,
+                76
+              ],
+              [
+                25,
+                80
+              ],
+              [
+                75,
+                84
+              ],
+              [
+                125,
+                86
+              ],
+              [
+                175,
+                86
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "fig13",
+        "figure": "Fig. 13",
+        "title": "Single Pulse Maximum Power Dissipation",
+        "xLabel": "TC",
+        "yLabel": "Ptot",
+        "xUnit": "°C",
+        "yUnit": "W",
+        "xScale": "linear",
+        "yScale": "linear",
+        "series": [
+          {
+            "id": "s1",
+            "name": "Ptot",
+            "points": [
+              [
+                0,
+                469
+              ],
+              [
+                25,
+                469
+              ],
+              [
+                50,
+                391
+              ],
+              [
+                75,
+                313
+              ],
+              [
+                100,
+                234
+              ],
+              [
+                125,
+                156
+              ],
+              [
+                150,
+                78
+              ],
+              [
+                175,
+                0
+              ]
+            ]
+          }
+        ],
+        "notes": []
+      }
+    ],
+    "pkg": {
+      "name": "TOLL",
+      "notes": [
+        "Package body size, length and width do not include mold flash, protrusions and gate burrs."
+      ]
+    }
+  }
+]

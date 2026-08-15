@@ -1,0 +1,9 @@
+node_modules
+dist
+.vite
+.omo
+*.tsbuildinfo
+*.tsbuildinfo.*
+*.d.ts
+deploy-gh.ps1
+

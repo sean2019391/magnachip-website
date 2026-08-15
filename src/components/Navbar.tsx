@@ -81,7 +81,7 @@ export default function Navbar() {
   const productCategories = Object.keys(productsData)
 
   return (
-    <header ref={headerRef} className="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200">
+    <header ref={headerRef} className="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200 print:hidden">
       <nav className="max-w-[1280px] mx-auto flex items-center justify-between px-6 py-4 relative">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0">
           <img src="/magnachip-black-letter-logo.png" alt="MagnaChip" className="h-8 w-auto" />
@@ -213,7 +213,7 @@ export default function Navbar() {
                       ) : (
                         <Link
                           key={fam}
-                          href={fam === 'Overview' ? '/products' : `/products/${toSlug(fam)}`}
+                          href={fam === 'Overview' ? '/products/overview' : `/products/${toSlug(fam)}`}
                           className="block w-full text-left px-4 py-2 text-sm rounded-lg transition-colors text-gray-700 hover:bg-gray-50 hover:text-black"
                           onClick={() => setOpenMenu(null)}
                         >
@@ -524,7 +524,7 @@ export default function Navbar() {
                       return (
                         <Link
                           key={fam}
-                          href={fam === 'Overview' ? '/products' : `/products/${toSlug(fam)}`}
+                          href={fam === 'Overview' ? '/products/overview' : `/products/${toSlug(fam)}`}
                           className="text-sm text-gray-600 hover:text-black py-0.5 block ml-2"
                           onClick={() => setMobileOpen(false)}
                         >

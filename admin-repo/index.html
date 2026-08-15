@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Magnachip Admin</title>
+    <style>
+      body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:1rem;color:#111}
+      header{display:flex;align-items:center;justify-content:space-between}
+      textarea{width:100%;height:480px;font-family:monospace;white-space:pre;}
+      .row{display:flex;gap:8px;margin-top:8px}
+      input[type=password]{width:420px}
+      button{padding:8px 12px}
+      .note{color:#555;margin-top:8px}
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Magnachip Admin (Editor)</h1>
+      <div>
+        <small>Repo: <a href="https://github.com/sean2019391/magnachip-website-admin" target="_blank">magnachip-website-admin</a></small>
+      </div>
+    </header>
+
+    <p class="note">This in-browser admin lets you edit files under <code>pending/</code>. You must paste a GitHub Personal Access Token (PAT) with <code>repo</code> scope into the token field below to read and save files. The token is used only by your browser session ? it is not sent to any server here.</p>
+
+    <div class="row">
+      <input id="token" type="password" placeholder="Paste your GitHub PAT here (kept in this browser only)" />
+      <button id="load">Load articles.json</button>
+      <button id="save">Save to pending/public/data/articles.json</button>
+    </div>
+
+    <p class="note">You can also change <code>targetPath</code> in the UI to edit other pending files.</p>
+    <div style="margin-top:8px">
+      <label>Target path under repo: </label>
+      <input id="targetPath" value="pending/public/data/articles.json" style="width:70%" />
+    </div>
+
+    <textarea id="editor" placeholder="File content will appear here..."></textarea>
+
+    <pre id="status" style="background:#f6f8fa;padding:8px;border-radius:6px;display:block;white-space:pre-wrap"></pre>
+
+    <script>
+      const owner = 'sean2019391';
+      const repo = 'magnachip-website-admin';
+      const tokenInput = document.getElementById('token');
+      const editor = document.getElementById('editor');
+      const loadBtn = document.getElementById('load');
+      const saveBtn = document.getElementById('save');
+      const status = document.getElementById('status');
+      const pathInput = document.getElementById('targetPath');
+
+      function setStatus(msg){ status.textContent = msg }
+
+      async function apiGet(path, token){
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+        const res = await fetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
+        if (!res.ok) throw new Error(`GET ${res.status} ${res.statusText}`);
+        return res.json();
+      }
+
+      async function apiPut(path, token, contentBase64, message, sha){
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+        const body = { message, content: contentBase64, branch: 'main' };
+        if (sha) body.sha = sha;
+        const res = await fetch(url, { method: 'PUT', headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json', 'Content-Type':'application/json' }, body: JSON.stringify(body) });
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(`PUT ${res.status} ${res.statusText}: ${txt}`);
+        }
+        return res.json();
+      }
+
+      loadBtn.onclick = async ()=>{
+        const token = tokenInput.value.trim();
+        const target = pathInput.value.trim();
+        if (!token) return setStatus('ERROR: Provide a GitHub PAT in the token field');
+        if (!target) return setStatus('ERROR: target path empty');
+        setStatus('Loading...');
+        try{
+          const data = await apiGet(target, token);
+          const content = atob(data.content.replace(/\n/g,''));
+          editor.value = content;
+          editor.dataset.sha = data.sha;
+          setStatus(`Loaded ${target} (sha: ${data.sha})`);
+        }catch(e){ setStatus('Load failed: '+e.message) }
+      }
+
+      saveBtn.onclick = async ()=>{
+        const token = tokenInput.value.trim();
+        const target = pathInput.value.trim();
+        if (!token) return setStatus('ERROR: Provide a GitHub PAT in the token field');
+        if (!target) return setStatus('ERROR: target path empty');
+        setStatus('Encoding content...');
+        try{
+          const contentUtf8 = new TextEncoder().encode(editor.value);
+          const base64 = btoa(String.fromCharCode(...contentUtf8));
+          const sha = editor.dataset.sha;
+          setStatus('Saving to GitHub...');
+          const msg = `chore(admin): update ${target} via admin UI`;
+          const result = await apiPut(target, token, base64, msg, sha);
+          editor.dataset.sha = result.content.sha;
+          setStatus(`Saved ${target} (new sha: ${result.content.sha})\nBranch: ${result.commit.sha}`);
+        }catch(e){ setStatus('Save failed: '+e.message) }
+      }
+
+    </script>
+  </body>
+</html>
+\n<!-- deployed: 2026-07-30T17:53:02.0038875+09:00 -->

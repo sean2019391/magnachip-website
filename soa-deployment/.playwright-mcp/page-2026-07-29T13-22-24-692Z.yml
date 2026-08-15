@@ -1,0 +1,277 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - heading [level=1] [ref=e5]:
+        - img "MagnaChip" [ref=e6]
+        - text: Safe Operating Area Calculator
+      - generic [ref=e7]:
+        - button "Device DB" [ref=e8] [cursor=pointer]
+        - button "Import" [ref=e9] [cursor=pointer]
+        - button "Save" [ref=e10] [cursor=pointer]
+        - button "Load" [ref=e11] [cursor=pointer]
+    - navigation [ref=e12]:
+      - button "SOA Check" [ref=e13] [cursor=pointer]
+      - button "Protection" [ref=e14] [cursor=pointer]
+    - main [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - complementary [ref=e18]:
+            - generic [ref=e19]:
+              - generic [ref=e20]:
+                - generic [ref=e21]: Device Parameters
+                - table [ref=e23]:
+                  - rowgroup [ref=e24]:
+                    - row [ref=e25]:
+                      - columnheader "Parameter" [ref=e26]
+                      - columnheader "Value" [ref=e27]
+                      - columnheader "Unit" [ref=e28]
+                  - rowgroup [ref=e29]:
+                    - row [ref=e30]:
+                      - cell [ref=e31]:
+                        - generic "Breakdown voltage BVDSS (datasheet Absolute Max). Pick BV >= 1.25 x Vbus." [ref=e32]:
+                          - text: BV
+                          - subscript [ref=e33]: DSS
+                      - cell [ref=e34]:
+                        - textbox [ref=e35]: "650"
+                      - cell "V" [ref=e36]
+                    - row [ref=e38]:
+                      - cell [ref=e39]:
+                        - generic "Max continuous drain current ID (datasheet, package limit)." [ref=e40]:
+                          - text: I
+                          - subscript [ref=e41]: D
+                          - text: (max)
+                      - cell [ref=e42]:
+                        - textbox [ref=e43]: "36"
+                      - cell "A" [ref=e44]
+                    - row [ref=e46]:
+                      - cell [ref=e47]:
+                        - generic "Pulsed drain current IDM (datasheet). Sets the SOA plateau for pulsed curves; blank = use ID_max." [ref=e48]:
+                          - text: I
+                          - subscript [ref=e49]: DM
+                      - cell [ref=e50]:
+                        - textbox "blank = use default" [ref=e51]: "144"
+                      - cell "A" [ref=e52]
+                    - row [ref=e54]:
+                      - cell [ref=e55]:
+                        - generic "RDS(on) at operating Tj (ohm). 10 mOhm = 0.010." [ref=e56]:
+                          - text: R
+                          - subscript [ref=e57]: DS
+                          - text: (on)
+                      - cell [ref=e58]:
+                        - textbox [ref=e59]: "0.020"
+                      - cell "Ω" [ref=e60]
+                    - row [ref=e62]:
+                      - cell [ref=e63]:
+                        - generic "Max rated junction temperature (datasheet abs-max)." [ref=e64]:
+                          - text: T
+                          - subscript [ref=e65]: J
+                          - text: (max)
+                      - cell [ref=e66]:
+                        - textbox [ref=e67]: "150"
+                      - cell "°C" [ref=e68]
+              - generic [ref=e70]:
+                - generic [ref=e71]: Operating Point ??Linear
+                - table [ref=e73]:
+                  - rowgroup [ref=e74]:
+                    - row [ref=e75]:
+                      - columnheader "Parameter" [ref=e76]
+                      - columnheader "Value" [ref=e77]
+                      - columnheader "Unit" [ref=e78]
+                  - rowgroup [ref=e79]:
+                    - row [ref=e80]:
+                      - cell [ref=e81]:
+                        - generic "Drain-source voltage held across the device WHILE conducting (linear mode)." [ref=e82]:
+                          - text: V
+                          - subscript [ref=e83]: DS
+                      - cell [ref=e84]:
+                        - textbox [ref=e85]: "48"
+                      - cell "V" [ref=e86]
+                    - row [ref=e88]:
+                      - cell [ref=e89]:
+                        - 'generic "Operating drain current (switching: the conducted current; linear: the current while dropping VDS)." [ref=e90]':
+                          - text: I
+                          - subscript [ref=e91]: D
+                      - cell [ref=e92]:
+                        - textbox [ref=e93]: "20"
+                      - cell "A" [ref=e94]
+                    - row [ref=e96]:
+                      - cell [ref=e97]:
+                        - generic "Pulse duration the device stays in linear mode (s). 1ms = 1e-3." [ref=e98]:
+                          - text: t
+                          - subscript [ref=e99]: p
+                      - cell [ref=e100]:
+                        - textbox [ref=e101]: "0.001"
+                      - cell "s" [ref=e102]
+                    - row [ref=e104]:
+                      - cell [ref=e105]:
+                        - generic "Case temperature (degC) - heatsink/case surface." [ref=e106]:
+                          - text: T
+                          - subscript [ref=e107]: C
+                      - cell [ref=e108]:
+                        - textbox [ref=e109]: "50"
+                      - cell "°C" [ref=e110]
+                    - row [ref=e112]:
+                      - cell "Duty D" [ref=e113]:
+                        - generic "Repetitive duty ratio D (0 < D ≤ 1). Blank = single pulse. For steady-state repetitive pulses at switching frequency." [ref=e114]: Duty D
+                      - cell [ref=e115]:
+                        - textbox "blank = use default" [ref=e116]
+                      - cell [ref=e117]
+              - generic [ref=e118]:
+                - generic [ref=e119]: Thermal Model
+                - generic [ref=e120]:
+                  - generic [ref=e121]:
+                    - button "Single-pole" [ref=e122] [cursor=pointer]
+                    - button "Foster" [ref=e123] [cursor=pointer]
+                  - table [ref=e124]:
+                    - rowgroup [ref=e125]:
+                      - row [ref=e126]:
+                        - columnheader "Parameter" [ref=e127]
+                        - columnheader "Value" [ref=e128]
+                        - columnheader "Unit" [ref=e129]
+                    - rowgroup [ref=e130]:
+                      - row [ref=e131]:
+                        - cell [ref=e132]:
+                          - generic "Thermal resistance junction-to-case (datasheet)." [ref=e133]:
+                            - text: R
+                            - subscript [ref=e134]: θJC
+                        - cell [ref=e135]:
+                          - textbox [ref=e136]: "0.5"
+                        - cell "°C/W" [ref=e137]
+                      - row [ref=e139]:
+                        - cell "τ" [ref=e140]:
+                          - generic "Thermal time constant (s) of the Zth curve knee." [ref=e141]: τ
+                        - cell [ref=e142]:
+                          - textbox [ref=e143]: "0.05"
+                        - cell "s" [ref=e144]
+            - button "Run SOA Check" [ref=e146] [cursor=pointer]
+          - generic [ref=e147]:
+            - generic [ref=e148]:
+              - generic [ref=e149]: PASS
+              - button "Copy results to clipboard" [ref=e150] [cursor=pointer]: "?��"
+            - generic [ref=e151]:
+              - generic [ref=e152]:
+                - text: V
+                - subscript [ref=e153]: DS
+                - text: =48V × I
+                - subscript [ref=e154]: D
+                - text: =20.0A = 960.0 W
+              - generic "Dissipated power vs the SOA power limit at the given pulse/duty" [ref=e155]:
+                - generic [ref=e156]: Power
+                - generic [ref=e157]:
+                  - text: 960W
+                  - generic [ref=e158]: vs Pmax(1.0ms) = 10100W
+                - generic [ref=e159]: PASS
+              - generic "Drain-source voltage stress relative to BVDSS rating" [ref=e160]:
+                - generic [ref=e161]:
+                  - text: V
+                  - subscript [ref=e162]: DS
+                - generic [ref=e163]:
+                  - text: 48 V
+                  - generic [ref=e164]: vs BVDSS 650V
+                - generic [ref=e165]: PASS
+              - generic "Drain current stress relative to ID(max) / IDM rating" [ref=e166]:
+                - generic [ref=e167]:
+                  - text: I
+                  - subscript [ref=e168]: D
+                - generic [ref=e169]:
+                  - text: 20.0 A
+                  - generic [ref=e170]: vs IDM 144A (pulsed)
+                - generic [ref=e171]: PASS
+              - generic [ref=e172]: "Max pulse: 11.7ms"
+              - generic [ref=e173]:
+                - generic [ref=e174]: OVERALL
+                - generic [ref=e175]: PASS
+        - generic [ref=e176]:
+          - generic [ref=e177]:
+            - generic [ref=e178]: SOA Diagram
+            - generic [ref=e179]:
+              - button "Export SVG" [ref=e180] [cursor=pointer]: SVG
+              - img [ref=e184]:
+                - generic [ref=e185]:
+                  - generic [ref=e189]:
+                    - generic [ref=e199]: 1µs
+                    - generic [ref=e201]: 10µs
+                    - generic [ref=e203]: 100µs
+                    - generic [ref=e204]: 1ms
+                    - generic [ref=e205]: 10ms
+                    - generic [ref=e206]: 100ms
+                    - generic [ref=e208]: 1s
+                    - generic [ref=e210]: 10s
+                  - generic [ref=e216]:
+                    - generic [ref=e218]: 10-1
+                    - generic [ref=e220]: 2·10-1
+                    - generic [ref=e222]: 5·10-1
+                    - generic [ref=e224]: "100"
+                    - generic [ref=e226]: 2·100
+                    - generic [ref=e228]: 5·100
+                    - generic [ref=e230]: "101"
+                    - generic [ref=e232]: 2·101
+                    - generic [ref=e234]: 5·101
+                    - generic [ref=e236]: "102"
+                  - generic [ref=e238]:
+                    - generic [ref=e240]: "100"
+                    - generic [ref=e242]: 2·100
+                    - generic [ref=e244]: 5·100
+                    - generic [ref=e246]: "101"
+                    - generic [ref=e248]: 2·101
+                    - generic [ref=e250]: 5·101
+                    - generic [ref=e252]: "102"
+                - generic [ref=e254]: VDS (V)
+                - generic [ref=e255]: ID (A)
+          - generic [ref=e256]:
+            - generic [ref=e257]:
+              - text: Transient Thermal Response (R
+              - subscript [ref=e258]: thjc
+              - text: )
+            - generic [ref=e259]:
+              - button "Export SVG" [ref=e260] [cursor=pointer]: SVG
+              - img [ref=e264]:
+                - generic [ref=e265]:
+                  - generic [ref=e279]:
+                    - generic [ref=e281]: 10-6
+                    - generic [ref=e283]: 2·10-6
+                    - generic [ref=e285]: 5·10-6
+                    - generic [ref=e287]: 10-5
+                    - generic [ref=e289]: 2·10-5
+                    - generic [ref=e291]: 5·10-5
+                    - generic [ref=e293]: 10-4
+                    - generic [ref=e295]: 2·10-4
+                    - generic [ref=e297]: 5·10-4
+                    - generic [ref=e299]: 10-3
+                    - generic [ref=e301]: 2·10-3
+                    - generic [ref=e303]: 5·10-3
+                    - generic [ref=e305]: 10-2
+                    - generic [ref=e307]: 2·10-2
+                    - generic [ref=e309]: 5·10-2
+                    - generic [ref=e311]: 10-1
+                    - generic [ref=e313]: 2·10-1
+                    - generic [ref=e315]: 5·10-1
+                    - generic [ref=e317]: "100"
+                    - generic [ref=e319]: 2·100
+                    - generic [ref=e321]: 5·100
+                    - generic [ref=e323]: "101"
+                  - generic [ref=e325]:
+                    - generic [ref=e327]: 10-5
+                    - generic [ref=e329]: 2·10-5
+                    - generic [ref=e331]: 5·10-5
+                    - generic [ref=e333]: 10-4
+                    - generic [ref=e335]: 2·10-4
+                    - generic [ref=e337]: 5·10-4
+                    - generic [ref=e339]: 10-3
+                    - generic [ref=e341]: 2·10-3
+                    - generic [ref=e343]: 5·10-3
+                    - generic [ref=e345]: 10-2
+                    - generic [ref=e347]: 2·10-2
+                    - generic [ref=e349]: 5·10-2
+                    - generic [ref=e351]: 10-1
+                  - generic [ref=e355]: Single pulse
+                  - generic [ref=e357]: D = 0.01
+                  - generic [ref=e359]: D = 0.02
+                  - generic [ref=e361]: D = 0.05
+                  - generic [ref=e363]: D = 0.1
+                  - generic [ref=e365]: D = 0.2
+                  - generic [ref=e367]: D = 0.5
+                - generic [ref=e368]: tp (s)
+                - generic [ref=e369]: Zth(jc) (°C/W)
+    - contentinfo [ref=e370]: MOSFET SOA Calculator · all computation is local.
+  - status

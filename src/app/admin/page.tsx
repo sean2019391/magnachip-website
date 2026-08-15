@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import type { Article } from '@/types/article'
 
 export default function AdminPage() {
@@ -41,6 +42,22 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-[1100px] mx-auto px-6 py-12">
+        {/* Section nav */}
+        <nav className="flex items-center gap-1 mb-8">
+          <Link
+            href="/admin"
+            className="px-4 py-2 rounded-xl text-sm font-medium bg-black text-white transition-colors"
+          >
+            Articles
+          </Link>
+          <Link
+            href="/admin/datasheets"
+            className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-200/60 hover:text-gray-900 transition-colors"
+          >
+            Digital Datasheets
+          </Link>
+        </nav>
+
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
