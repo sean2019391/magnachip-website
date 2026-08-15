@@ -1,0 +1,44 @@
+﻿{
+  "@types/react": {
+    "current": "18.3.31",
+    "wanted": "18.3.31",
+    "latest": "19.2.18",
+    "dependent": "soa-deployment",
+    "location": "C:\\Users\\140949\\Desktop\\magnachip-website\\packages\\soa-deployment\\node_modules\\@types\\react"
+  },
+  "@types/react-dom": {
+    "current": "18.3.7",
+    "wanted": "18.3.7",
+    "latest": "19.2.4",
+    "dependent": "soa-deployment",
+    "location": "C:\\Users\\140949\\Desktop\\magnachip-website\\packages\\soa-deployment\\node_modules\\@types\\react-dom"
+  },
+  "pdfjs-dist": {
+    "current": "4.10.38",
+    "wanted": "4.10.38",
+    "latest": "6.2.108",
+    "dependent": "soa-deployment",
+    "location": "C:\\Users\\140949\\Desktop\\magnachip-website\\node_modules\\pdfjs-dist"
+  },
+  "react": {
+    "current": "18.3.1",
+    "wanted": "18.3.1",
+    "latest": "19.2.8",
+    "dependent": "soa-deployment",
+    "location": "C:\\Users\\140949\\Desktop\\magnachip-website\\packages\\soa-deployment\\node_modules\\react"
+  },
+  "react-dom": {
+    "current": "18.3.1",
+    "wanted": "18.3.1",
+    "latest": "19.2.8",
+    "dependent": "soa-deployment",
+    "location": "C:\\Users\\140949\\Desktop\\magnachip-website\\packages\\soa-deployment\\node_modules\\react-dom"
+  },
+  "typescript": {
+    "current": "5.9.3",
+    "wanted": "5.9.3",
+    "latest": "7.0.2",
+    "dependent": "soa-deployment",
+    "location": "C:\\Users\\140949\\Desktop\\magnachip-website\\node_modules\\typescript"
+  }
+}
