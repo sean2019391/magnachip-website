@@ -7,18 +7,22 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductsSidebar from '@/components/ProductsSidebar';
 import FadeIn from '@/components/FadeIn';
-nfunction ProductsOverviewContent() {
+
+function ProductsOverviewContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const partNumber = searchParams.get('partNumber');
-n  useEffect(() => {
+
+  useEffect(() => {
     if (partNumber) {
       // Legacy links that pointed here with ?partNumber should go to the canonical tool page
       router.replace(`/design-resources/tool/digital-datasheet?partNumber=${encodeURIComponent(partNumber)}`);
     }
   }, [partNumber, router]);
-n  if (partNumber) return null; // while redirecting
-n  return (
+
+  if (partNumber) return null; // while redirecting
+
+  return (
     <>
       <FadeIn>
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-8 flex-wrap">
@@ -29,11 +33,13 @@ import FadeIn from '@/components/FadeIn';
           <span className="text-gray-900 font-medium print:hidden">Overview</span>
         </div>
       </FadeIn>
-n      <div className="flex flex-col lg:flex-row gap-10">
+
+      <div className="flex flex-col lg:flex-row gap-10">
         <div className="print:hidden">
           <ProductsSidebar />
         </div>
-n        <div className="flex-1 min-w-0">
+
+        <div className="flex-1 min-w-0">
           <FadeIn>
             <div className="max-w-2xl mb-8 print:hidden">
               <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">Products</p>
@@ -44,7 +50,8 @@ import FadeIn from '@/components/FadeIn';
               </p>
             </div>
           </FadeIn>
-n          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="p-5 rounded-xl bg-white border border-gray-200">
               <h3 className="text-base font-semibold text-gray-900 mb-2">Power Solution</h3>
               <p className="text-sm text-gray-500">MXT, SJ, HV MOSFETs, IGBTs, and SiC products.</p>
@@ -63,7 +70,8 @@ import FadeIn from '@/components/FadeIn';
     </>
   );
 }
-nexport default function ProductOverviewPage() {
+
+export default function ProductOverviewPage() {
   return (
     <main className="min-h-screen">
       <Navbar />
