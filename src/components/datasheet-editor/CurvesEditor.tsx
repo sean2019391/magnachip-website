@@ -223,6 +223,7 @@ function SeriesEditor({
   // Keep CSV view in sync if external points change.
   useEffect(() => {
     setText(series.points.map(([x, y]) => `${x},${y}`).join('\n'))
+    // Keep CSV text in sync when series.id changes only; other internal changes are handled elsewhere
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [series.id])
 
