@@ -1,0 +1,2 @@
+id,partNumber,title,version,date,company,classification,published,createdAt,updatedAt,ordering_type,ordering_package,ordering_marking,ordering_packing,ordering_rohs,ordering_url,keyPerformance,sections_count
+"amdta080n017rh","AMDTA080N017RH","AMDTA080N017RH","1.0","2026-04-29","Magnachip Semiconductor","Product Data Sheet","true","2026-04-29T00:00:00.000Z","2026-04-29T00:00:00.000Z","AMDTA080N017RH","TOLL","AMDTA080N017","Tape & Reel","Halogen Free","http://www.magnachip.com/","VDS:80 V; RDS(on), max.:1.7 mΩ; ID:300 A; Qg:183 nC; TJ, max:175 °C","6"
