@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useParams } from 'next/navigation'
-import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { designResourcesData, slugToDrCategory, toSlug } from '@/lib/products'
-import DesignResourcesSidebar from '@/components/DesignResourcesSidebar'
-import FadeIn from '@/components/FadeIn'
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { designResourcesData, slugToDrCategory, toSlug } from '@/lib/products';
+import DesignResourcesSidebar from '@/components/DesignResourcesSidebar';
+import FadeIn from '@/components/FadeIn';
 
 export default function DesignResourceCategoryPage() {
-  const params = useParams()
-  const slug = params.slug as string
-  const category = slugToDrCategory[slug]
+  const params = useParams();
+  const slug = params.slug as string;
+  const category = slugToDrCategory[slug];
 
   if (!category || category === 'Overview') {
     return (
@@ -23,17 +23,22 @@ export default function DesignResourceCategoryPage() {
               <DesignResourcesSidebar />
               <div className="flex-1 min-w-0 text-center pt-10">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">Category not found</h1>
-                <Link href="/design-resources" className="text-sm text-gray-600 hover:text-black underline">Back to resources</Link>
+                <Link
+                  href="/design-resources"
+                  className="text-sm text-gray-600 hover:text-black underline"
+                >
+                  Back to resources
+                </Link>
               </div>
             </div>
           </div>
         </section>
         <Footer />
       </main>
-    )
+    );
   }
 
-  const items = designResourcesData[category] ?? []
+  const items = designResourcesData[category] ?? [];
 
   return (
     <main className="min-h-screen">
@@ -42,7 +47,9 @@ export default function DesignResourceCategoryPage() {
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
             <div className="flex items-center gap-2 text-sm text-gray-400 mb-8 flex-wrap">
-              <Link href="/design-resources" className="hover:text-black transition-colors">Design Resources</Link>
+              <Link href="/design-resources" className="hover:text-black transition-colors">
+                Design Resources
+              </Link>
               <span>/</span>
               <span className="text-gray-900 font-medium">{category}</span>
             </div>
@@ -88,5 +95,5 @@ export default function DesignResourceCategoryPage() {
       </section>
       <Footer />
     </main>
-  )
+  );
 }

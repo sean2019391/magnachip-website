@@ -1,38 +1,42 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import FadeIn from '@/components/FadeIn'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { useI18n } from '@/i18n/context'
-import type { Article } from '@/types/article'
-import { getCategoryBySlug } from '@/lib/category'
-import { IconChevronLeft, IconChevronRight } from '@/components/Icons'
-import SolutionsSection from '@/components/SolutionsSection'
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import FadeIn from '@/components/FadeIn';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { useI18n } from '@/i18n/context';
+import type { Article } from '@/types/article';
+import { getCategoryBySlug } from '@/lib/category';
+import { IconChevronLeft, IconChevronRight } from '@/components/Icons';
+import SolutionsSection from '@/components/SolutionsSection';
 
 export default function HomePage() {
-  const { t } = useI18n()
-  const [articles, setArticles] = useState<Article[]>([])
-  const [currentIdx, setCurrentIdx] = useState(0)
-  const [loading, setLoading] = useState(true)
+  const { t } = useI18n();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/articles')
       .then((res) => res.json())
       .then((data) => {
-        setArticles(data.articles ?? [])
-        setLoading(false)
+        setArticles(data.articles ?? []);
+        setLoading(false);
       })
-      .catch(() => setLoading(false))
-  }, [])
+      .catch(() => setLoading(false));
+  }, []);
 
-  const article = articles[currentIdx]
-  const hasPrev = currentIdx > 0
-  const hasNext = currentIdx < articles.length - 1
+  const article = articles[currentIdx];
+  const hasPrev = currentIdx > 0;
+  const hasNext = currentIdx < articles.length - 1;
 
-  const goPrev = () => { if (hasPrev) setCurrentIdx((i) => i - 1) }
-  const goNext = () => { if (hasNext) setCurrentIdx((i) => i + 1) }
+  const goPrev = () => {
+    if (hasPrev) setCurrentIdx((i) => i - 1);
+  };
+  const goNext = () => {
+    if (hasNext) setCurrentIdx((i) => i + 1);
+  };
 
   return (
     <main className="min-h-screen">
@@ -77,16 +81,16 @@ export default function HomePage() {
                   <div className="w-12 h-0.5 bg-gray-200 my-5" />
 
                   {/* Excerpt */}
-                  <p className="text-gray-500 leading-relaxed text-base">
-                    {article.excerpt}
-                  </p>
-
+                  <p className="text-gray-500 leading-relaxed text-base">{article.excerpt}</p>
                 </Link>
 
                 {/* Navigation */}
                 <div className="flex items-center justify-between px-8 md:px-10 lg:px-12 py-4 border-t border-gray-100 bg-gray-50/50">
                   <button
-                    onClick={(e) => { e.stopPropagation(); goPrev() }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goPrev();
+                    }}
                     disabled={!hasPrev}
                     className={`p-3 rounded-lg transition-colors ${
                       hasPrev
@@ -99,7 +103,10 @@ export default function HomePage() {
                   </button>
 
                   <button
-                    onClick={(e) => { e.stopPropagation(); goNext() }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goNext();
+                    }}
                     disabled={!hasNext}
                     className={`p-3 rounded-lg transition-colors ${
                       hasNext
@@ -124,7 +131,9 @@ export default function HomePage() {
             {t.metrics.map((m, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="card-mk p-6 md:p-8 text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-black mb-1 tabular-nums">{m.value}</div>
+                  <div className="text-3xl md:text-4xl font-bold text-black mb-1 tabular-nums">
+                    {m.value}
+                  </div>
                   <div className="text-sm text-gray-500 mt-1">{m.label}</div>
                 </div>
               </FadeIn>
@@ -138,8 +147,12 @@ export default function HomePage() {
         <div className="max-w-[1100px] mx-auto">
           <FadeIn>
             <div className="max-w-2xl mb-14">
-              <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">{t.products.sectionTag}</p>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 text-balance">{t.products.sectionTitle}</h2>
+              <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">
+                {t.products.sectionTag}
+              </p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 text-balance">
+                {t.products.sectionTitle}
+              </h2>
               <p className="text-gray-500 leading-relaxed">{t.products.sectionDesc}</p>
             </div>
           </FadeIn>
@@ -170,14 +183,20 @@ export default function HomePage() {
           <div>
             <FadeIn>
               <span className="badge-mk bg-gray-200 text-gray-600 mb-4">{t.about.sectionTag}</span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 text-balance">{t.about.sectionTitle}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 text-balance">
+                {t.about.sectionTitle}
+              </h2>
               <p className="text-gray-500 mb-4 leading-relaxed">{t.about.p1}</p>
               <p className="text-gray-500 leading-relaxed">{t.about.p2}</p>
             </FadeIn>
           </div>
           <FadeIn delay={0.1}>
             <div className="card-mk aspect-[4/3] flex items-center justify-center p-6">
-              <img src="/magnachip_image.png" alt="MagnaChip" className="w-full h-full object-contain" />
+              <img
+                src="/magnachip_image.png"
+                alt="MagnaChip"
+                className="w-full h-full object-contain"
+              />
             </div>
           </FadeIn>
         </div>
@@ -189,7 +208,9 @@ export default function HomePage() {
           <FadeIn>
             <div className="max-w-2xl mb-14">
               <span className="badge-mk bg-gray-100 text-gray-500 mb-4">{t.news.sectionTag}</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-balance">{t.news.sectionTitle}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-balance">
+                {t.news.sectionTitle}
+              </h2>
             </div>
           </FadeIn>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
@@ -215,7 +236,9 @@ export default function HomePage() {
         <div className="max-w-[1100px] mx-auto text-center relative">
           <FadeIn>
             <span className="badge-mk bg-white/10 text-white/70 mb-4">Get in Touch</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 text-balance">{t.cta.title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 text-balance">
+              {t.cta.title}
+            </h2>
             <p className="text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">{t.cta.desc}</p>
             <div className="flex gap-3 justify-center flex-wrap">
               <a
@@ -226,10 +249,7 @@ export default function HomePage() {
               >
                 {t.cta.btn1}
               </a>
-              <a
-                href="#products"
-                className="btn-gradient"
-              >
+              <a href="#products" className="btn-gradient">
                 {t.cta.btn2}
               </a>
             </div>
@@ -239,5 +259,5 @@ export default function HomePage() {
 
       <Footer />
     </main>
-  )
+  );
 }

@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { cloneElement, isValidElement, useId } from 'react'
+import { cloneElement, isValidElement, useId } from 'react';
 import type {
   ButtonHTMLAttributes,
   InputHTMLAttributes,
   ReactElement,
   ReactNode,
   TextareaHTMLAttributes,
-} from 'react'
+} from 'react';
 
-export type InputSize = 'md' | 'sm' | 'xs'
+export type InputSize = 'md' | 'sm' | 'xs';
 
 const SIZES: Record<InputSize, string> = {
   md: 'px-3 py-2 text-sm',
   sm: 'px-2 py-1.5 text-sm',
   xs: 'px-1.5 py-1 text-xs',
-}
+};
 
 /* ── Icons (inline SVG, no external deps) ── */
 
-type IconProps = { className?: string }
+type IconProps = { className?: string };
 
 function Icon({ className, children }: IconProps & { children: ReactNode }) {
   return (
@@ -36,7 +36,7 @@ function Icon({ className, children }: IconProps & { children: ReactNode }) {
     >
       {children}
     </svg>
-  )
+  );
 }
 
 export function PlusIcon({ className }: IconProps) {
@@ -45,7 +45,7 @@ export function PlusIcon({ className }: IconProps) {
       <path d="M12 5v14" />
       <path d="M5 12h14" />
     </Icon>
-  )
+  );
 }
 
 export function XIcon({ className }: IconProps) {
@@ -54,7 +54,7 @@ export function XIcon({ className }: IconProps) {
       <path d="M18 6 6 18" />
       <path d="m6 6 12 12" />
     </Icon>
-  )
+  );
 }
 
 export function TrashIcon({ className }: IconProps) {
@@ -64,7 +64,7 @@ export function TrashIcon({ className }: IconProps) {
       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
       <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
     </Icon>
-  )
+  );
 }
 
 export function ChevronUpIcon({ className }: IconProps) {
@@ -72,7 +72,7 @@ export function ChevronUpIcon({ className }: IconProps) {
     <Icon className={className}>
       <path d="m18 15-6-6-6 6" />
     </Icon>
-  )
+  );
 }
 
 export function ChevronDownIcon({ className }: IconProps) {
@@ -80,7 +80,7 @@ export function ChevronDownIcon({ className }: IconProps) {
     <Icon className={className}>
       <path d="m6 9 6 6 6-6" />
     </Icon>
-  )
+  );
 }
 
 export function ArrowLeftIcon({ className }: IconProps) {
@@ -89,7 +89,7 @@ export function ArrowLeftIcon({ className }: IconProps) {
       <path d="m12 19-7-7 7-7" />
       <path d="M19 12H5" />
     </Icon>
-  )
+  );
 }
 
 export function SaveIcon({ className }: IconProps) {
@@ -99,7 +99,7 @@ export function SaveIcon({ className }: IconProps) {
       <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
       <path d="M7 3v4a1 1 0 0 0 1 1h7" />
     </Icon>
-  )
+  );
 }
 
 export function DownloadIcon({ className }: IconProps) {
@@ -109,7 +109,7 @@ export function DownloadIcon({ className }: IconProps) {
       <polyline points="7 10 12 15 17 10" />
       <line x1="12" x2="12" y1="15" y2="3" />
     </Icon>
-  )
+  );
 }
 
 export function UploadIcon({ className }: IconProps) {
@@ -119,7 +119,7 @@ export function UploadIcon({ className }: IconProps) {
       <polyline points="17 8 12 3 7 8" />
       <line x1="12" x2="12" y1="3" y2="15" />
     </Icon>
-  )
+  );
 }
 
 export function DocIcon({ className }: IconProps) {
@@ -131,7 +131,7 @@ export function DocIcon({ className }: IconProps) {
       <path d="M16 13H8" />
       <path d="M16 17H8" />
     </Icon>
-  )
+  );
 }
 
 /* ── Primitives ── */
@@ -142,12 +142,12 @@ export function Card({
   children,
   className,
 }: {
-  title?: string
-  action?: ReactNode
-  children: ReactNode
-  className?: string
+  title?: string;
+  action?: ReactNode;
+  children: ReactNode;
+  className?: string;
 }) {
-  const hasHeader = title !== undefined || action !== undefined
+  const hasHeader = title !== undefined || action !== undefined;
   return (
     <div className={`rounded-xl border border-gray-200 bg-white ${className ?? ''}`}>
       {hasHeader && (
@@ -158,26 +158,20 @@ export function Card({
       )}
       <div className={`space-y-2 px-4 pb-4 ${hasHeader ? 'pt-2' : 'pt-4'}`}>{children}</div>
     </div>
-  )
+  );
 }
 
-export function SectionHeader({
-  title,
-  action,
-}: {
-  title: string
-  action?: ReactNode
-}) {
+export function SectionHeader({ title, action }: { title: string; action?: ReactNode }) {
   return (
     <div className="flex items-center justify-between">
       <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
       {action}
     </div>
-  )
+  );
 }
 
 export function Field({ label, children }: { label: string; children: ReactNode }) {
-  const id = useId()
+  const id = useId();
   return (
     <div className="grid grid-cols-[110px_1fr] items-center gap-2">
       <label htmlFor={id} className="text-sm text-gray-500">
@@ -187,7 +181,7 @@ export function Field({ label, children }: { label: string; children: ReactNode 
         ? cloneElement(children, { id })
         : children}
     </div>
-  )
+  );
 }
 
 export function TextInput({
@@ -200,19 +194,16 @@ export function TextInput({
       {...rest}
       className={`w-full rounded-lg border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 transition-colors outline-none focus:border-black focus:ring-1 focus:ring-black ${SIZES[size]} ${className}`}
     />
-  )
+  );
 }
 
-export function TextArea({
-  className = '',
-  ...rest
-}: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function TextArea({ className = '', ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
       {...rest}
       className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 transition-colors outline-none focus:border-black focus:ring-1 focus:ring-black ${className}`}
     />
-  )
+  );
 }
 
 export function SelectInput({
@@ -223,12 +214,12 @@ export function SelectInput({
   className = '',
   disabled,
 }: {
-  value: string
-  onChange: (value: string) => void
-  options: readonly string[]
-  size?: InputSize
-  className?: string
-  disabled?: boolean
+  value: string;
+  onChange: (value: string) => void;
+  options: readonly string[];
+  size?: InputSize;
+  className?: string;
+  disabled?: boolean;
 }) {
   return (
     <select
@@ -243,7 +234,7 @@ export function SelectInput({
         </option>
       ))}
     </select>
-  )
+  );
 }
 
 export function IconButton({
@@ -261,7 +252,7 @@ export function IconButton({
     >
       {children}
     </button>
-  )
+  );
 }
 
 export function AddButton({
@@ -269,9 +260,9 @@ export function AddButton({
   children,
   className = '',
 }: {
-  onClick: () => void
-  children: ReactNode
-  className?: string
+  onClick: () => void;
+  children: ReactNode;
+  className?: string;
 }) {
   return (
     <button
@@ -281,5 +272,5 @@ export function AddButton({
     >
       {children}
     </button>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useParams } from 'next/navigation'
-import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { applicationsData, slugToCategory, toSlug } from '@/lib/products'
-import ApplicationsSidebar from '@/components/ApplicationsSidebar'
-import FadeIn from '@/components/FadeIn'
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { applicationsData, slugToCategory, toSlug } from '@/lib/products';
+import ApplicationsSidebar from '@/components/ApplicationsSidebar';
+import FadeIn from '@/components/FadeIn';
 
 export default function ApplicationCategoryPage() {
-  const params = useParams()
-  const slug = params.slug as string
-  const category = slugToCategory[slug]
+  const params = useParams();
+  const slug = params.slug as string;
+  const category = slugToCategory[slug];
 
   if (!category) {
     return (
@@ -23,7 +23,10 @@ export default function ApplicationCategoryPage() {
               <ApplicationsSidebar />
               <div className="flex-1 min-w-0 text-center pt-10">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">Category not found</h1>
-                <Link href="/applications" className="text-sm text-gray-600 hover:text-black underline">
+                <Link
+                  href="/applications"
+                  className="text-sm text-gray-600 hover:text-black underline"
+                >
                   Back to applications
                 </Link>
               </div>
@@ -32,10 +35,10 @@ export default function ApplicationCategoryPage() {
         </section>
         <Footer />
       </main>
-    )
+    );
   }
 
-  const subs = Object.keys(applicationsData[category]).filter((s) => s !== 'Overview')
+  const subs = Object.keys(applicationsData[category]).filter((s) => s !== 'Overview');
 
   return (
     <main className="min-h-screen">
@@ -44,7 +47,9 @@ export default function ApplicationCategoryPage() {
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
             <div className="flex items-center gap-2 text-sm text-gray-400 mb-8 flex-wrap">
-              <Link href="/applications" className="hover:text-black transition-colors">Applications</Link>
+              <Link href="/applications" className="hover:text-black transition-colors">
+                Applications
+              </Link>
               <span>/</span>
               <span className="text-gray-900 font-medium">{category}</span>
             </div>
@@ -58,7 +63,9 @@ export default function ApplicationCategoryPage() {
             <div className="flex-1 min-w-0">
               <FadeIn>
                 <div className="max-w-2xl mb-10">
-                  <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">Application</p>
+                  <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">
+                    Application
+                  </p>
                   <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-balance mb-4">
                     {category}
                   </h1>
@@ -83,7 +90,8 @@ export default function ApplicationCategoryPage() {
                           <p className="text-sm font-semibold text-gray-900">{sub}</p>
                           {applicationsData[category][sub].length > 0 && (
                             <p className="text-xs text-gray-400 mt-1">
-                              {applicationsData[category][sub].length} solution detail{applicationsData[category][sub].length !== 1 ? 's' : ''}
+                              {applicationsData[category][sub].length} solution detail
+                              {applicationsData[category][sub].length !== 1 ? 's' : ''}
                             </p>
                           )}
                         </Link>
@@ -98,5 +106,5 @@ export default function ApplicationCategoryPage() {
       </section>
       <Footer />
     </main>
-  )
+  );
 }

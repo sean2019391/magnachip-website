@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 
 export default function EditArticlePage() {
-  const router = useRouter()
-  const params = useParams()
-  const isNew = params.id === 'new'
+  const router = useRouter();
+  const params = useParams();
+  const isNew = params.id === 'new';
 
   const [form, setForm] = useState({
     title: '',
@@ -15,18 +15,18 @@ export default function EditArticlePage() {
     content: '',
     date: new Date().toISOString().split('T')[0],
     published: true,
-  })
-  const [loading, setLoading] = useState(!isNew)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
+  });
+  const [loading, setLoading] = useState(!isNew);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isNew) return
+    if (isNew) return;
     fetch(`/api/articles/${params.id}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.article) {
-          const a = data.article
+          const a = data.article;
           setForm({
             title: a.title,
             slug: a.slug,
@@ -34,95 +34,93 @@ export default function EditArticlePage() {
             content: a.content,
             date: a.date.split('T')[0],
             published: a.published,
-          })
+          });
         }
-        setLoading(false)
+        setLoading(false);
       })
-      .catch(() => setLoading(false))
-  }, [isNew, params.id])
+      .catch(() => setLoading(false));
+  }, [isNew, params.id]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
     const checked =
-      type === 'checkbox' ? (e as React.ChangeEvent<HTMLInputElement>).target.checked : undefined
+      type === 'checkbox' ? (e as React.ChangeEvent<HTMLInputElement>).target.checked : undefined;
 
     setForm((prev) => {
       const updated = {
         ...prev,
         [name]: type === 'checkbox' ? checked : value,
-      }
+      };
       if (name === 'title' && prev.slug === '') {
         updated.slug = value
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '')
+          .replace(/^-+|-+$/g, '');
       }
-      return updated
-    })
-  }
+      return updated;
+    });
+  };
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
       ...prev,
       slug: e.target.value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async () => {
     if (!form.title.trim()) {
-      setError('Title is required')
-      return
+      setError('Title is required');
+      return;
     }
     if (!form.slug.trim()) {
-      setError('Slug is required')
-      return
+      setError('Slug is required');
+      return;
     }
 
-    setSaving(true)
-    setError('')
+    setSaving(true);
+    setError('');
 
     try {
       const body = {
         ...form,
         date: new Date(form.date).toISOString(),
-      }
+      };
 
-      let res: Response
+      let res: Response;
       if (isNew) {
         res = await fetch('/api/articles', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
-        })
+        });
       } else {
         res = await fetch(`/api/articles/${params.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
-        })
+        });
       }
 
       if (res.ok) {
-        router.push('/admin')
+        router.push('/admin');
       } else {
-        const data = await res.json()
-        setError(data.error ?? 'Failed to save article')
+        const data = await res.json();
+        setError(data.error ?? 'Failed to save article');
       }
     } catch {
-      setError('Failed to save article')
+      setError('Failed to save article');
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <p className="text-gray-400 text-sm">Loading...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -247,5 +245,5 @@ export default function EditArticlePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

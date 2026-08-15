@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { motion, useReducedMotion } from 'framer-motion'
-import { ReactNode } from 'react'
+import { motion, useReducedMotion } from 'framer-motion';
+import { ReactNode } from 'react';
 
 interface FadeInProps {
-  children: ReactNode
-  delay?: number
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none'
-  scale?: boolean
-  blur?: boolean
-  duration?: number
-  className?: string
+  children: ReactNode;
+  delay?: number;
+  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
+  scale?: boolean;
+  blur?: boolean;
+  duration?: number;
+  className?: string;
 }
 
 export default function FadeIn({
@@ -22,7 +22,7 @@ export default function FadeIn({
   duration = 0.7,
   className = '',
 }: FadeInProps) {
-  const prefersReduced = useReducedMotion()
+  const prefersReduced = useReducedMotion();
 
   const directionMap = {
     up: { y: 40, x: 0 },
@@ -30,12 +30,12 @@ export default function FadeIn({
     left: { y: 0, x: 40 },
     right: { y: 0, x: -40 },
     none: { y: 0, x: 0 },
-  }
+  };
 
-  const { x, y } = directionMap[direction]
+  const { x, y } = directionMap[direction];
 
   if (prefersReduced) {
-    return <div className={className}>{children}</div>
+    return <div className={className}>{children}</div>;
   }
 
   return (
@@ -60,5 +60,5 @@ export default function FadeIn({
     >
       {children}
     </motion.div>
-  )
+  );
 }

@@ -1,43 +1,43 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import type { Article } from '@/types/article'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import type { Article } from '@/types/article';
 
 export default function AdminPage() {
-  const router = useRouter()
-  const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(true)
+  const router = useRouter();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchArticles = () => {
-    setLoading(true)
+    setLoading(true);
     fetch('/api/articles?admin=true')
       .then((res) => res.json())
       .then((data) => {
-        setArticles(data.articles ?? [])
-        setLoading(false)
+        setArticles(data.articles ?? []);
+        setLoading(false);
       })
-      .catch(() => setLoading(false))
-  }
+      .catch(() => setLoading(false));
+  };
 
   useEffect(() => {
-    fetchArticles()
-  }, [])
+    fetchArticles();
+  }, []);
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this article?')) return
+    if (!window.confirm('Are you sure you want to delete this article?')) return;
     try {
-      const res = await fetch(`/api/articles/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/articles/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        setArticles((prev) => prev.filter((a) => a.id !== id))
+        setArticles((prev) => prev.filter((a) => a.id !== id));
       } else {
-        alert('Failed to delete article')
+        alert('Failed to delete article');
       }
     } catch {
-      alert('Failed to delete article')
+      alert('Failed to delete article');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -153,5 +153,5 @@ export default function AdminPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
