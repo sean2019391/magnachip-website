@@ -109,8 +109,17 @@ function OverviewContent() {
             </FadeIn>
           ) : datasheet ? (
             <FadeIn delay={0.1}>
-              <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-                <DatasheetViewer d={datasheet} />
+              <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden p-8">
+                <div className="max-w-2xl mx-auto text-center">
+                  <p className="text-lg font-semibold mb-2">Interactive Digital Datasheet moved</p>
+                  <p className="text-sm text-gray-500 mb-4">The full, integrated Digital Datasheet experience has been moved to Design resources → Tool. Click below to open the unified viewer.</p>
+                  <div className="flex justify-center gap-3">
+                    <Link href={`/design-resources/tool/digital-datasheet?partNumber=${encodeURIComponent(datasheet.meta.partNumber)}`} className="px-4 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800">
+                      Open Digital Datasheet (Design resources → Tool)
+                    </Link>
+                    <button type="button" onClick={() => setReloadKey((k) => k + 1)} className="px-4 py-2 rounded-lg border text-sm">Refresh</button>
+                  </div>
+                </div>
               </div>
             </FadeIn>
           ) : (
