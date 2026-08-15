@@ -223,7 +223,7 @@ export default function ProductVariantPage() {
                                 )}
                                 {hasDigitalDatasheet(product.pn) && (
                                   <Link
-                                    href={`/products/overview?partNumber=${encodeURIComponent(product.pn)}`}
+                                                                      href={`/design-resources/tool/digital-datasheet?partNumber=${encodeURIComponent(product.pn)}`}
                                     className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
                                     title="View interactive digital datasheet"
                                   >

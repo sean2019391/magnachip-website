@@ -1,58 +1,24 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductsSidebar from '@/components/ProductsSidebar';
 import FadeIn from '@/components/FadeIn';
-import { DatasheetViewer } from '@/components/datasheet/DatasheetViewer';
-import type { DatasheetRecord } from '@/types/datasheet';
-
-function OverviewContent() {
+nfunction ProductsOverviewContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const partNumber = searchParams.get('partNumber');
-
-  const [datasheet, setDatasheet] = useState<DatasheetRecord | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [reloadKey, setReloadKey] = useState(0);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(false);
-    fetch('/api/datasheets?published=true')
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Failed to load datasheets (${res.status})`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (cancelled) return;
-        const list: DatasheetRecord[] = data.datasheets ?? [];
-        const requested = partNumber ? partNumber.trim().toLowerCase() : null;
-        const target =
-          (requested && list.find((d) => d.meta.partNumber.trim().toLowerCase() === requested)) ||
-          list.find((d) => d.meta.partNumber.startsWith('AMDTA')) ||
-          list[0] ||
-          null;
-        setDatasheet(target);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setError(true);
-        setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [partNumber, reloadKey]);
-
-  return (
+n  useEffect(() => {
+    if (partNumber) {
+      // Legacy links that pointed here with ?partNumber should go to the canonical tool page
+      router.replace(`/design-resources/tool/digital-datasheet?partNumber=${encodeURIComponent(partNumber)}`);
+    }
+  }, [partNumber, router]);
+n  if (partNumber) return null; // while redirecting
+n  return (
     <>
       <FadeIn>
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-8 flex-wrap">
@@ -63,80 +29,47 @@ function OverviewContent() {
           <span className="text-gray-900 font-medium print:hidden">Overview</span>
         </div>
       </FadeIn>
-
-      <div className="flex flex-col lg:flex-row gap-10">
+n      <div className="flex flex-col lg:flex-row gap-10">
         <div className="print:hidden">
           <ProductsSidebar />
         </div>
-
-        <div className="flex-1 min-w-0">
+n        <div className="flex-1 min-w-0">
           <FadeIn>
             <div className="max-w-2xl mb-8 print:hidden">
-              <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">
-                Digital Datasheet
-              </p>
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-balance mb-2">
-                {datasheet ? datasheet.meta.partNumber : 'Overview'}
-              </h1>
+              <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">Products</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-balance mb-2">Overview</h1>
               <p className="text-gray-500 text-sm">
-                Interactive product datasheet — hover the charts to inspect values, and use your
-                browser&apos;s print dialog to save a PDF.
+                Explore our product portfolio by family and variant. Use the sidebar to navigate
+                families or click a product to view detailed specifications and datasheets.
               </p>
             </div>
           </FadeIn>
-
-          {loading ? (
-            <div className="rounded-xl bg-white border border-gray-200 p-12 text-center">
-              <p className="text-gray-400 text-sm">Loading datasheet...</p>
+n          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="p-5 rounded-xl bg-white border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Power Solution</h3>
+              <p className="text-sm text-gray-500">MXT, SJ, HV MOSFETs, IGBTs, and SiC products.</p>
             </div>
-          ) : error ? (
-            <FadeIn delay={0.1}>
-              <div className="rounded-xl bg-white border border-gray-200 p-12 text-center">
-                <p className="text-sm text-gray-700 mb-4">
-                  Failed to load the digital datasheet. Please try again.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setReloadKey((k) => k + 1)}
-                  className="px-4 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors"
-                >
-                  Retry
-                </button>
-              </div>
-            </FadeIn>
-          ) : datasheet ? (
-            <FadeIn delay={0.1}>
-              {/* Digital Datasheet has been moved to Design resources → Tool; CTA removed from products overview as requested. */}
-              <div className="rounded-xl bg-white border border-gray-200 p-6 text-center">
-                <p className="text-sm text-gray-500">
-                  This datasheet is available in Design resources → Tool.
-                </p>
-              </div>
-            </FadeIn>
-          ) : (
-            <FadeIn delay={0.1}>
-              <div className="rounded-xl bg-white border border-gray-200 p-12 text-center">
-                <p className="text-gray-400 text-sm">
-                  No published digital datasheet available yet.
-                </p>
-              </div>
-            </FadeIn>
-          )}
+            <div className="p-5 rounded-xl bg-white border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Autonomous Solution</h3>
+              <p className="text-sm text-gray-500">Solutions for motor drivers and automotive applications.</p>
+            </div>
+            <div className="p-5 rounded-xl bg-white border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Power IC</h3>
+              <p className="text-sm text-gray-500">Integrated power management ICs and controllers.</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
   );
 }
-
-export default function ProductOverviewPage() {
+nexport default function ProductOverviewPage() {
   return (
     <main className="min-h-screen">
       <Navbar />
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen print:bg-white print:pt-0 print:pb-0 print:min-h-0">
         <div className="max-w-[1200px] mx-auto">
-          <Suspense fallback={null}>
-            <OverviewContent />
-          </Suspense>
+          <ProductsOverviewContent />
         </div>
       </section>
       <Footer />
