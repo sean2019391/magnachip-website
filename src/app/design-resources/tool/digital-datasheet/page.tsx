@@ -72,7 +72,7 @@ export default function DesignDigitalDatasheetPage() {
   }, [selectedPn, products]);
 
   // If a published datasheet exists in site's API, prefer that. Otherwise create a minimal DatasheetRecord
-  const toDatasheetRecord = async (pn: string): Promise<DatasheetRecord> => {
+  const toDatasheetRecord = async (pn: string): Promise<DatasheetRecord | null> => {
     // try fetch from /api/datasheets
     try {
       const res = await fetch('/api/datasheets?partNumber=' + encodeURIComponent(pn));
@@ -83,8 +83,17 @@ export default function DesignDigitalDatasheetPage() {
         );
         if (found) return found as DatasheetRecord;
       }
-    } catch {}
-    // fallback using selection data
+    } catch {
+      // network error: continue to controlled fallback logic
+    }
+
+    // Only provide a full fallback datasheet for AMDTA080N017RH (per request).
+    const canonical = 'amdta080n017rh';
+    if (pn.toLowerCase() !== canonical) {
+      return null; // indicate no published digital datasheet for this part
+    }
+
+    // For the canonical part, attempt to build from embedded data (selection guide fallback)
     const p = products.find((x) => x.pn.toLowerCase() === pn.toLowerCase());
     const id = p ? p.pn.toLowerCase() : pn.toLowerCase();
     const metaRec: any = {
@@ -104,7 +113,7 @@ export default function DesignDigitalDatasheetPage() {
       meta: metaRec,
       cover: {},
       sections: [],
-      datas: {},
+      curves: [],
     } as unknown as DatasheetRecord;
   };
 
@@ -254,20 +263,42 @@ function SelectedViewer({
   toDatasheetRecord,
 }: {
   pn: string;
-  toDatasheetRecord: (pn: string) => Promise<DatasheetRecord>;
+  toDatasheetRecord: (pn: string) => Promise<DatasheetRecord | null>;
 }) {
   const [rec, setRec] = useState<DatasheetRecord | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
   useEffect(() => {
     let mounted = true;
+    setLoading(true);
+    setNotFound(false);
     toDatasheetRecord(pn)
       .then((r) => {
-        if (mounted) setRec(r);
+        if (!mounted) return;
+        if (r === null) {
+          setNotFound(true);
+          setRec(null);
+        } else {
+          setRec(r);
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!mounted) return;
+        setNotFound(true);
+        setRec(null);
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoading(false);
+      });
     return () => {
       mounted = false;
     };
   }, [pn]);
-  if (!rec) return <div className="p-12 text-center text-gray-400">Loading datasheet…</div>;
+
+  if (loading) return <div className="p-12 text-center text-gray-400">Loading datasheet…</div>;
+  if (notFound) return <div className="p-12 text-center text-gray-400">No published digital datasheet for this part.</div>;
+  if (!rec) return <div className="p-12 text-center text-gray-400">No datasheet available.</div>;
   return <DatasheetViewer d={rec} />;
 }
