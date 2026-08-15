@@ -75,12 +75,33 @@ export default function DesignResourceCategoryPage() {
                   <h2 className="text-sm font-semibold text-gray-700 mb-3">Resources</h2>
                   <div className="grid sm:grid-cols-2 gap-3">
                     {items.map((item, i) => {
+                      // Render SOA as a card that can show nested tool links (e.g. Digital Datasheet)
+                      if (category === 'Tools' && item === 'Safe Operating Area (SOA)') {
+                        return (
+                          <FadeIn key={item} delay={Math.min(i * 0.04, 0.15)}>
+                            <div className="block p-4 rounded-xl bg-white border border-gray-200 hover:border-black/30 hover:shadow-sm transition-all">
+                              <Link href={`/design-resources/tools/${toSlug(item)}`} className="text-sm font-semibold text-gray-900 block mb-2">
+                                Safe Operating Area (SOA)
+                              </Link>
+
+                              <div className="mt-2 text-xs text-gray-600">
+                                {/* If Digital Datasheet is present, show it as a nested link under SOA */}
+                                {items.includes('Digital Datasheet') && (
+                                  <Link href="/design-resources/tool/digital-datasheet" className="inline-block mr-3 mb-1 px-2 py-1 rounded bg-gray-50 border text-gray-800 hover:bg-gray-100">
+                                    Digital Datasheet
+                                  </Link>
+                                )}
+                              </div>
+                            </div>
+                          </FadeIn>
+                        );
+                      }
+
                       const href =
-                        category === 'Tools' && item === 'Safe Operating Area (SOA)'
-                          ? `/design-resources/tools/${toSlug(item)}`
-                          : item === 'Digital Datasheet'
+                        item === 'Digital Datasheet'
                           ? `/design-resources/tool/digital-datasheet`
                           : `/design-resources?q=${encodeURIComponent(item)}`;
+
                       return (
                         <FadeIn key={item} delay={Math.min(i * 0.04, 0.15)}>
                           <Link
