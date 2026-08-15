@@ -74,16 +74,24 @@ export default function DesignResourceCategoryPage() {
                 <FadeIn delay={0.1}>
                   <h2 className="text-sm font-semibold text-gray-700 mb-3">Resources</h2>
                   <div className="grid sm:grid-cols-2 gap-3">
-                    {items.map((item, i) => (
-                      <FadeIn key={item} delay={Math.min(i * 0.04, 0.15)}>
-                        <Link
-                          href={`/design-resources?q=${encodeURIComponent(item)}`}
-                          className="block p-4 rounded-xl bg-white border border-gray-200 hover:border-black/30 hover:shadow-sm transition-all"
-                        >
-                          <p className="text-sm font-semibold text-gray-900">{item}</p>
-                        </Link>
-                      </FadeIn>
-                    ))}
+                    {items.map((item, i) => {
+                      const href =
+                        category === 'Tools' && item === 'Safe Operating Area (SOA)'
+                          ? `/design-resources/tools/${toSlug(item)}`
+                          : item === 'Digital Datasheet'
+                          ? `/design-resources/tool/digital-datasheet`
+                          : `/design-resources?q=${encodeURIComponent(item)}`;
+                      return (
+                        <FadeIn key={item} delay={Math.min(i * 0.04, 0.15)}>
+                          <Link
+                            href={href}
+                            className="block p-4 rounded-xl bg-white border border-gray-200 hover:border-black/30 hover:shadow-sm transition-all"
+                          >
+                            <p className="text-sm font-semibold text-gray-900">{item}</p>
+                          </Link>
+                        </FadeIn>
+                      );
+                    })}
                   </div>
                 </FadeIn>
               ) : (
