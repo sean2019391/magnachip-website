@@ -86,11 +86,9 @@ export default function DesignResourceCategoryPage() {
 
                               <div className="mt-2 text-xs text-gray-600">
                                 {/* If Digital Datasheet is present, show it as a nested link under SOA */}
-                                {items.includes('Digital Datasheet') && (
-                                  <Link href="/design-resources/tool/digital-datasheet" className="inline-block mr-3 mb-1 px-2 py-1 rounded bg-gray-50 border text-gray-800 hover:bg-gray-100">
-                                    Digital Datasheet
-                                  </Link>
-                                )}
+                                <Link href="/design-resources/tool/digital-datasheet" className="inline-block mr-3 mb-1 px-2 py-1 rounded bg-gray-50 border text-gray-800 hover:bg-gray-100">
+                                  Digital Datasheet
+                                </Link>
                               </div>
                             </div>
                           </FadeIn>
