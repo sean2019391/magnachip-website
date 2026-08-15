@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
@@ -77,7 +77,9 @@ export default function ProductOverviewPage() {
       <Navbar />
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen print:bg-white print:pt-0 print:pb-0 print:min-h-0">
         <div className="max-w-[1200px] mx-auto">
-          <ProductsOverviewContent />
+          <Suspense fallback={null}>
+            <ProductsOverviewContent />
+          </Suspense>
         </div>
       </section>
       <Footer />
