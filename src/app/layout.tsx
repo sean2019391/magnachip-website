@@ -15,7 +15,11 @@ export const metadata: Metadata = {
     siteName: 'MagnaChip Semiconductor',
     title: 'MagnaChip Semiconductor - Powering Magnificent Moments',
     description: 'Innovative power solutions for a smarter, smaller, faster world.',
-    url: 'https://www.magnachip.com',
+    url: 'https://magnachip-website.vercel.app',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@magnachip',
   },
 };
 
