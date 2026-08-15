@@ -37,6 +37,7 @@
   ],
   "exclude": [
     "node_modules",
-    "packages/soa-deployment"
+    "packages/soa-deployment",
+    "original-sources"
   ]
 }
