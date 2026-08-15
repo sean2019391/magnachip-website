@@ -224,7 +224,6 @@ function SeriesEditor({
   useEffect(() => {
     setText(series.points.map(([x, y]) => `${x},${y}`).join('\n'))
     // Keep CSV text in sync when series.id changes only; other internal changes are handled elsewhere
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [series.id])
 
   const parseCsv = (raw: string): [number, number][] =>

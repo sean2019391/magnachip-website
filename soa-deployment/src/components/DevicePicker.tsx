@@ -24,9 +24,11 @@ export function DevicePicker({ open, onClose, onSelect }: DevicePickerProps) {
       .list()
       .then((rs) => { if (active) { setRecords(rs); setLoaded(true); } })
       .catch((err) => {
-        console.error('DevicePicker: failed to load device database', err);
-        if (active) setLoaded(true);
-      });
+          // Log in dev only; avoid noisy console in production
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          import('../lib/logger').then(({ error }) => error('DevicePicker: failed to load device database', err));
+          if (active) setLoaded(true);
+        });
     return () => { active = false; };
   }, [open]);
 

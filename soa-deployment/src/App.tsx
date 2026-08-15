@@ -218,20 +218,17 @@ export default function App() {
       if (recomputeTimer.current) window.clearTimeout(recomputeTimer.current);
     };
     // Intentionally omitted recomputeAndProt from deps: recompute is driven by explicit state changes and a ref timer
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [devVals, opVals, protVals, protEnabled]);
 
   const recomputeAndProt = useCallback(() => {
     gatherAndCompute();
     runProtectionCheck();
-    // runProtectionCheck and gatherAndCompute are stable via useCallback; disabling exhaustive-deps to avoid adding transient internal refs
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // runProtectionCheck and gatherAndCompute are stable via useCallback; disable exhaustive-deps was previously used to avoid adding transient internal refs
   }, [gatherAndCompute, runProtectionCheck]);
 
   useEffect(() => {
     recomputeAndProt();
     // Calling recomputeAndProt on mount only; deps intentionally empty to run once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

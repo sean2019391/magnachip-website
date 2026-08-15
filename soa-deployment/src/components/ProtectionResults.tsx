@@ -33,7 +33,9 @@ const ProtectionResultsInner = ({ results }: ProtectionResultsProps) => {
       </div>
     );
   } catch (err) {
-    console.error('ProtectionResults: render failed', err);
+    // Log render errors in development only
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    import('../lib/logger').then(({ error }) => error('ProtectionResults: render failed', err));
     return <div className="muted center">Failed to render protection results.</div>;
   }
 };

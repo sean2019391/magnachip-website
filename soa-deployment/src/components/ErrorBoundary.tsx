@@ -18,7 +18,10 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('ErrorBoundary caught:', error, info.componentStack);
+    // Use dynamic import to avoid requiring logger in SSR contexts where console suppression may differ
+    // Log errors only in non-production to avoid leaking internal info
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    import('../lib/logger').then(({ error: logError }) => logError('ErrorBoundary caught:', error, info.componentStack));
   }
 
   handleRetry = () => {
