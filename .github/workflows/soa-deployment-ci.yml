@@ -1,0 +1,43 @@
+name: 'SOA Deployment CI'
+
+on:
+  push:
+    paths:
+      - 'packages/soa-deployment/**'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    name: Build & Test packages/soa-deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install (root workspace)
+        run: npm ci
+
+      - name: Lint (soa-deployment)
+        run: npm --workspace=packages/soa-deployment run lint
+
+      - name: Build (soa-deployment)
+        run: npm --workspace=packages/soa-deployment run build
+
+      - name: Test (soa-deployment)
+        run: npm --workspace=packages/soa-deployment run test
+
+      - name: Audit (soa-deployment) - report only
+        run: |
+          mkdir -p packages/soa-deployment/reports || true
+          npm --workspace=packages/soa-deployment audit --json > packages/soa-deployment/reports/audit-report.json || true
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: soa-audit-report
+          path: packages/soa-deployment/reports/audit-report.json
