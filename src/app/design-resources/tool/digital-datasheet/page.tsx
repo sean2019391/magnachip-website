@@ -78,6 +78,8 @@ export default function DesignDigitalDatasheetPage() {
       const res = await fetch('/api/datasheets?partNumber=' + encodeURIComponent(pn));
       if (res.ok) {
         const j = await res.json();
+        // API may return { datasheet } or { datasheets: [...] }
+        if (j && j.datasheet) return j.datasheet as DatasheetRecord;
         const found = (j.datasheets ?? []).find(
           (d: any) => d.meta.partNumber.toLowerCase() === pn.toLowerCase(),
         );
@@ -93,7 +95,18 @@ export default function DesignDigitalDatasheetPage() {
       return null; // indicate no published digital datasheet for this part
     }
 
-    // For the canonical part, attempt to build from embedded data (selection guide fallback)
+    // For the canonical part, attempt to build from embedded DATA file (server-provided JSON fallback)
+    try {
+      const res2 = await fetch('/api/datasheets?published=true');
+      if (res2.ok) {
+        const j2 = await res2.json();
+        const list = j2.datasheets ?? [];
+        const found2 = list.find((d: any) => d.meta.partNumber.toLowerCase() === pn.toLowerCase());
+        if (found2) return found2 as DatasheetRecord;
+      }
+    } catch {}
+
+    // As a last resort, build a minimal datasheet record from selection guide entry
     const p = products.find((x) => x.pn.toLowerCase() === pn.toLowerCase());
     const id = p ? p.pn.toLowerCase() : pn.toLowerCase();
     const metaRec: any = {
