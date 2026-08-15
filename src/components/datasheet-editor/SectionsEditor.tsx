@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import type { Column, Row, Section, SectionType } from '@/types/datasheet'
-import { newId } from '@/types/datasheet'
+import { useEffect, useState } from 'react';
+import type { Column, Row, Section, SectionType } from '@/types/datasheet';
+import { newId } from '@/types/datasheet';
 import {
   AddButton,
   Card,
@@ -15,7 +15,7 @@ import {
   TextInput,
   TrashIcon,
   XIcon,
-} from './ui'
+} from './ui';
 
 const SECTION_TYPES: SectionType[] = [
   'absoluteMax',
@@ -28,25 +28,25 @@ const SECTION_TYPES: SectionType[] = [
   'soa',
   'custom',
   'notes',
-]
+];
 
 export function SectionsEditor({
   sections,
   onChange,
 }: {
-  sections: Section[]
-  onChange: (sections: Section[]) => void
+  sections: Section[];
+  onChange: (sections: Section[]) => void;
 }) {
-  const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null)
-  const selectedId = sections.some((s) => s.id === activeId) ? activeId : (sections[0]?.id ?? null)
-  const active = sections.find((s) => s.id === selectedId) ?? null
+  const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
+  const selectedId = sections.some((s) => s.id === activeId) ? activeId : (sections[0]?.id ?? null);
+  const active = sections.find((s) => s.id === selectedId) ?? null;
 
   useEffect(() => {
-    if (selectedId !== activeId) setActiveId(selectedId)
-  }, [selectedId, activeId])
+    if (selectedId !== activeId) setActiveId(selectedId);
+  }, [selectedId, activeId]);
 
   const addSection = () => {
-    const id = newId('sec')
+    const id = newId('sec');
     const newSec: Section = {
       id,
       type: 'custom',
@@ -57,10 +57,10 @@ export function SectionsEditor({
       ],
       rows: [{ id: newId('row'), cells: ['', ''], notes: [] }],
       notes: [],
-    }
-    onChange([...sections, newSec])
-    setActiveId(id)
-  }
+    };
+    onChange([...sections, newSec]);
+    setActiveId(id);
+  };
 
   return (
     <div className="space-y-3">
@@ -96,30 +96,30 @@ export function SectionsEditor({
           section={active}
           onChange={(next) => onChange(sections.map((s) => (s.id === next.id ? next : s)))}
           onRemove={() => {
-            if (!window.confirm(`Delete section "${active.title}"? This cannot be undone.`)) return
-            const idx = sections.findIndex((s) => s.id === active.id)
-            const remaining = sections.filter((s) => s.id !== active.id)
-            onChange(remaining)
-            setActiveId(remaining[Math.min(idx, remaining.length - 1)]?.id ?? null)
+            if (!window.confirm(`Delete section "${active.title}"? This cannot be undone.`)) return;
+            const idx = sections.findIndex((s) => s.id === active.id);
+            const remaining = sections.filter((s) => s.id !== active.id);
+            onChange(remaining);
+            setActiveId(remaining[Math.min(idx, remaining.length - 1)]?.id ?? null);
           }}
           onMoveUp={() => {
-            const idx = sections.findIndex((s) => s.id === active.id)
-            if (idx <= 0) return
-            const arr = [...sections]
-            ;[arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]]
-            onChange(arr)
+            const idx = sections.findIndex((s) => s.id === active.id);
+            if (idx <= 0) return;
+            const arr = [...sections];
+            [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
+            onChange(arr);
           }}
           onMoveDown={() => {
-            const idx = sections.findIndex((s) => s.id === active.id)
-            if (idx < 0 || idx === sections.length - 1) return
-            const arr = [...sections]
-            ;[arr[idx + 1], arr[idx]] = [arr[idx], arr[idx + 1]]
-            onChange(arr)
+            const idx = sections.findIndex((s) => s.id === active.id);
+            if (idx < 0 || idx === sections.length - 1) return;
+            const arr = [...sections];
+            [arr[idx + 1], arr[idx]] = [arr[idx], arr[idx + 1]];
+            onChange(arr);
           }}
         />
       )}
     </div>
-  )
+  );
 }
 
 function SectionEditor({
@@ -129,16 +129,17 @@ function SectionEditor({
   onMoveUp,
   onMoveDown,
 }: {
-  section: Section
-  onChange: (section: Section) => void
-  onRemove: () => void
-  onMoveUp: () => void
-  onMoveDown: () => void
+  section: Section;
+  onChange: (section: Section) => void;
+  onRemove: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
 }) {
-  const nextNoteNumber = section.notes.reduce((max, n) => {
-    const m = /(\d+)/.exec(n.label)
-    return Math.max(max, m ? parseInt(m[1], 10) : 0)
-  }, 0) + 1
+  const nextNoteNumber =
+    section.notes.reduce((max, n) => {
+      const m = /(\d+)/.exec(n.label);
+      return Math.max(max, m ? parseInt(m[1], 10) : 0);
+    }, 0) + 1;
   return (
     <Card>
       <div className="space-y-2 px-4 pt-3">
@@ -187,7 +188,10 @@ function SectionEditor({
               onClick={() =>
                 onChange({
                   ...section,
-                  columns: [...section.columns, { id: newId('col'), header: 'Header', type: 'text' }],
+                  columns: [
+                    ...section.columns,
+                    { id: newId('col'), header: 'Header', type: 'text' },
+                  ],
                   rows: section.rows.map((r) => ({ ...r, cells: [...r.cells, ''] })),
                 })
               }
@@ -204,7 +208,9 @@ function SectionEditor({
                   onChange={(e) =>
                     onChange({
                       ...section,
-                      columns: section.columns.map((x, j) => (j === i ? { ...x, header: e.target.value } : x)),
+                      columns: section.columns.map((x, j) =>
+                        j === i ? { ...x, header: e.target.value } : x,
+                      ),
                     })
                   }
                 />
@@ -215,7 +221,9 @@ function SectionEditor({
                   onChange={(e) =>
                     onChange({
                       ...section,
-                      columns: section.columns.map((x, j) => (j === i ? { ...x, unit: e.target.value } : x)),
+                      columns: section.columns.map((x, j) =>
+                        j === i ? { ...x, unit: e.target.value } : x,
+                      ),
                     })
                   }
                 />
@@ -225,7 +233,9 @@ function SectionEditor({
                   onChange={(v) =>
                     onChange({
                       ...section,
-                      columns: section.columns.map((x, j) => (j === i ? { ...x, type: v as Column['type'] } : x)),
+                      columns: section.columns.map((x, j) =>
+                        j === i ? { ...x, type: v as Column['type'] } : x,
+                      ),
                     })
                   }
                   options={['text', 'number']}
@@ -233,12 +243,15 @@ function SectionEditor({
                 <IconButton
                   title="Remove"
                   onClick={() => {
-                    if (!window.confirm('Remove this column and its cell values?')) return
+                    if (!window.confirm('Remove this column and its cell values?')) return;
                     onChange({
                       ...section,
                       columns: section.columns.filter((_, j) => j !== i),
-                      rows: section.rows.map((r) => ({ ...r, cells: r.cells.filter((_, ci) => ci !== i) })),
-                    })
+                      rows: section.rows.map((r) => ({
+                        ...r,
+                        cells: r.cells.filter((_, ci) => ci !== i),
+                      })),
+                    });
                   }}
                 >
                   <XIcon className="h-3 w-3" />
@@ -279,20 +292,20 @@ function SectionEditor({
                 }
                 onRemove={() => {
                   if (window.confirm('Delete this row? This cannot be undone.')) {
-                    onChange({ ...section, rows: section.rows.filter((_, j) => j !== i) })
+                    onChange({ ...section, rows: section.rows.filter((_, j) => j !== i) });
                   }
                 }}
                 onMoveUp={() => {
-                  if (i === 0) return
-                  const arr = [...section.rows]
-                  ;[arr[i - 1], arr[i]] = [arr[i], arr[i - 1]]
-                  onChange({ ...section, rows: arr })
+                  if (i === 0) return;
+                  const arr = [...section.rows];
+                  [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+                  onChange({ ...section, rows: arr });
                 }}
                 onMoveDown={() => {
-                  if (i === section.rows.length - 1) return
-                  const arr = [...section.rows]
-                  ;[arr[i + 1], arr[i]] = [arr[i], arr[i + 1]]
-                  onChange({ ...section, rows: arr })
+                  if (i === section.rows.length - 1) return;
+                  const arr = [...section.rows];
+                  [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
+                  onChange({ ...section, rows: arr });
                 }}
               />
             ))}
@@ -325,7 +338,9 @@ function SectionEditor({
                   onChange={(e) =>
                     onChange({
                       ...section,
-                      notes: section.notes.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)),
+                      notes: section.notes.map((x, j) =>
+                        j === i ? { ...x, label: e.target.value } : x,
+                      ),
                     })
                   }
                 />
@@ -335,13 +350,17 @@ function SectionEditor({
                   onChange={(e) =>
                     onChange({
                       ...section,
-                      notes: section.notes.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)),
+                      notes: section.notes.map((x, j) =>
+                        j === i ? { ...x, text: e.target.value } : x,
+                      ),
                     })
                   }
                 />
                 <IconButton
                   title="Remove"
-                  onClick={() => onChange({ ...section, notes: section.notes.filter((_, j) => j !== i) })}
+                  onClick={() =>
+                    onChange({ ...section, notes: section.notes.filter((_, j) => j !== i) })
+                  }
                 >
                   <XIcon className="h-3 w-3" />
                 </IconButton>
@@ -351,7 +370,7 @@ function SectionEditor({
         </div>
       </div>
     </Card>
-  )
+  );
 }
 
 function RowEditor({
@@ -362,12 +381,12 @@ function RowEditor({
   onMoveUp,
   onMoveDown,
 }: {
-  row: Row
-  columnsCount: number
-  onChange: (row: Row) => void
-  onRemove: () => void
-  onMoveUp: () => void
-  onMoveDown: () => void
+  row: Row;
+  columnsCount: number;
+  onChange: (row: Row) => void;
+  onRemove: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
 }) {
   return (
     <div className="rounded-md border border-gray-200 bg-gray-50/40 p-1.5">
@@ -381,9 +400,9 @@ function RowEditor({
             size="xs"
             value={row.cells[ci] ?? ''}
             onChange={(e) => {
-              const next = [...row.cells]
-              next[ci] = e.target.value
-              onChange({ ...row, cells: next })
+              const next = [...row.cells];
+              next[ci] = e.target.value;
+              onChange({ ...row, cells: next });
             }}
           />
         ))}
@@ -415,5 +434,5 @@ function RowEditor({
         </div>
       </div>
     </div>
-  )
+  );
 }

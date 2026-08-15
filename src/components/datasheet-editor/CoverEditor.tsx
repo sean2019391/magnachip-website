@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import type { Cover, Ordering } from '@/types/datasheet'
-import { AddButton, Card, Field, IconButton, PlusIcon, TextInput, XIcon } from './ui'
+import type { Cover, Ordering } from '@/types/datasheet';
+import { AddButton, Card, Field, IconButton, PlusIcon, TextInput, XIcon } from './ui';
 
 const ORDERING_FIELDS: { key: keyof Ordering; label: string }[] = [
   { key: 'type', label: 'Type / Code' },
@@ -10,14 +10,14 @@ const ORDERING_FIELDS: { key: keyof Ordering; label: string }[] = [
   { key: 'packing', label: 'Packing' },
   { key: 'rohs', label: 'RoHS Status' },
   { key: 'url', label: 'URL' },
-]
+];
 
 export function CoverEditor({
   cover,
   onChange,
 }: {
-  cover: Cover
-  onChange: (cover: Cover) => void
+  cover: Cover;
+  onChange: (cover: Cover) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -32,7 +32,9 @@ export function CoverEditor({
         title="Features"
         action={
           <AddButton
-            onClick={() => onChange({ ...cover, features: [...cover.features, { text: 'New feature' }] })}
+            onClick={() =>
+              onChange({ ...cover, features: [...cover.features, { text: 'New feature' }] })
+            }
           >
             <PlusIcon className="h-3 w-3" />
           </AddButton>
@@ -45,13 +47,17 @@ export function CoverEditor({
               onChange={(e) =>
                 onChange({
                   ...cover,
-                  features: cover.features.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)),
+                  features: cover.features.map((x, j) =>
+                    j === i ? { ...x, text: e.target.value } : x,
+                  ),
                 })
               }
             />
             <IconButton
               title="Remove"
-              onClick={() => onChange({ ...cover, features: cover.features.filter((_, j) => j !== i) })}
+              onClick={() =>
+                onChange({ ...cover, features: cover.features.filter((_, j) => j !== i) })
+              }
             >
               <XIcon className="h-3 w-3" />
             </IconButton>
@@ -63,7 +69,9 @@ export function CoverEditor({
         title="Validation"
         action={
           <AddButton
-            onClick={() => onChange({ ...cover, validation: [...cover.validation, { text: 'New validation' }] })}
+            onClick={() =>
+              onChange({ ...cover, validation: [...cover.validation, { text: 'New validation' }] })
+            }
           >
             <PlusIcon className="h-3 w-3" />
           </AddButton>
@@ -76,13 +84,17 @@ export function CoverEditor({
               onChange={(e) =>
                 onChange({
                   ...cover,
-                  validation: cover.validation.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)),
+                  validation: cover.validation.map((x, j) =>
+                    j === i ? { ...x, text: e.target.value } : x,
+                  ),
                 })
               }
             />
             <IconButton
               title="Remove"
-              onClick={() => onChange({ ...cover, validation: cover.validation.filter((_, j) => j !== i) })}
+              onClick={() =>
+                onChange({ ...cover, validation: cover.validation.filter((_, j) => j !== i) })
+              }
             >
               <XIcon className="h-3 w-3" />
             </IconButton>
@@ -113,7 +125,9 @@ export function CoverEditor({
               onChange={(e) =>
                 onChange({
                   ...cover,
-                  keyPerformance: cover.keyPerformance.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)),
+                  keyPerformance: cover.keyPerformance.map((x, j) =>
+                    j === i ? { ...x, label: e.target.value } : x,
+                  ),
                 })
               }
             />
@@ -123,7 +137,9 @@ export function CoverEditor({
               onChange={(e) =>
                 onChange({
                   ...cover,
-                  keyPerformance: cover.keyPerformance.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)),
+                  keyPerformance: cover.keyPerformance.map((x, j) =>
+                    j === i ? { ...x, value: e.target.value } : x,
+                  ),
                 })
               }
             />
@@ -134,7 +150,9 @@ export function CoverEditor({
               onChange={(e) =>
                 onChange({
                   ...cover,
-                  keyPerformance: cover.keyPerformance.map((x, j) => (j === i ? { ...x, unit: e.target.value } : x)),
+                  keyPerformance: cover.keyPerformance.map((x, j) =>
+                    j === i ? { ...x, unit: e.target.value } : x,
+                  ),
                 })
               }
             />
@@ -146,7 +164,7 @@ export function CoverEditor({
                   onChange({
                     ...cover,
                     keyPerformance: cover.keyPerformance.map((x, j) =>
-                      j === i ? { ...x, highlight: e.target.checked } : x
+                      j === i ? { ...x, highlight: e.target.checked } : x,
                     ),
                   })
                 }
@@ -157,7 +175,10 @@ export function CoverEditor({
             <IconButton
               title="Remove"
               onClick={() =>
-                onChange({ ...cover, keyPerformance: cover.keyPerformance.filter((_, j) => j !== i) })
+                onChange({
+                  ...cover,
+                  keyPerformance: cover.keyPerformance.filter((_, j) => j !== i),
+                })
               }
             >
               <XIcon className="h-3 w-3" />
@@ -172,7 +193,10 @@ export function CoverEditor({
             <TextInput
               value={(cover.ordering ?? {})[f.key] ?? ''}
               onChange={(e) =>
-                onChange({ ...cover, ordering: { ...(cover.ordering ?? {}), [f.key]: e.target.value } })
+                onChange({
+                  ...cover,
+                  ordering: { ...(cover.ordering ?? {}), [f.key]: e.target.value },
+                })
               }
             />
           </Field>
@@ -194,5 +218,5 @@ export function CoverEditor({
         )}
       </Card>
     </div>
-  )
+  );
 }

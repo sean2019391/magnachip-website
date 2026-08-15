@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import FadeIn from '@/components/FadeIn'
+import FadeIn from '@/components/FadeIn';
 
 const cards = [
   {
@@ -19,10 +19,11 @@ const cards = [
     title: 'World Leading Solutions',
     desc: 'A global leader in power semiconductor solutions.',
     links: ['Products and applications'],
-    extraDesc: 'Industry-leading products with endless application possibilities. Learn more about our solutions.',
+    extraDesc:
+      'Industry-leading products with endless application possibilities. Learn more about our solutions.',
     cta: { label: 'View All Solutions', href: '#products' },
   },
-]
+];
 
 export default function SolutionsSection() {
   return (
@@ -30,7 +31,9 @@ export default function SolutionsSection() {
       <div className="max-w-[1100px] mx-auto">
         <FadeIn>
           <div className="max-w-2xl mb-14">
-            <p className="text-sm font-medium tracking-[0.2em] uppercase text-white/60 mb-3">Solutions</p>
+            <p className="text-sm font-medium tracking-[0.2em] uppercase text-white/60 mb-3">
+              Solutions
+            </p>
             <h2 className="text-3xl md:text-4xl font-bold text-white text-balance">
               Products and Solutions
             </h2>
@@ -60,7 +63,9 @@ export default function SolutionsSection() {
                 )}
 
                 {card.extraDesc && (
-                  <p className="text-sm text-gray-400 leading-relaxed mb-4 flex-1">{card.extraDesc}</p>
+                  <p className="text-sm text-gray-400 leading-relaxed mb-4 flex-1">
+                    {card.extraDesc}
+                  </p>
                 )}
 
                 {card.cta && (
@@ -78,5 +83,5 @@ export default function SolutionsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

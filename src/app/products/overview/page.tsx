@@ -1,59 +1,56 @@
-'use client'
+'use client';
 
-import { Suspense, useEffect, useState } from 'react'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import ProductsSidebar from '@/components/ProductsSidebar'
-import FadeIn from '@/components/FadeIn'
-import { DatasheetViewer } from '@/components/datasheet/DatasheetViewer'
-import type { DatasheetRecord } from '@/types/datasheet'
+import { Suspense, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import ProductsSidebar from '@/components/ProductsSidebar';
+import FadeIn from '@/components/FadeIn';
+import { DatasheetViewer } from '@/components/datasheet/DatasheetViewer';
+import type { DatasheetRecord } from '@/types/datasheet';
 
 function OverviewContent() {
-  const searchParams = useSearchParams()
-  const partNumber = searchParams.get('partNumber')
+  const searchParams = useSearchParams();
+  const partNumber = searchParams.get('partNumber');
 
-  const [datasheet, setDatasheet] = useState<DatasheetRecord | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-  const [reloadKey, setReloadKey] = useState(0)
+  const [datasheet, setDatasheet] = useState<DatasheetRecord | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    let cancelled = false
-    setLoading(true)
-    setError(false)
+    let cancelled = false;
+    setLoading(true);
+    setError(false);
     fetch('/api/datasheets?published=true')
       .then((res) => {
         if (!res.ok) {
-          throw new Error(`Failed to load datasheets (${res.status})`)
+          throw new Error(`Failed to load datasheets (${res.status})`);
         }
-        return res.json()
+        return res.json();
       })
       .then((data) => {
-        if (cancelled) return
-        const list: DatasheetRecord[] = data.datasheets ?? []
-        const requested = partNumber ? partNumber.trim().toLowerCase() : null
+        if (cancelled) return;
+        const list: DatasheetRecord[] = data.datasheets ?? [];
+        const requested = partNumber ? partNumber.trim().toLowerCase() : null;
         const target =
-          (requested &&
-            list.find(
-              (d) => d.meta.partNumber.trim().toLowerCase() === requested,
-            )) ||
+          (requested && list.find((d) => d.meta.partNumber.trim().toLowerCase() === requested)) ||
           list.find((d) => d.meta.partNumber.startsWith('AMDTA')) ||
           list[0] ||
-          null
-        setDatasheet(target)
-        setLoading(false)
+          null;
+        setDatasheet(target);
+        setLoading(false);
       })
       .catch(() => {
-        if (cancelled) return
-        setError(true)
-        setLoading(false)
-      })
+        if (cancelled) return;
+        setError(true);
+        setLoading(false);
+      });
     return () => {
-      cancelled = true
-    }
-  }, [partNumber, reloadKey])
+      cancelled = true;
+    };
+  }, [partNumber, reloadKey]);
 
   return (
     <>
@@ -82,8 +79,8 @@ function OverviewContent() {
                 {datasheet ? datasheet.meta.partNumber : 'Overview'}
               </h1>
               <p className="text-gray-500 text-sm">
-                Interactive product datasheet — hover the charts to inspect values,
-                and use your browser&apos;s print dialog to save a PDF.
+                Interactive product datasheet — hover the charts to inspect values, and use your
+                browser&apos;s print dialog to save a PDF.
               </p>
             </div>
           </FadeIn>
@@ -111,7 +108,9 @@ function OverviewContent() {
             <FadeIn delay={0.1}>
               {/* Digital Datasheet has been moved to Design resources → Tool; CTA removed from products overview as requested. */}
               <div className="rounded-xl bg-white border border-gray-200 p-6 text-center">
-                <p className="text-sm text-gray-500">This datasheet is available in Design resources → Tool.</p>
+                <p className="text-sm text-gray-500">
+                  This datasheet is available in Design resources → Tool.
+                </p>
               </div>
             </FadeIn>
           ) : (
@@ -126,7 +125,7 @@ function OverviewContent() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
 export default function ProductOverviewPage() {
@@ -142,5 +141,5 @@ export default function ProductOverviewPage() {
       </section>
       <Footer />
     </main>
-  )
+  );
 }

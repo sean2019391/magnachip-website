@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { designResourcesData, toSlug } from '@/lib/products'
-import DesignResourcesSidebar from '@/components/DesignResourcesSidebar'
-import FadeIn from '@/components/FadeIn'
-import Link from 'next/link'
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { designResourcesData, toSlug } from '@/lib/products';
+import DesignResourcesSidebar from '@/components/DesignResourcesSidebar';
+import FadeIn from '@/components/FadeIn';
+import Link from 'next/link';
 
 export default function DesignResourcesPage() {
-  const categories = Object.keys(designResourcesData).filter((c) => c !== 'Overview')
+  const categories = Object.keys(designResourcesData).filter((c) => c !== 'Overview');
 
   return (
     <main className="min-h-screen">
@@ -39,7 +39,7 @@ export default function DesignResourcesPage() {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 {categories.map((cat, i) => {
-                  const items = designResourcesData[cat]
+                  const items = designResourcesData[cat];
                   return (
                     <FadeIn key={cat} delay={Math.min(i * 0.08, 0.2)}>
                       <Link
@@ -54,7 +54,7 @@ export default function DesignResourcesPage() {
                         )}
                       </Link>
                     </FadeIn>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -63,5 +63,5 @@ export default function DesignResourcesPage() {
       </section>
       <Footer />
     </main>
-  )
+  );
 }

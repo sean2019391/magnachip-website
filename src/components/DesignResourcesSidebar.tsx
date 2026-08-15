@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { designResourcesData, toSlug } from '@/lib/products'
+import Link from 'next/link';
+import { designResourcesData, toSlug } from '@/lib/products';
 
 interface Props {
-  activeCategory?: string
+  activeCategory?: string;
 }
 
 export default function DesignResourcesSidebar({ activeCategory }: Props) {
-  const categories = Object.keys(designResourcesData).filter((c) => c !== 'Overview')
+  const categories = Object.keys(designResourcesData).filter((c) => c !== 'Overview');
 
   return (
     <aside className="w-full lg:w-64 shrink-0">
@@ -38,5 +38,5 @@ export default function DesignResourcesSidebar({ activeCategory }: Props) {
         ))}
       </nav>
     </aside>
-  )
+  );
 }

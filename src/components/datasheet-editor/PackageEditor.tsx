@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import type { Package } from '@/types/datasheet'
-import { AddButton, Card, IconButton, PlusIcon, TextInput, XIcon } from './ui'
+import type { Package } from '@/types/datasheet';
+import { AddButton, Card, IconButton, PlusIcon, TextInput, XIcon } from './ui';
 
 export function PackageEditor({
   pkg,
   onChange,
 }: {
-  pkg?: Package
-  onChange: (pkg: Package) => void
+  pkg?: Package;
+  onChange: (pkg: Package) => void;
 }) {
-  const p: Package = pkg ?? { name: '', notes: [] }
+  const p: Package = pkg ?? { name: '', notes: [] };
 
   return (
     <div className="space-y-3">
@@ -29,7 +29,11 @@ export function PackageEditor({
           onChange={(e) => onChange({ ...p, imageUrl: e.target.value })}
         />
         {p.imageUrl && (
-          <img src={p.imageUrl} alt="package" className="max-h-40 rounded border border-gray-200 bg-white p-2" />
+          <img
+            src={p.imageUrl}
+            alt="package"
+            className="max-h-40 rounded border border-gray-200 bg-white p-2"
+          />
         )}
       </Card>
 
@@ -45,7 +49,9 @@ export function PackageEditor({
           <div key={i} className="flex items-center gap-1">
             <TextInput
               value={n}
-              onChange={(e) => onChange({ ...p, notes: p.notes.map((x, j) => (j === i ? e.target.value : x)) })}
+              onChange={(e) =>
+                onChange({ ...p, notes: p.notes.map((x, j) => (j === i ? e.target.value : x)) })
+              }
             />
             <IconButton
               title="Remove"
@@ -57,5 +63,5 @@ export function PackageEditor({
         ))}
       </Card>
     </div>
-  )
+  );
 }

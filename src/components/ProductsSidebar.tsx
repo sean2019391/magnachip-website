@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { productsData, toSlug, categoryForFamily } from '@/lib/products'
+import Link from 'next/link';
+import { productsData, toSlug, categoryForFamily } from '@/lib/products';
 
 interface Props {
-  activeFamily?: string
-  activeVariant?: string
+  activeFamily?: string;
+  activeVariant?: string;
 }
 
 export default function ProductsSidebar({ activeFamily, activeVariant }: Props) {
@@ -13,8 +13,8 @@ export default function ProductsSidebar({ activeFamily, activeVariant }: Props) 
     <aside className="w-full lg:w-64 shrink-0">
       <nav className="space-y-6">
         {Object.keys(productsData).map((cat) => {
-          const families = Object.keys(productsData[cat])
-          const isCategoryActive = activeFamily && categoryForFamily(activeFamily) === cat
+          const families = Object.keys(productsData[cat]);
+          const isCategoryActive = activeFamily && categoryForFamily(activeFamily) === cat;
 
           return (
             <div key={cat}>
@@ -23,15 +23,17 @@ export default function ProductsSidebar({ activeFamily, activeVariant }: Props) 
               </h3>
               <div className="space-y-0.5">
                 {families.map((fam) => {
-                  const variants = productsData[cat][fam]
-                  const isFamilyActive = activeFamily === fam
-                  const isOverview = activeVariant === undefined && isFamilyActive
+                  const variants = productsData[cat][fam];
+                  const isFamilyActive = activeFamily === fam;
+                  const isOverview = activeVariant === undefined && isFamilyActive;
 
                   return (
                     <div key={fam}>
                       {/* Family link */}
                       <Link
-                        href={fam === 'Overview' ? '/products/overview' : `/products/${toSlug(fam)}`}
+                        href={
+                          fam === 'Overview' ? '/products/overview' : `/products/${toSlug(fam)}`
+                        }
                         className={`block px-3 py-2 rounded-lg text-sm transition-all ${
                           isFamilyActive
                             ? 'bg-black/10 text-black font-medium'
@@ -45,8 +47,8 @@ export default function ProductsSidebar({ activeFamily, activeVariant }: Props) 
                       {isFamilyActive && variants.length > 0 && (
                         <div className="ml-3 mt-0.5 space-y-0.5 border-l border-gray-200 pl-2">
                           {variants.map((v) => {
-                            const vSlug = toSlug(v)
-                            const isVariantActive = activeVariant === v
+                            const vSlug = toSlug(v);
+                            const isVariantActive = activeVariant === v;
                             return (
                               <Link
                                 key={v}
@@ -59,18 +61,18 @@ export default function ProductsSidebar({ activeFamily, activeVariant }: Props) 
                               >
                                 {v}
                               </Link>
-                            )
+                            );
                           })}
                         </div>
                       )}
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
-          )
+          );
         })}
       </nav>
     </aside>
-  )
+  );
 }

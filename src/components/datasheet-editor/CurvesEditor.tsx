@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import type { ClipboardEvent } from 'react'
-import type { Curve, CurveSeries } from '@/types/datasheet'
-import { newId } from '@/types/datasheet'
+import { useEffect, useState } from 'react';
+import type { ClipboardEvent } from 'react';
+import type { Curve, CurveSeries } from '@/types/datasheet';
+import { newId } from '@/types/datasheet';
 import {
   AddButton,
   Card,
@@ -15,29 +15,30 @@ import {
   TextInput,
   TrashIcon,
   XIcon,
-} from './ui'
+} from './ui';
 
 export function CurvesEditor({
   curves,
   onChange,
 }: {
-  curves: Curve[]
-  onChange: (curves: Curve[]) => void
+  curves: Curve[];
+  onChange: (curves: Curve[]) => void;
 }) {
-  const [activeId, setActiveId] = useState<string | null>(curves[0]?.id ?? null)
-  const selectedId = curves.some((c) => c.id === activeId) ? activeId : (curves[0]?.id ?? null)
-  const active = curves.find((c) => c.id === selectedId) ?? null
+  const [activeId, setActiveId] = useState<string | null>(curves[0]?.id ?? null);
+  const selectedId = curves.some((c) => c.id === activeId) ? activeId : (curves[0]?.id ?? null);
+  const active = curves.find((c) => c.id === selectedId) ?? null;
 
   useEffect(() => {
-    if (selectedId !== activeId) setActiveId(selectedId)
-  }, [selectedId, activeId])
+    if (selectedId !== activeId) setActiveId(selectedId);
+  }, [selectedId, activeId]);
 
   const addCurve = () => {
-    const id = newId('curve')
-    const nextFigure = curves.reduce((max, c) => {
-      const m = /(\d+)/.exec(c.figure)
-      return Math.max(max, m ? parseInt(m[1], 10) : 0)
-    }, 0) + 1
+    const id = newId('curve');
+    const nextFigure =
+      curves.reduce((max, c) => {
+        const m = /(\d+)/.exec(c.figure);
+        return Math.max(max, m ? parseInt(m[1], 10) : 0);
+      }, 0) + 1;
     const nc: Curve = {
       id,
       figure: `Fig. ${nextFigure}`,
@@ -48,10 +49,10 @@ export function CurvesEditor({
       xScale: 'linear',
       yScale: 'linear',
       notes: [],
-    }
-    onChange([...curves, nc])
-    setActiveId(id)
-  }
+    };
+    onChange([...curves, nc]);
+    setActiveId(id);
+  };
 
   return (
     <div className="space-y-3">
@@ -87,16 +88,16 @@ export function CurvesEditor({
           curve={active}
           onChange={(c) => onChange(curves.map((x) => (x.id === c.id ? c : x)))}
           onRemove={() => {
-            if (!window.confirm(`Delete curve "${active.title}"? This cannot be undone.`)) return
-            const idx = curves.findIndex((c) => c.id === active.id)
-            const remaining = curves.filter((c) => c.id !== active.id)
-            onChange(remaining)
-            setActiveId(remaining[Math.min(idx, remaining.length - 1)]?.id ?? null)
+            if (!window.confirm(`Delete curve "${active.title}"? This cannot be undone.`)) return;
+            const idx = curves.findIndex((c) => c.id === active.id);
+            const remaining = curves.filter((c) => c.id !== active.id);
+            onChange(remaining);
+            setActiveId(remaining[Math.min(idx, remaining.length - 1)]?.id ?? null);
           }}
         />
       )}
     </div>
-  )
+  );
 }
 
 function CurveEditor({
@@ -104,9 +105,9 @@ function CurveEditor({
   onChange,
   onRemove,
 }: {
-  curve: Curve
-  onChange: (curve: Curve) => void
-  onRemove: () => void
+  curve: Curve;
+  onChange: (curve: Curve) => void;
+  onRemove: () => void;
 }) {
   return (
     <Card>
@@ -181,7 +182,10 @@ function CurveEditor({
             onClick={() =>
               onChange({
                 ...curve,
-                series: [...curve.series, { id: newId('series'), name: `Series ${curve.series.length + 1}`, points: [] }],
+                series: [
+                  ...curve.series,
+                  { id: newId('series'), name: `Series ${curve.series.length + 1}`, points: [] },
+                ],
               })
             }
           >
@@ -193,10 +197,12 @@ function CurveEditor({
             <SeriesEditor
               key={s.id}
               series={s}
-              onChange={(ns) => onChange({ ...curve, series: curve.series.map((x, j) => (j === i ? ns : x)) })}
+              onChange={(ns) =>
+                onChange({ ...curve, series: curve.series.map((x, j) => (j === i ? ns : x)) })
+              }
               onRemove={() => {
                 if (window.confirm(`Delete series "${s.name}"? This cannot be undone.`)) {
-                  onChange({ ...curve, series: curve.series.filter((_, j) => j !== i) })
+                  onChange({ ...curve, series: curve.series.filter((_, j) => j !== i) });
                 }
               }}
             />
@@ -204,7 +210,7 @@ function CurveEditor({
         </div>
       </div>
     </Card>
-  )
+  );
 }
 
 function SeriesEditor({
@@ -212,19 +218,19 @@ function SeriesEditor({
   onChange,
   onRemove,
 }: {
-  series: CurveSeries
-  onChange: (series: CurveSeries) => void
-  onRemove: () => void
+  series: CurveSeries;
+  onChange: (series: CurveSeries) => void;
+  onRemove: () => void;
 }) {
-  const [tab, setTab] = useState<'table' | 'csv'>('table')
-  const [text, setText] = useState(() => series.points.map(([x, y]) => `${x},${y}`).join('\n'))
-  const [draft, setDraft] = useState<Record<string, string>>({})
+  const [tab, setTab] = useState<'table' | 'csv'>('table');
+  const [text, setText] = useState(() => series.points.map(([x, y]) => `${x},${y}`).join('\n'));
+  const [draft, setDraft] = useState<Record<string, string>>({});
 
   // Keep CSV view in sync if external points change.
   useEffect(() => {
-    setText(series.points.map(([x, y]) => `${x},${y}`).join('\n'))
+    setText(series.points.map(([x, y]) => `${x},${y}`).join('\n'));
     // Keep CSV text in sync when series.id changes only; other internal changes are handled elsewhere
-  }, [series.id])
+  }, [series.id]);
 
   const parseCsv = (raw: string): [number, number][] =>
     raw
@@ -232,65 +238,70 @@ function SeriesEditor({
       .map((l) => l.trim())
       .filter(Boolean)
       .map((l) => {
-        const [x, y] = l.split(/[,\s\t]+/).map(Number)
-        return [Number.isFinite(x) ? x : 0, Number.isFinite(y) ? y : 0] as [number, number]
-      })
+        const [x, y] = l.split(/[,\s\t]+/).map(Number);
+        return [Number.isFinite(x) ? x : 0, Number.isFinite(y) ? y : 0] as [number, number];
+      });
 
   const updateRow = (idx: number, axis: 0 | 1, v: number) => {
     const next = series.points.map((p, i) => {
-      if (i !== idx) return p
-      return [axis === 0 ? v : p[0], axis === 1 ? v : p[1]] as [number, number]
-    })
-    onChange({ ...series, points: next })
-  }
+      if (i !== idx) return p;
+      return [axis === 0 ? v : p[0], axis === 1 ? v : p[1]] as [number, number];
+    });
+    onChange({ ...series, points: next });
+  };
 
-  const draftKey = (rowIdx: number, axis: 0 | 1) => `${rowIdx}:${axis}`
+  const draftKey = (rowIdx: number, axis: 0 | 1) => `${rowIdx}:${axis}`;
 
   const commitDraft = (rowIdx: number, axis: 0 | 1) => {
-    const key = draftKey(rowIdx, axis)
-    const raw = draft[key]
-    if (raw === undefined) return
-    const trimmed = raw.trim()
-    const v = trimmed === '' ? NaN : Number(trimmed)
-    if (Number.isFinite(v)) updateRow(rowIdx, axis, v)
+    const key = draftKey(rowIdx, axis);
+    const raw = draft[key];
+    if (raw === undefined) return;
+    const trimmed = raw.trim();
+    const v = trimmed === '' ? NaN : Number(trimmed);
+    if (Number.isFinite(v)) updateRow(rowIdx, axis, v);
     setDraft((prev) => {
-      const next = { ...prev }
-      delete next[key]
-      return next
-    })
-  }
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
 
   const isDraftInvalid = (key: string) => {
-    const raw = draft[key]
-    if (raw === undefined || raw.trim() === '') return false
-    return !Number.isFinite(Number(raw.trim()))
-  }
+    const raw = draft[key];
+    if (raw === undefined || raw.trim() === '') return false;
+    return !Number.isFinite(Number(raw.trim()));
+  };
 
   const removeRow = (idx: number) => {
-    if (!window.confirm('Delete this point? This cannot be undone.')) return
-    setDraft({})
-    onChange({ ...series, points: series.points.filter((_, i) => i !== idx) })
-  }
+    if (!window.confirm('Delete this point? This cannot be undone.')) return;
+    setDraft({});
+    onChange({ ...series, points: series.points.filter((_, i) => i !== idx) });
+  };
 
   const addRow = () => {
-    const last = series.points[series.points.length - 1] ?? [0, 0]
-    onChange({ ...series, points: [...series.points, [last[0], last[1]] as [number, number]] })
-  }
+    const last = series.points[series.points.length - 1] ?? [0, 0];
+    onChange({ ...series, points: [...series.points, [last[0], last[1]] as [number, number]] });
+  };
 
   const handlePaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
-    const pasted = e.clipboardData.getData('text')
+    const pasted = e.clipboardData.getData('text');
     // Tab- or comma- or whitespace-separated 2+ column data -> multi-row insert.
-    const lines = pasted.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
-    if (lines.length === 0) return
-    const parsed = lines.map((l) => l.split(/[\s,;\t]+/).map(Number))
-    const looksLikeMulti = parsed.every((row) => row.length >= 2 && row.slice(0, 2).every((v) => Number.isFinite(v)))
+    const lines = pasted
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean);
+    if (lines.length === 0) return;
+    const parsed = lines.map((l) => l.split(/[\s,;\t]+/).map(Number));
+    const looksLikeMulti = parsed.every(
+      (row) => row.length >= 2 && row.slice(0, 2).every((v) => Number.isFinite(v)),
+    );
     if (looksLikeMulti) {
-      e.preventDefault()
-      const newPoints = parsed.map((row) => [row[0], row[1]] as [number, number])
-      onChange({ ...series, points: [...series.points, ...newPoints] })
-      setText([...text.split('\n'), ...lines].join('\n'))
+      e.preventDefault();
+      const newPoints = parsed.map((row) => [row[0], row[1]] as [number, number]);
+      onChange({ ...series, points: [...series.points, ...newPoints] });
+      setText([...text.split('\n'), ...lines].join('\n'));
     }
-  }
+  };
 
   return (
     <div className="rounded-md border border-gray-200 bg-gray-50/40 p-2">
@@ -349,24 +360,32 @@ function SeriesEditor({
                     <TextInput
                       size="xs"
                       value={draft[draftKey(i, 0)] ?? String(x)}
-                      onChange={(e) => setDraft((prev) => ({ ...prev, [draftKey(i, 0)]: e.target.value }))}
+                      onChange={(e) =>
+                        setDraft((prev) => ({ ...prev, [draftKey(i, 0)]: e.target.value }))
+                      }
                       onBlur={() => commitDraft(i, 0)}
                       onKeyDown={(e) => {
-                        if (e.key === 'Enter') e.currentTarget.blur()
+                        if (e.key === 'Enter') e.currentTarget.blur();
                       }}
-                      className={isDraftInvalid(draftKey(i, 0)) ? '!border-red-500 !text-red-600' : ''}
+                      className={
+                        isDraftInvalid(draftKey(i, 0)) ? '!border-red-500 !text-red-600' : ''
+                      }
                     />
                   </td>
                   <td className="px-1 py-0.5">
                     <TextInput
                       size="xs"
                       value={draft[draftKey(i, 1)] ?? String(y)}
-                      onChange={(e) => setDraft((prev) => ({ ...prev, [draftKey(i, 1)]: e.target.value }))}
+                      onChange={(e) =>
+                        setDraft((prev) => ({ ...prev, [draftKey(i, 1)]: e.target.value }))
+                      }
                       onBlur={() => commitDraft(i, 1)}
                       onKeyDown={(e) => {
-                        if (e.key === 'Enter') e.currentTarget.blur()
+                        if (e.key === 'Enter') e.currentTarget.blur();
                       }}
-                      className={isDraftInvalid(draftKey(i, 1)) ? '!border-red-500 !text-red-600' : ''}
+                      className={
+                        isDraftInvalid(draftKey(i, 1)) ? '!border-red-500 !text-red-600' : ''
+                      }
                     />
                   </td>
                   <td className="px-1 py-0.5 text-center">
@@ -403,9 +422,11 @@ function SeriesEditor({
           <PlusIcon className="h-3 w-3" /> Add point
         </AddButton>
         {tab === 'csv' && (
-          <span className="text-[10px] text-gray-400">CSV per line - paste a block to bulk add</span>
+          <span className="text-[10px] text-gray-400">
+            CSV per line - paste a block to bulk add
+          </span>
         )}
       </div>
     </div>
-  )
+  );
 }

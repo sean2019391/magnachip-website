@@ -1,40 +1,40 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
-import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import FadeIn from '@/components/FadeIn'
-import type { Article } from '@/types/article'
-import { getCategoryBySlug } from '@/lib/category'
-import { IconChevronLeft } from '@/components/Icons'
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import FadeIn from '@/components/FadeIn';
+import type { Article } from '@/types/article';
+import { getCategoryBySlug } from '@/lib/category';
+import { IconChevronLeft } from '@/components/Icons';
 
 export default function NewsDetailPage() {
-  const params = useParams()
-  const [article, setArticle] = useState<Article | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
+  const params = useParams();
+  const [article, setArticle] = useState<Article | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     fetch(`/api/articles?slug=${params.slug}`)
       .then((res) => {
-        if (!res.ok) throw new Error('Not found')
-        return res.json()
+        if (!res.ok) throw new Error('Not found');
+        return res.json();
       })
       .then((data) => {
         if (data.article) {
-          setArticle(data.article)
+          setArticle(data.article);
         } else {
-          setNotFound(true)
+          setNotFound(true);
         }
-        setLoading(false)
+        setLoading(false);
       })
       .catch(() => {
-        setNotFound(true)
-        setLoading(false)
-      })
-  }, [params.slug])
+        setNotFound(true);
+        setLoading(false);
+      });
+  }, [params.slug]);
 
   if (loading) {
     return (
@@ -52,7 +52,7 @@ export default function NewsDetailPage() {
         </main>
         <Footer />
       </>
-    )
+    );
   }
 
   if (notFound || !article) {
@@ -62,16 +62,18 @@ export default function NewsDetailPage() {
         <main className="min-h-screen bg-[#f9fafb] flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Article Not Found</h1>
-            <Link href="/" className="text-sm text-gray-500 hover:text-black underline">Back to homepage</Link>
+            <Link href="/" className="text-sm text-gray-500 hover:text-black underline">
+              Back to homepage
+            </Link>
           </div>
         </main>
         <Footer />
       </>
-    )
+    );
   }
 
-  const category = getCategoryBySlug(article.slug)
-  const paragraphs = article.content.split('\n\n')
+  const category = getCategoryBySlug(article.slug);
+  const paragraphs = article.content.split('\n\n');
 
   return (
     <>
@@ -113,9 +115,7 @@ export default function NewsDetailPage() {
               </FadeIn>
 
               <FadeIn delay={0.3}>
-                <p className="text-lg text-gray-500 mt-5 leading-relaxed">
-                  {article.excerpt}
-                </p>
+                <p className="text-lg text-gray-500 mt-5 leading-relaxed">{article.excerpt}</p>
               </FadeIn>
             </div>
           </div>
@@ -130,7 +130,9 @@ export default function NewsDetailPage() {
                     alt="Chae Lee, CEO of Magnachip"
                     className="w-full max-w-[400px] rounded-2xl border border-gray-200 shadow-sm"
                   />
-                  <p className="text-xs text-gray-400 mt-2">Chae Lee, Chief Executive Officer of Magnachip Semiconductor</p>
+                  <p className="text-xs text-gray-400 mt-2">
+                    Chae Lee, Chief Executive Officer of Magnachip Semiconductor
+                  </p>
                 </div>
               </FadeIn>
             )}
@@ -143,9 +145,7 @@ export default function NewsDetailPage() {
                       {p}
                     </blockquote>
                   ) : (
-                    <p className="text-gray-700 text-base leading-[1.8] mb-6">
-                      {p}
-                    </p>
+                    <p className="text-gray-700 text-base leading-[1.8] mb-6">{p}</p>
                   )}
                 </FadeIn>
               ))}
@@ -186,5 +186,5 @@ export default function NewsDetailPage() {
       </main>
       <Footer />
     </>
-  )
+  );
 }

@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useParams } from 'next/navigation'
-import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import {
   applicationsData,
   slugToCategory,
   slugToSubcategory,
   categoryForSubcategory,
   toSlug,
-} from '@/lib/products'
-import ApplicationsSidebar from '@/components/ApplicationsSidebar'
-import FadeIn from '@/components/FadeIn'
+} from '@/lib/products';
+import ApplicationsSidebar from '@/components/ApplicationsSidebar';
+import FadeIn from '@/components/FadeIn';
 
 export default function ApplicationSubcategoryPage() {
-  const params = useParams()
-  const slug = params.slug as string
-  const subSlug = params.subcategory as string
+  const params = useParams();
+  const slug = params.slug as string;
+  const subSlug = params.subcategory as string;
 
-  const subcategory = slugToSubcategory[subSlug]
-  const category = subcategory ? categoryForSubcategory(subcategory) : null
+  const subcategory = slugToSubcategory[subSlug];
+  const category = subcategory ? categoryForSubcategory(subcategory) : null;
 
   if (!subcategory || !category) {
     return (
@@ -32,7 +32,10 @@ export default function ApplicationSubcategoryPage() {
               <ApplicationsSidebar />
               <div className="flex-1 min-w-0 text-center pt-10">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">Application not found</h1>
-                <Link href="/applications" className="text-sm text-gray-600 hover:text-black underline">
+                <Link
+                  href="/applications"
+                  className="text-sm text-gray-600 hover:text-black underline"
+                >
                   Back to applications
                 </Link>
               </div>
@@ -41,10 +44,10 @@ export default function ApplicationSubcategoryPage() {
         </section>
         <Footer />
       </main>
-    )
+    );
   }
 
-  const details = applicationsData[category]?.[subcategory] ?? []
+  const details = applicationsData[category]?.[subcategory] ?? [];
 
   return (
     <main className="min-h-screen">
@@ -53,7 +56,9 @@ export default function ApplicationSubcategoryPage() {
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
             <div className="flex items-center gap-2 text-sm text-gray-400 mb-8 flex-wrap">
-              <Link href="/applications" className="hover:text-black transition-colors">Applications</Link>
+              <Link href="/applications" className="hover:text-black transition-colors">
+                Applications
+              </Link>
               <span>/</span>
               <Link href={`/applications/${slug}`} className="hover:text-black transition-colors">
                 {category}
@@ -91,9 +96,7 @@ export default function ApplicationSubcategoryPage() {
                       </ul>
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-sm">
-                      Detailed information coming soon.
-                    </p>
+                    <p className="text-gray-400 text-sm">Detailed information coming soon.</p>
                   )}
                 </div>
               </FadeIn>
@@ -103,5 +106,5 @@ export default function ApplicationSubcategoryPage() {
       </section>
       <Footer />
     </main>
-  )
+  );
 }

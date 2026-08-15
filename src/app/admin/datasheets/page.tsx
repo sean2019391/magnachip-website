@@ -1,37 +1,38 @@
-'use client'
+'use client';
 
-import { useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import type { DatasheetRecord } from '@/types/datasheet'
-import { emptyDatasheetBody } from '@/types/datasheet'
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import type { DatasheetRecord } from '@/types/datasheet';
+import { emptyDatasheetBody } from '@/types/datasheet';
 
 export default function AdminDatasheetsPage() {
-  const router = useRouter()
-  const [datasheets, setDatasheets] = useState<DatasheetRecord[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [datasheets, setDatasheets] = useState<DatasheetRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchDatasheets = useCallback(() => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     fetch('/api/datasheets?admin=true')
       .then(async (res) => {
-        const data = await res.json()
+        const data = await res.json();
         if (!res.ok) {
-          const detail = typeof data?.error === 'string' && data.error ? data.error : `HTTP ${res.status}`
-          throw new Error(`Failed to load datasheets. ${detail}`)
+          const detail =
+            typeof data?.error === 'string' && data.error ? data.error : `HTTP ${res.status}`;
+          throw new Error(`Failed to load datasheets. ${detail}`);
         }
-        setDatasheets(data.datasheets ?? [])
+        setDatasheets(data.datasheets ?? []);
       })
       .catch((err: unknown) => {
-        setError(err instanceof Error && err.message ? err.message : 'Failed to load datasheets.')
+        setError(err instanceof Error && err.message ? err.message : 'Failed to load datasheets.');
       })
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
-    fetchDatasheets()
-  }, [fetchDatasheets])
+    fetchDatasheets();
+  }, [fetchDatasheets]);
 
   const handleCreate = async () => {
     try {
@@ -39,31 +40,31 @@ export default function AdminDatasheetsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...emptyDatasheetBody(), published: true }),
-      })
-      const data = await res.json()
+      });
+      const data = await res.json();
       if (res.ok && data.datasheet?.id) {
-        router.push(`/admin/datasheets/${data.datasheet.id}`)
+        router.push(`/admin/datasheets/${data.datasheet.id}`);
       } else {
-        alert('Failed to create datasheet')
+        alert('Failed to create datasheet');
       }
     } catch {
-      alert('Failed to create datasheet')
+      alert('Failed to create datasheet');
     }
-  }
+  };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this datasheet?')) return
+    if (!window.confirm('Are you sure you want to delete this datasheet?')) return;
     try {
-      const res = await fetch(`/api/datasheets/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/datasheets/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        setDatasheets((prev) => prev.filter((d) => d.id !== id))
+        setDatasheets((prev) => prev.filter((d) => d.id !== id));
       } else {
-        alert('Failed to delete datasheet')
+        alert('Failed to delete datasheet');
       }
     } catch {
-      alert('Failed to delete datasheet')
+      alert('Failed to delete datasheet');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -181,5 +182,5 @@ export default function AdminDatasheetsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

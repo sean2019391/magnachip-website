@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { applicationsData, toSlug } from '@/lib/products'
-import ApplicationsSidebar from '@/components/ApplicationsSidebar'
-import FadeIn from '@/components/FadeIn'
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { applicationsData, toSlug } from '@/lib/products';
+import ApplicationsSidebar from '@/components/ApplicationsSidebar';
+import FadeIn from '@/components/FadeIn';
 
 export default function ApplicationsPage() {
-  const categories = Object.keys(applicationsData)
+  const categories = Object.keys(applicationsData);
 
   return (
     <main className="min-h-screen">
@@ -33,9 +33,9 @@ export default function ApplicationsPage() {
                     Applications
                   </h1>
                   <p className="text-gray-500 text-sm leading-relaxed">
-                    MagnaChip&apos;s power semiconductor solutions are deployed across
-                    server, solar/ESS, and automotive applications. Select a category below
-                    to explore recommended products and solutions.
+                    MagnaChip&apos;s power semiconductor solutions are deployed across server,
+                    solar/ESS, and automotive applications. Select a category below to explore
+                    recommended products and solutions.
                   </p>
                 </div>
               </FadeIn>
@@ -43,8 +43,8 @@ export default function ApplicationsPage() {
               {/* Category Overview Cards */}
               <div className="space-y-6">
                 {categories.map((cat, i) => {
-                  const subs = Object.keys(applicationsData[cat]).filter((s) => s !== 'Overview')
-                  const catSlug = toSlug(cat)
+                  const subs = Object.keys(applicationsData[cat]).filter((s) => s !== 'Overview');
+                  const catSlug = toSlug(cat);
                   return (
                     <FadeIn key={cat} delay={Math.min(i * 0.08, 0.2)}>
                       <Link
@@ -75,7 +75,7 @@ export default function ApplicationsPage() {
                         </div>
                       </Link>
                     </FadeIn>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -84,5 +84,5 @@ export default function ApplicationsPage() {
       </section>
       <Footer />
     </main>
-  )
+  );
 }

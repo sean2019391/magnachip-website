@@ -1,0 +1,265 @@
+﻿{
+    "deployments":  [
+                        {
+                            "uid":  "dpl_6bqKqApYqFkLZmcKca1Gn2n5416s",
+                            "name":  "magnachip-website",
+                            "projectId":  "prj_8tRUCHxKYEIsyAXPCMNnjOyYj9Sy",
+                            "url":  "magnachip-website-fapt339gb-magnachip-semiconductor.vercel.app",
+                            "created":  1786763861858,
+                            "source":  "git",
+                            "state":  "ERROR",
+                            "readyState":  "ERROR",
+                            "type":  "LAMBDAS",
+                            "creator":  {
+                                            "uid":  "Xh8m3PySJC2pAJM6Lszu6EEg",
+                                            "email":  "lees58915@gmail.com",
+                                            "username":  "lees58915"
+                                        },
+                            "inspectorUrl":  "https://vercel.com/magnachip-semiconductor/magnachip-website/6bqKqApYqFkLZmcKca1Gn2n5416s",
+                            "attribution":  {
+                                                "commitMeta":  "@{name=sangwon.lee; email=140949@magnachip.com; isVerified=False}"
+                                            },
+                            "meta":  {
+                                         "githubCommitAuthorName":  "sangwon.lee",
+                                         "githubCommitAuthorEmail":  "140949@magnachip.com",
+                                         "githubCommitMessage":  "chore: add d3 and @types/d3 to fix Vercel build error (SoaChart)",
+                                         "githubCommitOrg":  "sean2019391",
+                                         "githubCommitRef":  "main",
+                                         "githubCommitRepo":  "magnachip-website",
+                                         "githubCommitSha":  "ac01d75ebdce4a683eafe362d7af3dcb9f37e9aa",
+                                         "githubDeployment":  "1",
+                                         "githubOrg":  "sean2019391",
+                                         "githubRepo":  "magnachip-website",
+                                         "githubRepoOwnerType":  "User",
+                                         "githubCommitRepoId":  "1314007629",
+                                         "githubRepoId":  "1314007629",
+                                         "githubRepoVisibility":  "public",
+                                         "githubHost":  "github.com",
+                                         "githubCommitVerification":  "unverified",
+                                         "repoPushedAt":  "1786763860000",
+                                         "branchAlias":  "magnachip-website-git-main-magnachip-semiconductor.vercel.app"
+                                     },
+                            "target":  "production",
+                            "aliasAssigned":  null,
+                            "isRollbackCandidate":  false,
+                            "createdAt":  1786763861858,
+                            "buildingAt":  1786763862912,
+                            "ready":  1786763898176,
+                            "errorCode":  "module_not_found",
+                            "errorMessage":  "Command \"npm run build\" exited with 1",
+                            "projectSettings":  {
+                                                    "commandForIgnoringBuildStep":  null
+                                                }
+                        },
+                        {
+                            "uid":  "dpl_27aoN3ahix5VEFscSnxv3JdDgrE9",
+                            "name":  "magnachip-website",
+                            "projectId":  "prj_8tRUCHxKYEIsyAXPCMNnjOyYj9Sy",
+                            "url":  "magnachip-website-9p1dbyk0v-magnachip-semiconductor.vercel.app",
+                            "created":  1786763597714,
+                            "source":  "git",
+                            "state":  "ERROR",
+                            "readyState":  "ERROR",
+                            "type":  "LAMBDAS",
+                            "creator":  {
+                                            "uid":  "Xh8m3PySJC2pAJM6Lszu6EEg",
+                                            "email":  "lees58915@gmail.com",
+                                            "username":  "lees58915"
+                                        },
+                            "inspectorUrl":  "https://vercel.com/magnachip-semiconductor/magnachip-website/27aoN3ahix5VEFscSnxv3JdDgrE9",
+                            "attribution":  {
+                                                "commitMeta":  "@{name=sangwon.lee; email=140949@magnachip.com; isVerified=False}"
+                                            },
+                            "meta":  {
+                                         "githubCommitAuthorName":  "sangwon.lee",
+                                         "githubCommitAuthorEmail":  "140949@magnachip.com",
+                                         "githubCommitMessage":  "CI: add Vercel deploy workflow (requires VERCEL_TOKEN/ORG/PROJECT secrets)",
+                                         "githubCommitOrg":  "sean2019391",
+                                         "githubCommitRef":  "main",
+                                         "githubCommitRepo":  "magnachip-website",
+                                         "githubCommitSha":  "6346a95507316c6e22dcb47566750b5775dcae52",
+                                         "githubDeployment":  "1",
+                                         "githubOrg":  "sean2019391",
+                                         "githubRepo":  "magnachip-website",
+                                         "githubRepoOwnerType":  "User",
+                                         "githubCommitRepoId":  "1314007629",
+                                         "githubRepoId":  "1314007629",
+                                         "githubRepoVisibility":  "public",
+                                         "githubHost":  "github.com",
+                                         "githubCommitVerification":  "unverified",
+                                         "repoPushedAt":  "1786763595000",
+                                         "branchAlias":  "magnachip-website-git-main-magnachip-semiconductor.vercel.app"
+                                     },
+                            "target":  "production",
+                            "aliasAssigned":  null,
+                            "isRollbackCandidate":  false,
+                            "createdAt":  1786763597714,
+                            "buildingAt":  1786763598902,
+                            "ready":  1786763634824,
+                            "errorCode":  "module_not_found",
+                            "errorMessage":  "Command \"npm run build\" exited with 1",
+                            "projectSettings":  {
+                                                    "commandForIgnoringBuildStep":  null
+                                                }
+                        },
+                        {
+                            "uid":  "dpl_BLQcWiZ1mmN5rJMRFpo9ETHK6ASE",
+                            "name":  "magnachip-website",
+                            "projectId":  "prj_8tRUCHxKYEIsyAXPCMNnjOyYj9Sy",
+                            "url":  "magnachip-website-mry3insd4-magnachip-semiconductor.vercel.app",
+                            "created":  1786763063342,
+                            "source":  "git",
+                            "state":  "ERROR",
+                            "readyState":  "ERROR",
+                            "type":  "LAMBDAS",
+                            "creator":  {
+                                            "uid":  "Xh8m3PySJC2pAJM6Lszu6EEg",
+                                            "email":  "lees58915@gmail.com",
+                                            "username":  "lees58915"
+                                        },
+                            "inspectorUrl":  "https://vercel.com/magnachip-semiconductor/magnachip-website/BLQcWiZ1mmN5rJMRFpo9ETHK6ASE",
+                            "attribution":  {
+                                                "commitMeta":  "@{name=sangwon.lee; email=140949@magnachip.com; isVerified=False}"
+                                            },
+                            "meta":  {
+                                         "githubCommitAuthorName":  "sangwon.lee",
+                                         "githubCommitAuthorEmail":  "140949@magnachip.com",
+                                         "githubCommitMessage":  "CI: add gh-pages deploy workflow (static export)",
+                                         "githubCommitOrg":  "sean2019391",
+                                         "githubCommitRef":  "main",
+                                         "githubCommitRepo":  "magnachip-website",
+                                         "githubCommitSha":  "c900b5d820d09d77033aedc0be70bab09d86594e",
+                                         "githubDeployment":  "1",
+                                         "githubOrg":  "sean2019391",
+                                         "githubRepo":  "magnachip-website",
+                                         "githubRepoOwnerType":  "User",
+                                         "githubCommitRepoId":  "1314007629",
+                                         "githubRepoId":  "1314007629",
+                                         "githubRepoVisibility":  "public",
+                                         "githubHost":  "github.com",
+                                         "githubCommitVerification":  "unverified",
+                                         "repoPushedAt":  "1786763061000",
+                                         "branchAlias":  "magnachip-website-git-main-magnachip-semiconductor.vercel.app"
+                                     },
+                            "target":  "production",
+                            "aliasAssigned":  null,
+                            "isRollbackCandidate":  false,
+                            "createdAt":  1786763063342,
+                            "buildingAt":  1786763064652,
+                            "ready":  1786763102845,
+                            "errorCode":  "module_not_found",
+                            "errorMessage":  "Command \"npm run build\" exited with 1",
+                            "projectSettings":  {
+                                                    "commandForIgnoringBuildStep":  null
+                                                }
+                        },
+                        {
+                            "uid":  "dpl_411j7oGuZQ4RmZ9gGxMH2ALFqVrs",
+                            "name":  "magnachip-website",
+                            "projectId":  "prj_8tRUCHxKYEIsyAXPCMNnjOyYj9Sy",
+                            "url":  "magnachip-website-qev2nqtcz-magnachip-semiconductor.vercel.app",
+                            "created":  1786762802650,
+                            "source":  "git",
+                            "state":  "ERROR",
+                            "readyState":  "ERROR",
+                            "type":  "LAMBDAS",
+                            "creator":  {
+                                            "uid":  "Xh8m3PySJC2pAJM6Lszu6EEg",
+                                            "email":  "lees58915@gmail.com",
+                                            "username":  "lees58915"
+                                        },
+                            "inspectorUrl":  "https://vercel.com/magnachip-semiconductor/magnachip-website/411j7oGuZQ4RmZ9gGxMH2ALFqVrs",
+                            "attribution":  {
+                                                "commitMeta":  "@{name=sangwon.lee; email=140949@magnachip.com; isVerified=False}"
+                                            },
+                            "meta":  {
+                                         "githubCommitAuthorName":  "sangwon.lee",
+                                         "githubCommitAuthorEmail":  "140949@magnachip.com",
+                                         "githubCommitMessage":  "Fix: ensure unique keys in product list (use pn + index) to avoid React key collision",
+                                         "githubCommitOrg":  "sean2019391",
+                                         "githubCommitRef":  "main",
+                                         "githubCommitRepo":  "magnachip-website",
+                                         "githubCommitSha":  "2ae84b68ec0526a9743bd9550f1a5a9d8647e349",
+                                         "githubDeployment":  "1",
+                                         "githubOrg":  "sean2019391",
+                                         "githubRepo":  "magnachip-website",
+                                         "githubRepoOwnerType":  "User",
+                                         "githubCommitRepoId":  "1314007629",
+                                         "githubRepoId":  "1314007629",
+                                         "githubRepoVisibility":  "public",
+                                         "githubHost":  "github.com",
+                                         "githubCommitVerification":  "unverified",
+                                         "repoPushedAt":  "1786762800000",
+                                         "branchAlias":  "magnachip-website-git-main-magnachip-semiconductor.vercel.app"
+                                     },
+                            "target":  "production",
+                            "aliasAssigned":  null,
+                            "isRollbackCandidate":  false,
+                            "createdAt":  1786762802650,
+                            "buildingAt":  1786762803697,
+                            "ready":  1786762841222,
+                            "errorCode":  "module_not_found",
+                            "errorMessage":  "Command \"npm run build\" exited with 1",
+                            "projectSettings":  {
+                                                    "commandForIgnoringBuildStep":  null
+                                                }
+                        },
+                        {
+                            "uid":  "dpl_3PscD1CVC9eLJvwwu6RhBaPU6otQ",
+                            "name":  "magnachip-website",
+                            "projectId":  "prj_8tRUCHxKYEIsyAXPCMNnjOyYj9Sy",
+                            "url":  "magnachip-website-reuu1v12c-magnachip-semiconductor.vercel.app",
+                            "created":  1785400958297,
+                            "source":  "git",
+                            "state":  "READY",
+                            "readyState":  "READY",
+                            "readySubstate":  "PROMOTED",
+                            "type":  "LAMBDAS",
+                            "creator":  {
+                                            "uid":  "Xh8m3PySJC2pAJM6Lszu6EEg",
+                                            "email":  "lees58915@gmail.com",
+                                            "username":  "lees58915"
+                                        },
+                            "inspectorUrl":  "https://vercel.com/magnachip-semiconductor/magnachip-website/3PscD1CVC9eLJvwwu6RhBaPU6otQ",
+                            "attribution":  {
+                                                "commitMeta":  "@{name=sangwon.lee; email=140949@magnachip.com; isVerified=False}"
+                                            },
+                            "meta":  {
+                                         "githubCommitAuthorName":  "sangwon.lee",
+                                         "githubCommitAuthorEmail":  "140949@magnachip.com",
+                                         "githubCommitMessage":  "chore: update articles.json from admin pending (add SOA demo entry)",
+                                         "githubCommitOrg":  "sean2019391",
+                                         "githubCommitRef":  "main",
+                                         "githubCommitRepo":  "magnachip-website",
+                                         "githubCommitSha":  "40aeb5756880bc43736d1e8169aec9026f235eb2",
+                                         "githubDeployment":  "1",
+                                         "githubOrg":  "sean2019391",
+                                         "githubRepo":  "magnachip-website",
+                                         "githubRepoOwnerType":  "User",
+                                         "githubCommitRepoId":  "1314007629",
+                                         "githubRepoId":  "1314007629",
+                                         "githubRepoVisibility":  "public",
+                                         "githubHost":  "github.com",
+                                         "githubCommitVerification":  "unverified",
+                                         "repoPushedAt":  "1785400956000",
+                                         "branchAlias":  "magnachip-website-git-main-magnachip-semiconductor.vercel.app",
+                                         "lambdaRuntimeStats":  "{\"nodejs\":3}"
+                                     },
+                            "target":  "production",
+                            "aliasError":  null,
+                            "aliasAssigned":  1785401004484,
+                            "isRollbackCandidate":  true,
+                            "createdAt":  1785400958297,
+                            "buildingAt":  1785400960639,
+                            "ready":  1785401004245,
+                            "projectSettings":  {
+                                                    "commandForIgnoringBuildStep":  null
+                                                }
+                        }
+                    ],
+    "pagination":  {
+                       "count":  5,
+                       "next":  1785400958297,
+                       "prev":  1786763861858
+                   }
+}

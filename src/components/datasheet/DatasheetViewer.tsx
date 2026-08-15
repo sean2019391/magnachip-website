@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /* ────────────────────────────────────────────────────────────────────
  * Digital Datasheet Viewer
@@ -9,13 +9,8 @@
  * cover → characteristic tables → interactive curves → package → footer.
  * ──────────────────────────────────────────────────────────────────── */
 
-import {
-  type DatasheetRecord,
-  type Section,
-  type Curve,
-  type Row,
-} from '@/types/datasheet'
-import { formatNumericLike } from '@/lib/datasheet-format'
+import { type DatasheetRecord, type Section, type Curve, type Row } from '@/types/datasheet';
+import { formatNumericLike } from '@/lib/datasheet-format';
 import {
   LineChart,
   Line,
@@ -25,52 +20,52 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-} from 'recharts'
+} from 'recharts';
 
 /* ------------------------------------------------------------------ */
 /* helpers                                                             */
 /* ------------------------------------------------------------------ */
 
-const NUMERIC_CELL_RE = /^[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?[A-Za-z]*$/
+const NUMERIC_CELL_RE = /^[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?[A-Za-z]*$/;
 
 function isFullyNumeric(v: string) {
-  return NUMERIC_CELL_RE.test(v.trim().replace(/,/g, ''))
+  return NUMERIC_CELL_RE.test(v.trim().replace(/,/g, ''));
 }
 
 function isNumericCol(section: Section, colIdx: number) {
-  const col = section.columns[colIdx]
-  if (!col) return false
-  if (col.type === 'number') return true
+  const col = section.columns[colIdx];
+  if (!col) return false;
+  if (col.type === 'number') return true;
   const sample = section.rows
     .map((r) => r.cells[colIdx])
     .filter((c) => c !== '' && c != null)
-    .slice(0, 12)
-  if (sample.length === 0) return false
-  const numericCount = sample.filter((c) => isFullyNumeric(c)).length
-  return numericCount > sample.length / 2
+    .slice(0, 12);
+  if (sample.length === 0) return false;
+  const numericCount = sample.filter((c) => isFullyNumeric(c)).length;
+  return numericCount > sample.length / 2;
 }
 
 function renderCell(section: Section, colIdx: number, row: Row) {
-  const col = section.columns[colIdx]
-  const v = row.cells[colIdx] ?? ''
-  const numeric = isNumericCol(section, colIdx)
+  const col = section.columns[colIdx];
+  const v = row.cells[colIdx] ?? '';
+  const numeric = isNumericCol(section, colIdx);
   if (numeric) {
-    return <span className="ds-num">{formatNumericLike(v, col?.unit)}</span>
+    return <span className="ds-num">{formatNumericLike(v, col?.unit)}</span>;
   }
-  return <span>{v}</span>
+  return <span>{v}</span>;
 }
 
 function getCellColSpan(section: Section, colIdx: number, row: Row) {
   // Heuristic: empty cells stretch to the right when surrounded by empty
   // neighbors to mimic the way Excel merges long descriptive cells.
-  if (colIdx >= section.columns.length) return 1
-  if (row.cells[colIdx] !== '' && row.cells[colIdx] != null) return 1
-  let span = 1
+  if (colIdx >= section.columns.length) return 1;
+  if (row.cells[colIdx] !== '' && row.cells[colIdx] != null) return 1;
+  let span = 1;
   for (let i = colIdx + 1; i < section.columns.length; i++) {
-    if (row.cells[i] === '' || row.cells[i] == null) span++
-    else break
+    if (row.cells[i] === '' || row.cells[i] == null) span++;
+    else break;
   }
-  return span
+  return span;
 }
 
 /* ------------------------------------------------------------------ */
@@ -78,7 +73,7 @@ function getCellColSpan(section: Section, colIdx: number, row: Row) {
 /* ------------------------------------------------------------------ */
 
 function Cover({ d }: { d: DatasheetRecord }) {
-  const c = d.cover ?? { features: [], validation: [], keyPerformance: [] }
+  const c = d.cover ?? { features: [], validation: [], keyPerformance: [] };
   return (
     <section className="ds-page relative">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -90,9 +85,7 @@ function Cover({ d }: { d: DatasheetRecord }) {
             <h1 className="mt-1 text-4xl font-extrabold tracking-tight text-gray-900 text-balance">
               {d.meta.partNumber}
             </h1>
-            {c.subtitle && (
-              <p className="mt-2 text-lg text-gray-500 text-pretty">{c.subtitle}</p>
-            )}
+            {c.subtitle && <p className="mt-2 text-lg text-gray-500 text-pretty">{c.subtitle}</p>}
             <p className="mt-2 text-xs text-gray-400">
               {d.meta.company} · v{d.meta.version} · {d.meta.date}
             </p>
@@ -138,18 +131,14 @@ function Cover({ d }: { d: DatasheetRecord }) {
                   <div
                     key={i}
                     className={`flex items-baseline justify-between gap-3 border-b border-gray-100 pb-2 last:border-b-0 last:pb-0 ${
-                      k.highlight
-                        ? 'rounded-md bg-blue-50/50 px-2 py-2 border border-blue-200'
-                        : ''
+                      k.highlight ? 'rounded-md bg-blue-50/50 px-2 py-2 border border-blue-200' : ''
                     }`}
                   >
                     <dt className="text-xs text-gray-500">{k.label}</dt>
                     <dd className="ds-num text-base font-semibold text-gray-900">
                       {k.value}
                       {k.unit && (
-                        <span className="ml-1 text-xs font-normal text-gray-400">
-                          {k.unit}
-                        </span>
+                        <span className="ml-1 text-xs font-normal text-gray-400">{k.unit}</span>
                       )}
                     </dd>
                   </div>
@@ -174,9 +163,7 @@ function Cover({ d }: { d: DatasheetRecord }) {
                   ] as const
                 ).map(([k, v]) => (
                   <div key={k}>
-                    <dt className="text-[10px] uppercase tracking-wider text-gray-400">
-                      {k}
-                    </dt>
+                    <dt className="text-[10px] uppercase tracking-wider text-gray-400">{k}</dt>
                     <dd className="font-medium text-gray-800">{v || '—'}</dd>
                   </div>
                 ))}
@@ -196,7 +183,7 @@ function Cover({ d }: { d: DatasheetRecord }) {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -217,9 +204,7 @@ function SectionTable({ s }: { s: Section }) {
               {s.columns.map((c) => (
                 <th key={c.id} style={c.width ? { minWidth: c.width + 'ch' } : undefined}>
                   {c.header}
-                  {c.unit && (
-                    <span className="ml-1 text-gray-400 font-normal">({c.unit})</span>
-                  )}
+                  {c.unit && <span className="ml-1 text-gray-400 font-normal">({c.unit})</span>}
                 </th>
               ))}
               {s.rows.some((r) => (r.notes ?? []).length > 0) && (
@@ -229,16 +214,16 @@ function SectionTable({ s }: { s: Section }) {
           </thead>
           <tbody>
             {s.rows.map((r) => {
-              const plan: { start: number; span: number; ci: number }[] = []
-              let i = 0
+              const plan: { start: number; span: number; ci: number }[] = [];
+              let i = 0;
               while (i < s.columns.length) {
-                const span = getCellColSpan(s, i, r)
+                const span = getCellColSpan(s, i, r);
                 if (span === 0) {
-                  i += 1
-                  continue
+                  i += 1;
+                  continue;
                 }
-                plan.push({ start: i, span, ci: i })
-                i += span
+                plan.push({ start: i, span, ci: i });
+                i += span;
               }
               return (
                 <tr key={r.id}>
@@ -253,7 +238,7 @@ function SectionTable({ s }: { s: Section }) {
                     </td>
                   )}
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
@@ -269,7 +254,7 @@ function SectionTable({ s }: { s: Section }) {
         </ol>
       )}
     </section>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -287,7 +272,7 @@ const PALETTE = [
   '#db2777', // pink
   '#0f766e', // teal
   '#475569', // slate
-]
+];
 
 function CurveChart({ c, index }: { c: Curve; index: number }) {
   return (
@@ -357,8 +342,7 @@ function CurveChart({ c, index }: { c: Curve; index: number }) {
                   data={s.points
                     .filter(
                       ([x, y]) =>
-                        (c.xScale === 'log' ? x > 0 : true) &&
-                        (c.yScale === 'log' ? y > 0 : true)
+                        (c.xScale === 'log' ? x > 0 : true) && (c.yScale === 'log' ? y > 0 : true),
                     )
                     .map(([x, y]) => ({ x, y }))}
                   type="monotone"
@@ -386,7 +370,7 @@ function CurveChart({ c, index }: { c: Curve; index: number }) {
         )}
       </div>
     </section>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -394,7 +378,7 @@ function CurveChart({ c, index }: { c: Curve; index: number }) {
 /* ------------------------------------------------------------------ */
 
 function CurvesSection({ curves }: { curves: Curve[] }) {
-  if (curves.length === 0) return null
+  if (curves.length === 0) return null;
   return (
     <section className="ds-page space-y-4">
       <header>
@@ -409,7 +393,7 @@ function CurvesSection({ curves }: { curves: Curve[] }) {
         ))}
       </div>
     </section>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -423,11 +407,11 @@ function Disclaimer({ d }: { d: DatasheetRecord }) {
         <strong className="text-gray-800">Disclaimer —</strong> {d.meta.disclaimer}
       </div>
       <div className="mt-3 text-center text-[11px] text-gray-400">
-        Generated by Magnachip Digital Datasheet · {d.meta.partNumber} · v
-        {d.meta.version} · {d.meta.date}
+        Generated by Magnachip Digital Datasheet · {d.meta.partNumber} · v{d.meta.version} ·{' '}
+        {d.meta.date}
       </div>
     </section>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -435,18 +419,12 @@ function Disclaimer({ d }: { d: DatasheetRecord }) {
 /* ------------------------------------------------------------------ */
 
 export interface RenderOptions {
-  showHeader?: boolean
-  printLayout?: boolean
+  showHeader?: boolean;
+  printLayout?: boolean;
 }
 
-export function DatasheetViewer({
-  d,
-  options,
-}: {
-  d: DatasheetRecord
-  options?: RenderOptions
-}) {
-  const showHeader = options?.showHeader ?? true
+export function DatasheetViewer({ d, options }: { d: DatasheetRecord; options?: RenderOptions }) {
+  const showHeader = options?.showHeader ?? true;
   return (
     <div className="ds-renderer" data-print={options?.printLayout ? 'true' : 'false'}>
       {showHeader && (
@@ -489,5 +467,5 @@ export function DatasheetViewer({
         <Disclaimer d={d} />
       </div>
     </div>
-  )
+  );
 }

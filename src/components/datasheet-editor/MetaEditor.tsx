@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import type { DatasheetMeta } from '@/types/datasheet'
-import { Card, Field, TextArea, TextInput } from './ui'
+import type { DatasheetMeta } from '@/types/datasheet';
+import { Card, Field, TextArea, TextInput } from './ui';
 
 export function MetaEditor({
   meta,
   onChange,
 }: {
-  meta: DatasheetMeta
-  onChange: (meta: DatasheetMeta) => void
+  meta: DatasheetMeta;
+  onChange: (meta: DatasheetMeta) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -63,5 +63,5 @@ export function MetaEditor({
         />
       </Card>
     </div>
-  )
+  );
 }
