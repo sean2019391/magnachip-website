@@ -1,0 +1,34 @@
+name: 'SOA Deployment → GitHub Pages'
+
+on:
+  push:
+    paths:
+      - 'packages/soa-deployment/**'
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install (root workspace)
+        run: npm ci
+
+      - name: Build soa-deployment
+        run: npm --workspace=packages/soa-deployment run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          publish_dir: ./packages/soa-deployment/dist
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          user_name: 'copilot-bot'
+          user_email: 'copilot-bot@users.noreply.github.com'
