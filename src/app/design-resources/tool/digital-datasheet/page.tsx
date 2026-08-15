@@ -127,8 +127,8 @@ export default function DesignDigitalDatasheetPage() {
               <div className="rounded-xl border bg-white p-4 max-h-[60vh] overflow-auto">
                 <h3 className="font-medium mb-2">Products ({rows.length})</h3>
                 <ul className="space-y-1">
-                  {rows.map(p=> (
-                    <li key={p.pn}>
+                  {rows.map((p, i) => (
+                    <li key={`${p.pn}-${i}`}>
                       <button className={`w-full text-left px-3 py-2 rounded ${selectedPn===p.pn? 'bg-black text-white':''}`} onClick={()=>setSelectedPn(p.pn)}>
                         <div className="flex justify-between"><div className="font-medium">{p.pn}</div><div className="text-xs text-gray-500">{p.pkg}</div></div>
                         <div className="text-xs text-gray-500">{p.fam}</div>
