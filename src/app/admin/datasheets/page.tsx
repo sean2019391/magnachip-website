@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import type { DatasheetRecord } from '@/types/datasheet';
 import { emptyDatasheetBody } from '@/types/datasheet';
 
@@ -69,6 +70,28 @@ export default function AdminDatasheetsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-[1100px] px-6 py-12">
+        {/* Section nav */}
+        <nav className="mb-8 flex flex-wrap items-center gap-1">
+          <Link
+            href="/admin"
+            className="rounded-xl px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/60 hover:text-gray-900"
+          >
+            Articles
+          </Link>
+          <Link
+            href="/admin/datasheets"
+            className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white transition-colors"
+          >
+            Digital Datasheets
+          </Link>
+          <Link
+            href="/admin/site-content"
+            className="rounded-xl px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/60 hover:text-gray-900"
+          >
+            Site Content
+          </Link>
+        </nav>
+
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>

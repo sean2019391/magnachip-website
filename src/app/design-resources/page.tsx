@@ -1,14 +1,39 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { designResourcesData, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import DesignResourcesSidebar from '@/components/DesignResourcesSidebar';
 import FadeIn from '@/components/FadeIn';
 import Link from 'next/link';
+import {
+  DEFAULT_DESIGN_RESOURCES,
+  type NestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function DesignResourcesPage() {
-  const categories = Object.keys(designResourcesData).filter((c) => c !== 'Overview');
+  const [designResources, setDesignResources] =
+    useState<NestedStringMap>(DEFAULT_DESIGN_RESOURCES);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.designResources) return;
+        setDesignResources(data.content.designResources);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const categories = Object.keys(designResources).filter((c) => c !== 'Overview');
 
   return (
     <main className="min-h-screen">
@@ -39,7 +64,7 @@ export default function DesignResourcesPage() {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 {categories.map((cat, i) => {
-                  const items = designResourcesData[cat];
+                  const items = designResources[cat];
                   return (
                     <FadeIn key={cat} delay={Math.min(i * 0.08, 0.2)}>
                       <Link

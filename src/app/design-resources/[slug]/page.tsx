@@ -1,17 +1,46 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { designResourcesData, slugToDrCategory, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import DesignResourcesSidebar from '@/components/DesignResourcesSidebar';
 import FadeIn from '@/components/FadeIn';
+import {
+  DEFAULT_DESIGN_RESOURCES,
+  type NestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function DesignResourceCategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const category = slugToDrCategory[slug];
+  const [designResources, setDesignResources] =
+    useState<NestedStringMap>(DEFAULT_DESIGN_RESOURCES);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.designResources) return;
+        setDesignResources(data.content.designResources);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const reverseMap: Record<string, string> = {};
+  for (const cat of Object.keys(designResources)) {
+    reverseMap[toSlug(cat)] = cat;
+  }
+  const category = reverseMap[slug];
 
   if (!category || category === 'Overview') {
     return (
@@ -38,7 +67,7 @@ export default function DesignResourceCategoryPage() {
     );
   }
 
-  const items = designResourcesData[category] ?? [];
+  const items = designResources[category] ?? [];
 
   return (
     <main className="min-h-screen">

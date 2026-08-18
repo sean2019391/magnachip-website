@@ -1,14 +1,39 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { designResourcesData, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
+import {
+  DEFAULT_DESIGN_RESOURCES,
+  type NestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 interface Props {
   activeCategory?: string;
 }
 
 export default function DesignResourcesSidebar({ activeCategory }: Props) {
-  const categories = Object.keys(designResourcesData).filter((c) => c !== 'Overview');
+  const [designResources, setDesignResources] =
+    useState<NestedStringMap>(DEFAULT_DESIGN_RESOURCES);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.designResources) return;
+        setDesignResources(data.content.designResources);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const categories = Object.keys(designResources).filter((c) => c !== 'Overview');
 
   return (
     <aside className="w-full lg:w-64 shrink-0">

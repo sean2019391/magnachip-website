@@ -1,26 +1,54 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import {
-  applicationsData,
-  slugToCategory,
-  slugToSubcategory,
-  categoryForSubcategory,
-  toSlug,
-} from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import ApplicationsSidebar from '@/components/ApplicationsSidebar';
 import FadeIn from '@/components/FadeIn';
+import {
+  DEFAULT_APPLICATIONS,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function ApplicationSubcategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
   const subSlug = params.subcategory as string;
 
+  const [applications, setApplications] = useState<TripleNestedStringMap>(DEFAULT_APPLICATIONS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.applications) return;
+        setApplications(data.content.applications);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Build reverse lookups from the live applications data.
+  const slugToSubcategory: Record<string, string> = {};
+  const subcategoryToCategory: Record<string, string> = {};
+  for (const cat of Object.keys(applications)) {
+    for (const sub of Object.keys(applications[cat])) {
+      slugToSubcategory[toSlug(sub)] = sub;
+      subcategoryToCategory[sub] = cat;
+    }
+  }
+
   const subcategory = slugToSubcategory[subSlug];
-  const category = subcategory ? categoryForSubcategory(subcategory) : null;
+  const category = subcategory ? subcategoryToCategory[subcategory] ?? null : null;
 
   if (!subcategory || !category) {
     return (
@@ -47,7 +75,7 @@ export default function ApplicationSubcategoryPage() {
     );
   }
 
-  const details = applicationsData[category]?.[subcategory] ?? [];
+  const details = applications[category]?.[subcategory] ?? [];
 
   return (
     <main className="min-h-screen">

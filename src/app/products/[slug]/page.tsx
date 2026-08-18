@@ -1,19 +1,53 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { productsData, slugToFamily, categoryForFamily, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import ProductsSidebar from '@/components/ProductsSidebar';
 import FadeIn from '@/components/FadeIn';
+import {
+  DEFAULT_PRODUCTS,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function ProductFamilyPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const [products, setProducts] = useState<TripleNestedStringMap>(DEFAULT_PRODUCTS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.products) return;
+        setProducts(data.content.products);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Build reverse lookups from the (possibly updated) products map.
+  const slugToFamily: Record<string, string> = {};
+  const familyToCategory: Record<string, string> = {};
+  for (const cat of Object.keys(products)) {
+    for (const fam of Object.keys(products[cat])) {
+      slugToFamily[toSlug(fam)] = fam;
+      familyToCategory[fam] = cat;
+    }
+  }
+
   const family = slugToFamily[slug];
-  const category = family ? categoryForFamily(family) : null;
-  const items = family ? (productsData[category!]?.[family] ?? []) : [];
+  const category = family ? familyToCategory[family] ?? null : null;
+  const items = family && category ? (products[category]?.[family] ?? []) : [];
 
   if (!family) {
     return (

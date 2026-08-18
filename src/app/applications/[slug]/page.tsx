@@ -1,16 +1,44 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { applicationsData, slugToCategory, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import ApplicationsSidebar from '@/components/ApplicationsSidebar';
 import FadeIn from '@/components/FadeIn';
+import {
+  DEFAULT_APPLICATIONS,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function ApplicationCategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const [applications, setApplications] = useState<TripleNestedStringMap>(DEFAULT_APPLICATIONS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.applications) return;
+        setApplications(data.content.applications);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const slugToCategory: Record<string, string> = {};
+  for (const cat of Object.keys(applications)) {
+    slugToCategory[toSlug(cat)] = cat;
+  }
   const category = slugToCategory[slug];
 
   if (!category) {
@@ -38,7 +66,7 @@ export default function ApplicationCategoryPage() {
     );
   }
 
-  const subs = Object.keys(applicationsData[category]).filter((s) => s !== 'Overview');
+  const subs = Object.keys(applications[category]).filter((s) => s !== 'Overview');
 
   return (
     <main className="min-h-screen">
@@ -88,10 +116,10 @@ export default function ApplicationCategoryPage() {
                           className="block p-5 rounded-xl bg-white border border-gray-200 hover:border-black/30 hover:shadow-sm transition-all"
                         >
                           <p className="text-sm font-semibold text-gray-900">{sub}</p>
-                          {applicationsData[category][sub].length > 0 && (
+                          {applications[category][sub].length > 0 && (
                             <p className="text-xs text-gray-400 mt-1">
-                              {applicationsData[category][sub].length} solution detail
-                              {applicationsData[category][sub].length !== 1 ? 's' : ''}
+                              {applications[category][sub].length} solution detail
+                              {applications[category][sub].length !== 1 ? 's' : ''}
                             </p>
                           )}
                         </Link>

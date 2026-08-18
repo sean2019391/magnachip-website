@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState, useMemo, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { slugToFamily, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import {
   getProductsForVariant,
   getColumnsForFamily,
@@ -16,12 +16,44 @@ import {
 import ProductsSidebar from '@/components/ProductsSidebar';
 import FadeIn from '@/components/FadeIn';
 import { hasDigitalDatasheet } from '@/lib/digital-datasheet-registry';
+import {
+  DEFAULT_PRODUCTS,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function ProductVariantPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
   const variantSlug = params.variant as string;
+
+  const [navProducts, setNavProducts] = useState<TripleNestedStringMap>(DEFAULT_PRODUCTS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.products) return;
+        setNavProducts(data.content.products);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Build a slug → family reverse lookup from the live products data so the
+  // admin can add/rename product families without rebuilding the app.
+  const slugToFamily: Record<string, string> = {};
+  for (const cat of Object.keys(navProducts)) {
+    for (const fam of Object.keys(navProducts[cat])) {
+      slugToFamily[toSlug(fam)] = fam;
+    }
+  }
   const family = slugToFamily[slug];
 
   // If variant is "overview", redirect to family page

@@ -43,7 +43,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-[1100px] mx-auto px-6 py-12">
         {/* Section nav */}
-        <nav className="flex items-center gap-1 mb-8">
+        <nav className="flex items-center gap-1 mb-8 flex-wrap">
           <Link
             href="/admin"
             className="px-4 py-2 rounded-xl text-sm font-medium bg-black text-white transition-colors"
@@ -55,6 +55,12 @@ export default function AdminPage() {
             className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-200/60 hover:text-gray-900 transition-colors"
           >
             Digital Datasheets
+          </Link>
+          <Link
+            href="/admin/site-content"
+            className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-200/60 hover:text-gray-900 transition-colors"
+          >
+            Site Content
           </Link>
         </nav>
 

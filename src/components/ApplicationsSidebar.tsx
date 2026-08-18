@@ -1,7 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { applicationsData, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
+import {
+  DEFAULT_APPLICATIONS,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 interface Props {
   activeCategory?: string;
@@ -9,11 +15,29 @@ interface Props {
 }
 
 export default function ApplicationsSidebar({ activeCategory, activeSubcategory }: Props) {
+  const [applications, setApplications] = useState<TripleNestedStringMap>(DEFAULT_APPLICATIONS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.applications) return;
+        setApplications(data.content.applications);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <aside className="w-full lg:w-64 shrink-0">
       <nav className="space-y-6">
-        {Object.keys(applicationsData).map((cat) => {
-          const subs = Object.keys(applicationsData[cat]);
+        {Object.keys(applications).map((cat) => {
+          const subs = Object.keys(applications[cat]);
           const isCatActive = activeCategory === cat;
 
           return (

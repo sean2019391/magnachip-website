@@ -1,13 +1,37 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { productsData, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import FadeIn from '@/components/FadeIn';
+import {
+  DEFAULT_PRODUCTS,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function ProductsPage() {
-  const categories = Object.keys(productsData);
+  const [products, setProducts] = useState<TripleNestedStringMap>(DEFAULT_PRODUCTS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.products) return;
+        setProducts(data.content.products);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const categories = Object.keys(products);
 
   return (
     <main className="min-h-screen">
@@ -30,8 +54,8 @@ export default function ProductsPage() {
               <FadeIn delay={ci * 0.08}>
                 <h2 className="text-xl font-bold text-gray-800 mb-5">{cat}</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {Object.keys(productsData[cat]).map((fam, fi) => {
-                    const items = productsData[cat][fam];
+                  {Object.keys(products[cat]).map((fam, fi) => {
+                    const items = products[cat][fam];
                     return (
                       <Link
                         key={fam}

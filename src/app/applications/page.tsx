@@ -1,14 +1,38 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { applicationsData, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
 import ApplicationsSidebar from '@/components/ApplicationsSidebar';
 import FadeIn from '@/components/FadeIn';
+import {
+  DEFAULT_APPLICATIONS,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 export default function ApplicationsPage() {
-  const categories = Object.keys(applicationsData);
+  const [applications, setApplications] = useState<TripleNestedStringMap>(DEFAULT_APPLICATIONS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content?.applications) return;
+        setApplications(data.content.applications);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const categories = Object.keys(applications);
 
   return (
     <main className="min-h-screen">
@@ -43,7 +67,7 @@ export default function ApplicationsPage() {
               {/* Category Overview Cards */}
               <div className="space-y-6">
                 {categories.map((cat, i) => {
-                  const subs = Object.keys(applicationsData[cat]).filter((s) => s !== 'Overview');
+                  const subs = Object.keys(applications[cat]).filter((s) => s !== 'Overview');
                   const catSlug = toSlug(cat);
                   return (
                     <FadeIn key={cat} delay={Math.min(i * 0.08, 0.2)}>

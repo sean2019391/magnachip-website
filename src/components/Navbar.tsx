@@ -8,45 +8,20 @@ import { localeLabels, locales } from '@/i18n/translations';
 import { IconClose, IconSearch, IconGlobe, IconChevronRight } from '@/components/Icons';
 import DropdownWrapper from '@/components/DropdownWrapper';
 import MobileAccordion from '@/components/MobileAccordion';
-import { productsData, applicationsData, designResourcesData, toSlug } from '@/lib/products';
+import { toSlug } from '@/lib/products';
+import {
+  DEFAULT_ABOUT,
+  DEFAULT_APPLICATIONS,
+  DEFAULT_DESIGN_RESOURCES,
+  DEFAULT_PRODUCTS,
+  type NestedStringMap,
+  type TripleNestedStringMap,
+  type SiteContent,
+} from '@/lib/site-content';
 
 type DropdownKey = 'products' | 'applications' | 'design-resources' | 'about' | null;
 
-const aboutData: Record<string, Record<string, string[]>> = {
-  Overview: {},
-  'Executive Management': {},
-  'Corporate Responsibility': {
-    Environment: [
-      'Overview',
-      'Sustainability Priorities',
-      'Our Approach',
-      'Climate Change',
-      'GHG Emissions',
-      'Water Management',
-      'Waste Management',
-      'Sustainable Products and Services',
-      'Opportunities in Clean Tech',
-    ],
-    Social: [
-      'Overview',
-      'Human Capital Management',
-      'Health and Safety',
-      'Inclusive Workplace',
-      'Community',
-      'Supply Chain Management',
-    ],
-    Governance: [
-      'Overview',
-      'Oversight Structure',
-      'Board Composition and Role',
-      'Risk Management',
-      'Cybersecurity and Data Privacy',
-    ],
-    'Ethics & Compliance': [],
-    'TCFD Index': [],
-  },
-  Newsroom: {},
-};
+type AboutData = Record<string, NestedStringMap | string[]>;
 
 export default function Navbar() {
   const { t, locale, setLocale } = useI18n();
@@ -64,6 +39,32 @@ export default function Navbar() {
   const [appSub, setAppSub] = useState<string | null>(null);
   const [aboutCat, setAboutCat] = useState<string | null>(null);
   const [aboutSub, setAboutSub] = useState<string | null>(null);
+  const [drCat, setDrCat] = useState<string | null>(null);
+
+  // ── Editable site content (loaded from /api/site-content) ──
+  const [products, setProducts] = useState<TripleNestedStringMap>(DEFAULT_PRODUCTS);
+  const [applications, setApplications] = useState<TripleNestedStringMap>(DEFAULT_APPLICATIONS);
+  const [designResources, setDesignResources] = useState<NestedStringMap>(DEFAULT_DESIGN_RESOURCES);
+  const [aboutData, setAboutData] = useState<AboutData>(DEFAULT_ABOUT);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/site-content', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { content?: SiteContent } | null) => {
+        if (cancelled || !data?.content) return;
+        if (data.content.products) setProducts(data.content.products);
+        if (data.content.applications) setApplications(data.content.applications);
+        if (data.content.designResources) setDesignResources(data.content.designResources);
+        if (data.content.about) setAboutData(data.content.about as AboutData);
+      })
+      .catch(() => {
+        // Network error → keep defaults.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -75,8 +76,6 @@ export default function Navbar() {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
-
-  const [drCat, setDrCat] = useState<string | null>(null);
 
   useEffect(() => {
     if (openMenu !== 'products') {
@@ -107,7 +106,7 @@ export default function Navbar() {
     { key: 'about' as DropdownKey, label: t.nav.aboutUs },
   ];
 
-  const productCategories = Object.keys(productsData);
+  const productCategories = Object.keys(products);
 
   return (
     <header
@@ -139,10 +138,7 @@ export default function Navbar() {
             </div>
           ))}
 
-          {/* Direct link for high-visibility access to Digital Datasheet */}
-          <Link href="/design-resources/tool/digital-datasheet" className="text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200 text-gray-700 hover:text-black hidden lg:inline-block">
-            Digital Datasheet
-          </Link>
+          {/* Digital Datasheet moved into Design Resources → Tools (no longer a top-level direct link) */}
 
           <div className="ml-2 flex items-center">
             {searchOpen ? (
@@ -244,7 +240,6 @@ export default function Navbar() {
         {openMenu === 'products' && (
           <DropdownWrapper>
             <div className="max-w-[1280px] mx-auto flex min-h-[360px]">
-              {/* Col 1: Categories */}
               <div className="w-56 border-r border-gray-100 py-4 px-2 shrink-0">
                 {productCategories.map((cat) => (
                   <button
@@ -265,9 +260,8 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* Col 2: Families */}
               <AnimatePresence mode="wait">
-                {productCat && (
+                {productCat && products[productCat] && (
                   <motion.div
                     key={productCat}
                     initial={{ opacity: 0, x: -8 }}
@@ -276,8 +270,8 @@ export default function Navbar() {
                     transition={{ duration: 0.12 }}
                     className="w-56 py-4 px-2 shrink-0"
                   >
-                    {Object.keys(productsData[productCat]).map((fam) => {
-                      const hasVariants = productsData[productCat][fam].length > 0;
+                    {Object.keys(products[productCat]).map((fam) => {
+                      const hasVariants = products[productCat][fam].length > 0;
                       return hasVariants ? (
                         <button
                           type="button"
@@ -313,9 +307,8 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
 
-              {/* Col 3: Variants */}
               <AnimatePresence mode="wait">
-                {productCat && productFam && productsData[productCat][productFam].length > 0 && (
+                {productCat && productFam && products[productCat] && products[productCat][productFam] && products[productCat][productFam].length > 0 && (
                   <motion.div
                     key={`${productCat}-${productFam}`}
                     initial={{ opacity: 0, x: -8 }}
@@ -324,7 +317,7 @@ export default function Navbar() {
                     transition={{ duration: 0.12 }}
                     className="w-56 py-4 px-2 shrink-0"
                   >
-                    {productsData[productCat][productFam].map((v) => (
+                    {products[productCat][productFam].map((v) => (
                       <Link
                         key={v}
                         href={
@@ -349,9 +342,8 @@ export default function Navbar() {
         {openMenu === 'applications' && (
           <DropdownWrapper>
             <div className="max-w-[1280px] mx-auto flex min-h-[360px]">
-              {/* Col 1: Categories */}
               <div className="w-56 border-r border-gray-100 py-4 px-2 shrink-0">
-                {Object.keys(applicationsData).map((cat) => (
+                {Object.keys(applications).map((cat) => (
                   <button
                     type="button"
                     key={cat}
@@ -370,9 +362,8 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* Col 2: Subcategories */}
               <AnimatePresence mode="wait">
-                {appCat && (
+                {appCat && applications[appCat] && (
                   <motion.div
                     key={appCat}
                     initial={{ opacity: 0, x: -8 }}
@@ -381,8 +372,8 @@ export default function Navbar() {
                     transition={{ duration: 0.12 }}
                     className="w-64 py-4 px-2 shrink-0"
                   >
-                    {Object.keys(applicationsData[appCat]).map((sub) => {
-                      const details = applicationsData[appCat][sub];
+                    {Object.keys(applications[appCat]).map((sub) => {
+                      const details = applications[appCat][sub];
                       const hasDetails = details.length > 0;
                       return hasDetails ? (
                         <button
@@ -417,18 +408,17 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
 
-              {/* Col 3: Details */}
               <AnimatePresence mode="wait">
-                {appCat && appSub && applicationsData[appCat][appSub].length > 0 && (
+                {appCat && appSub && applications[appCat] && applications[appCat][appSub] && applications[appCat][appSub].length > 0 && (
                   <motion.div
                     key={`${appCat}-${appSub}`}
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -8 }}
                     transition={{ duration: 0.12 }}
-                    className="w-64 py-4 px-2 shrink-0"
+                    className="w-56 py-4 px-2 shrink-0"
                   >
-                    {applicationsData[appCat][appSub].map((d) => (
+                    {applications[appCat][appSub].map((d) => (
                       <Link
                         key={d}
                         href={`/applications/${toSlug(appCat)}/${toSlug(appSub)}`}
@@ -449,9 +439,8 @@ export default function Navbar() {
         {openMenu === 'design-resources' && (
           <DropdownWrapper>
             <div className="max-w-[1280px] mx-auto flex min-h-[300px]">
-              {/* Col 1: Categories */}
               <div className="w-56 border-r border-gray-100 py-4 px-2 shrink-0">
-                {Object.keys(designResourcesData)
+                {Object.keys(designResources)
                   .filter((c) => c !== 'Overview')
                   .map((cat) => (
                     <button
@@ -469,9 +458,8 @@ export default function Navbar() {
                   ))}
               </div>
 
-              {/* Col 2: Items */}
               <AnimatePresence mode="wait">
-                {drCat && designResourcesData[drCat] && designResourcesData[drCat].length > 0 && (
+                {drCat && designResources[drCat] && designResources[drCat].length > 0 && (
                   <motion.div
                     key={drCat}
                     initial={{ opacity: 0, x: -8 }}
@@ -480,7 +468,7 @@ export default function Navbar() {
                     transition={{ duration: 0.12 }}
                     className="w-64 py-4 px-2 shrink-0"
                   >
-                    {designResourcesData[drCat].map((item) => (
+                    {designResources[drCat].map((item) => (
                       <Link
                         key={item}
                         href={`/design-resources/${toSlug(drCat)}/${toSlug(item)}`}
@@ -503,7 +491,7 @@ export default function Navbar() {
             <div className="max-w-[1280px] mx-auto flex min-h-[360px]">
               <div className="w-56 border-r border-gray-100 py-4 px-2 shrink-0">
                 {Object.keys(aboutData).map((cat) => {
-                  const subKeys = Object.keys(aboutData[cat]);
+                  const subKeys = Object.keys(aboutData[cat] as NestedStringMap);
                   const hasSubs = subKeys.length > 0;
                   return (
                     <button
@@ -528,55 +516,60 @@ export default function Navbar() {
               </div>
 
               <AnimatePresence mode="wait">
-                {aboutCat && Object.keys(aboutData[aboutCat]).length > 0 && (
-                  <motion.div
-                    key={aboutCat}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -8 }}
-                    transition={{ duration: 0.12 }}
-                    className="w-64 border-r border-gray-100 py-4 px-2 shrink-0"
-                  >
-                    {Object.keys(aboutData[aboutCat]).map((sub) => {
-                      const items = aboutData[aboutCat][sub];
-                      const hasItems = items.length > 0;
-                      return hasItems ? (
-                        <button
-                          type="button"
-                          key={sub}
-                          onClick={() => setAboutSub(aboutSub === sub ? null : sub)}
-                          className={`block w-full text-left px-4 py-2 text-sm rounded-lg transition-colors ${
-                            aboutSub === sub
-                              ? 'bg-black/5 text-black font-medium'
-                              : 'text-gray-700 hover:bg-gray-50 hover:text-black'
-                          }`}
-                        >
-                          <span className="flex items-center justify-between gap-2">
+                {aboutCat &&
+                  aboutData[aboutCat] &&
+                  !Array.isArray(aboutData[aboutCat]) &&
+                  Object.keys(aboutData[aboutCat] as NestedStringMap).length > 0 && (
+                    <motion.div
+                      key={aboutCat}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -8 }}
+                      transition={{ duration: 0.12 }}
+                      className="w-64 border-r border-gray-100 py-4 px-2 shrink-0"
+                    >
+                      {Object.keys(aboutData[aboutCat] as NestedStringMap).map((sub) => {
+                        const items = (aboutData[aboutCat] as NestedStringMap)[sub];
+                        const hasItems = items.length > 0;
+                        return hasItems ? (
+                          <button
+                            type="button"
+                            key={sub}
+                            onClick={() => setAboutSub(aboutSub === sub ? null : sub)}
+                            className={`block w-full text-left px-4 py-2 text-sm rounded-lg transition-colors ${
+                              aboutSub === sub
+                                ? 'bg-black/5 text-black font-medium'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-black'
+                            }`}
+                          >
+                            <span className="flex items-center justify-between gap-2">
+                              {sub}
+                              <IconChevronRight
+                                className={`w-3.5 h-3.5 text-gray-300 shrink-0 transition-transform duration-200 ${aboutSub === sub ? 'rotate-90' : ''}`}
+                              />
+                            </span>
+                          </button>
+                        ) : (
+                          <a
+                            key={sub}
+                            href="#solutions"
+                            className="block text-sm text-gray-700 hover:bg-gray-50 hover:text-black px-4 py-2 rounded-lg transition-colors"
+                          >
                             {sub}
-                            <IconChevronRight
-                              className={`w-3.5 h-3.5 text-gray-300 shrink-0 transition-transform duration-200 ${aboutSub === sub ? 'rotate-90' : ''}`}
-                            />
-                          </span>
-                        </button>
-                      ) : (
-                        <a
-                          key={sub}
-                          href="#solutions"
-                          className="block text-sm text-gray-700 hover:bg-gray-50 hover:text-black px-4 py-2 rounded-lg transition-colors"
-                        >
-                          {sub}
-                        </a>
-                      );
-                    })}
-                  </motion.div>
-                )}
+                          </a>
+                        );
+                      })}
+                    </motion.div>
+                  )}
               </AnimatePresence>
 
               <AnimatePresence mode="wait">
                 {aboutCat &&
                   aboutSub &&
+                  aboutData[aboutCat] &&
+                  !Array.isArray(aboutData[aboutCat]) &&
                   (() => {
-                    const items = aboutData[aboutCat]?.[aboutSub];
+                    const items = (aboutData[aboutCat] as NestedStringMap)[aboutSub];
                     return (
                       items &&
                       items.length > 0 && (
@@ -630,8 +623,8 @@ export default function Navbar() {
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
                       {cat}
                     </p>
-                    {Object.keys(productsData[cat]).map((fam) => {
-                      const variants = productsData[cat][fam];
+                    {Object.keys(products[cat]).map((fam) => {
+                      const variants = products[cat][fam];
                       if (variants.length > 0) {
                         return (
                           <div key={fam} className="ml-2 mb-1">
@@ -678,13 +671,13 @@ export default function Navbar() {
                 setExpanded={setMobileExpanded}
                 id="applications"
               >
-                {Object.keys(applicationsData).map((cat) => (
+                {Object.keys(applications).map((cat) => (
                   <div key={cat} className="mt-2">
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
                       {cat}
                     </p>
-                    {Object.keys(applicationsData[cat]).map((sub) => {
-                      const details = applicationsData[cat][sub];
+                    {Object.keys(applications[cat]).map((sub) => {
+                      const details = applications[cat][sub];
                       if (details.length > 0) {
                         return (
                           <div key={sub} className="ml-2 mb-1">
@@ -731,10 +724,10 @@ export default function Navbar() {
                 setExpanded={setMobileExpanded}
                 id="design-resources"
               >
-                {Object.keys(designResourcesData)
+                {Object.keys(designResources)
                   .filter((c) => c !== 'Overview')
                   .map((cat) => {
-                    const items = designResourcesData[cat];
+                    const items = designResources[cat];
                     return (
                       <div key={cat} className="mt-2">
                         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
@@ -766,14 +759,15 @@ export default function Navbar() {
                 id="about"
               >
                 {Object.keys(aboutData).map((cat) => {
-                  const subKeys = Object.keys(aboutData[cat]);
+                  const value = aboutData[cat];
+                  const subKeys = !Array.isArray(value) ? Object.keys(value) : [];
                   return (
                     <div key={cat} className="mt-2">
                       <p className="text-sm text-gray-700 font-medium py-0.5">{cat}</p>
                       {subKeys.length > 0 && (
                         <div className="ml-3">
                           {subKeys.map((sub) => {
-                            const items = aboutData[cat][sub];
+                            const items = (value as NestedStringMap)[sub] ?? [];
                             return (
                               <div key={sub} className="py-0.5">
                                 <a
@@ -784,7 +778,7 @@ export default function Navbar() {
                                 </a>
                                 {items.length > 0 && (
                                   <div className="pl-3">
-                                    {items.map((v: string) => (
+                                    {items.map((v) => (
                                       <a
                                         key={v}
                                         href="#solutions"
