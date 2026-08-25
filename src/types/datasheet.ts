@@ -164,6 +164,16 @@ export interface DatasheetRecord extends DatasheetBody {
   updatedAt: string;
 }
 
+export function hasRawDatasheetData(
+  datasheet: Pick<DatasheetRecord, 'sections' | 'curves'> | null | undefined,
+): boolean {
+  if (!datasheet) return false;
+  return Boolean(
+    (Array.isArray(datasheet.sections) && datasheet.sections.length > 0) ||
+      (Array.isArray(datasheet.curves) && datasheet.curves.length > 0),
+  );
+}
+
 /* ── Default factory ── */
 
 export function emptyDatasheetMeta(): DatasheetMeta {

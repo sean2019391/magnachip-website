@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { DatasheetRecord } from '@/types/datasheet';
-import { emptyDatasheetBody } from '@/types/datasheet';
+import { emptyDatasheetBody, hasRawDatasheetData } from '@/types/datasheet';
 
 export default function AdminDatasheetsPage() {
   const router = useRouter();
@@ -96,7 +96,9 @@ export default function AdminDatasheetsPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Digital Datasheets</h1>
-            <p className="mt-1 text-sm text-gray-500">Manage your digital datasheets</p>
+            <p className="mt-1 text-sm text-gray-500">
+              Only datasheets with raw measurement data are exposed on the public site.
+            </p>
           </div>
           <button
             onClick={handleCreate}
@@ -104,6 +106,25 @@ export default function AdminDatasheetsPage() {
           >
             + New Datasheet
           </button>
+        </div>
+
+        <div className="mb-6 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <div className="text-xs uppercase tracking-[0.16em] text-gray-400">Total</div>
+            <div className="mt-2 text-2xl font-bold text-gray-900">{datasheets.length}</div>
+          </div>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <div className="text-xs uppercase tracking-[0.16em] text-gray-400">Visible</div>
+            <div className="mt-2 text-2xl font-bold text-gray-900">
+              {datasheets.filter((d) => d.published !== false && hasRawDatasheetData(d)).length}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <div className="text-xs uppercase tracking-[0.16em] text-gray-400">Blocked</div>
+            <div className="mt-2 text-2xl font-bold text-gray-900">
+              {datasheets.filter((d) => !(d.published !== false && hasRawDatasheetData(d))).length}
+            </div>
+          </div>
         </div>
 
         {/* Table */}
@@ -158,47 +179,60 @@ export default function AdminDatasheetsPage() {
                 </tr>
               </thead>
               <tbody>
-                {datasheets.map((d) => (
-                  <tr
-                    key={d.id}
-                    className="border-b border-gray-50 transition-colors hover:bg-gray-50/50"
-                  >
-                    <td className="px-6 py-4">
-                      <p className="text-sm font-medium text-gray-900">{d.meta.partNumber}</p>
-                    </td>
-                    <td className="hidden px-6 py-4 text-sm text-gray-500 md:table-cell">
-                      {d.meta.title}
-                    </td>
-                    <td className="hidden px-6 py-4 text-sm text-gray-500 lg:table-cell">
-                      {new Date(d.updatedAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{d.sections.length}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{d.curves.length}</td>
-                    <td className="hidden px-6 py-4 sm:table-cell">
-                      <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          d.published ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'
-                        }`}
-                      >
-                        {d.published ? 'Published' : 'Draft'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => router.push(`/admin/datasheets/${d.id}`)}
-                        className="mr-4 text-sm text-gray-600 transition-colors hover:text-black"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(d.id)}
-                        className="text-sm text-red-500 transition-colors hover:text-red-700"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {datasheets.map((d) => {
+                  const rawDataReady = hasRawDatasheetData(d);
+                  const publicVisible = d.published !== false && rawDataReady;
+                  return (
+                    <tr
+                      key={d.id}
+                      className="border-b border-gray-50 transition-colors hover:bg-gray-50/50"
+                    >
+                      <td className="px-6 py-4">
+                        <p className="text-sm font-medium text-gray-900">{d.meta.partNumber}</p>
+                      </td>
+                      <td className="hidden px-6 py-4 text-sm text-gray-500 md:table-cell">
+                        {d.meta.title}
+                      </td>
+                      <td className="hidden px-6 py-4 text-sm text-gray-500 lg:table-cell">
+                        {new Date(d.updatedAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{d.sections.length}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{d.curves.length}</td>
+                      <td className="hidden px-6 py-4 sm:table-cell">
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            publicVisible
+                              ? 'bg-green-50 text-green-700'
+                              : d.published
+                                ? 'bg-amber-50 text-amber-700'
+                                : 'bg-gray-100 text-gray-500'
+                          }`}
+                        >
+                          {publicVisible ? 'Visible' : d.published ? 'Hidden' : 'Draft'}
+                        </span>
+                        {!rawDataReady && (
+                          <span className="mt-2 block text-[10px] font-medium uppercase tracking-[0.12em] text-red-500">
+                            no raw data
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          onClick={() => router.push(`/admin/datasheets/${d.id}`)}
+                          className="mr-4 text-sm text-gray-600 transition-colors hover:text-black"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(d.id)}
+                          className="text-sm text-red-500 transition-colors hover:text-red-700"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

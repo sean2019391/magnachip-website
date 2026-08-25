@@ -4,26 +4,48 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Article } from '@/types/article';
+import type { DatasheetRecord } from '@/types/datasheet';
+import { hasRawDatasheetData } from '@/types/datasheet';
+import NotionLayout from '@/components/NotionLayout';
 
 export default function AdminPage() {
   const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
+  const [datasheets, setDatasheets] = useState<DatasheetRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchArticles = () => {
+  const fetchData = async () => {
     setLoading(true);
-    fetch('/api/articles?admin=true')
-      .then((res) => res.json())
-      .then((data) => {
-        setArticles(data.articles ?? []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    try {
+      const [articlesRes, datasheetsRes] = await Promise.all([
+        fetch('/api/articles?admin=true'),
+        fetch('/api/datasheets?admin=true'),
+      ]);
+
+      const articleData = await articlesRes.json();
+      const datasheetData = await datasheetsRes.json();
+
+      setArticles(articleData.articles ?? []);
+      setDatasheets(datasheetData.datasheets ?? []);
+    } catch {
+      setArticles([]);
+      setDatasheets([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchArticles();
+    fetchData();
   }, []);
+
+  const publishedArticles = articles.filter((a) => a.published).length;
+  const visibleDatasheets = datasheets.filter(
+    (d) => d.published !== false && hasRawDatasheetData(d),
+  ).length;
+  const hiddenDatasheets = datasheets.filter(
+    (d) => !(d.published !== false && hasRawDatasheetData(d)),
+  ).length;
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this article?')) return;
@@ -40,124 +62,147 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-[1100px] mx-auto px-6 py-12">
-        {/* Section nav */}
-        <nav className="flex items-center gap-1 mb-8 flex-wrap">
+    <NotionLayout title="Admin Control Center">
+      <div className="mx-auto max-w-[1200px] px-6 py-12">
+        <nav className="mb-8 flex flex-wrap items-center gap-1">
           <Link
             href="/admin"
-            className="px-4 py-2 rounded-xl text-sm font-medium bg-black text-white transition-colors"
+            className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white transition-colors"
           >
-            Articles
+            Dashboard
           </Link>
           <Link
             href="/admin/datasheets"
-            className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-200/60 hover:text-gray-900 transition-colors"
+            className="rounded-xl px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/60 hover:text-gray-900"
           >
             Digital Datasheets
           </Link>
           <Link
             href="/admin/site-content"
-            className="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-200/60 hover:text-gray-900 transition-colors"
+            className="rounded-xl px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/60 hover:text-gray-900"
           >
             Site Content
           </Link>
         </nav>
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Articles</h1>
-            <p className="text-gray-500 text-sm mt-1">Manage your newsroom articles</p>
+            <h1 className="text-3xl font-bold text-gray-900">Admin Control Center</h1>
+            <p className="mt-1 text-sm text-gray-500">
+              Full website, article, datasheet, and raw-data control from one place.
+            </p>
           </div>
           <button
             onClick={() => router.push('/admin/edit/new')}
-            className="px-4 py-2.5 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors"
+            className="rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800"
           >
             + New Article
           </button>
         </div>
 
-        {/* Table */}
-        {loading ? (
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-            <div className="p-12 text-center text-gray-400 text-sm">Loading...</div>
+        <div className="mb-8 grid gap-4 md:grid-cols-4">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-gray-400">Articles</div>
+            <div className="mt-2 text-3xl font-bold text-gray-900">{articles.length}</div>
+            <div className="mt-1 text-sm text-gray-500">{publishedArticles} published</div>
           </div>
-        ) : articles.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-            <div className="p-12 text-center">
-              <p className="text-gray-500 mb-4">No articles yet.</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-gray-400">Datasheets</div>
+            <div className="mt-2 text-3xl font-bold text-gray-900">{datasheets.length}</div>
+            <div className="mt-1 text-sm text-gray-500">{visibleDatasheets} visible publicly</div>
+          </div>
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-gray-400">Hidden</div>
+            <div className="mt-2 text-3xl font-bold text-gray-900">{hiddenDatasheets}</div>
+            <div className="mt-1 text-sm text-gray-500">No raw data or draft</div>
+          </div>
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-gray-400">Site Data</div>
+            <div className="mt-2 text-3xl font-bold text-gray-900">4</div>
+            <div className="mt-1 text-sm text-gray-500">Products / Apps / Resources / About</div>
+          </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <section className="rounded-2xl border border-gray-200 bg-white p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">Quick controls</h2>
+            </div>
+            <div className="space-y-3">
               <button
                 onClick={() => router.push('/admin/edit/new')}
-                className="px-4 py-2 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors"
+                className="flex w-full items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left transition-colors hover:bg-gray-100"
               >
-                Create your first article
+                <span>
+                  <span className="block font-medium text-gray-900">Create article</span>
+                  <span className="text-sm text-gray-500">Newsroom and press content</span>
+                </span>
+                <span className="text-lg text-gray-500">→</span>
+              </button>
+              <button
+                onClick={() => router.push('/admin/datasheets')}
+                className="flex w-full items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left transition-colors hover:bg-gray-100"
+              >
+                <span>
+                  <span className="block font-medium text-gray-900">Manage datasheets</span>
+                  <span className="text-sm text-gray-500">Publish only records with raw data</span>
+                </span>
+                <span className="text-lg text-gray-500">→</span>
+              </button>
+              <button
+                onClick={() => router.push('/admin/site-content')}
+                className="flex w-full items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left transition-colors hover:bg-gray-100"
+              >
+                <span>
+                  <span className="block font-medium text-gray-900">Edit site content</span>
+                  <span className="text-sm text-gray-500">Products, applications, resources, and about pages</span>
+                </span>
+                <span className="text-lg text-gray-500">→</span>
               </button>
             </div>
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4">
-                    Title
-                  </th>
-                  <th className="text-left text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4 hidden md:table-cell">
-                    Date
-                  </th>
-                  <th className="text-left text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4 hidden sm:table-cell">
-                    Status
-                  </th>
-                  <th className="text-right text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {articles.map((article) => (
-                  <tr
-                    key={article.id}
-                    className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
-                  >
-                    <td className="px-6 py-4">
-                      <p className="text-sm font-medium text-gray-900">{article.title}</p>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
-                      {new Date(article.date).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 hidden sm:table-cell">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          article.published
-                            ? 'bg-green-50 text-green-700'
-                            : 'bg-gray-100 text-gray-500'
-                        }`}
-                      >
-                        {article.published ? 'Published' : 'Draft'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
+          </section>
+
+          <section className="rounded-2xl border border-gray-200 bg-white p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">Recent articles</h2>
+              <Link href="/admin" className="text-sm font-medium text-gray-600 hover:text-black">
+                View all
+              </Link>
+            </div>
+
+            {loading ? (
+              <div className="text-sm text-gray-400">Loading...</div>
+            ) : articles.length === 0 ? (
+              <div className="text-sm text-gray-500">No articles yet.</div>
+            ) : (
+              <div className="space-y-3">
+                {articles.slice(0, 4).map((article) => (
+                  <div key={article.id} className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-gray-900">{article.title}</p>
+                      <p className="text-xs text-gray-500">{new Date(article.date).toLocaleDateString()}</p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
                       <button
                         onClick={() => router.push(`/admin/edit/${article.id}`)}
-                        className="text-sm text-gray-600 hover:text-black mr-4 transition-colors"
+                        className="text-xs font-medium text-gray-600 hover:text-black"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(article.id)}
-                        className="text-sm text-red-500 hover:text-red-700 transition-colors"
+                        className="text-xs font-medium text-red-500 hover:text-red-700"
                       >
                         Delete
                       </button>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+              </div>
+            )}
+          </section>
+        </div>
       </div>
-    </div>
+    </NotionLayout>
   );
 }

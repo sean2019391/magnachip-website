@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import EditorCanvas from '@/components/EditorCanvas';
 
 export default function EditArticlePage() {
   const router = useRouter();
@@ -192,14 +193,13 @@ export default function EditArticlePage() {
           {/* Content */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Content</label>
-            <textarea
-              name="content"
-              rows={10}
-              value={form.content}
-              onChange={handleChange}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-black focus:ring-1 focus:ring-black outline-none transition-colors text-sm font-mono leading-relaxed"
-              placeholder="Article content (supports plain text with line breaks)..."
-            />
+            <div className="w-full">
+              <EditorCanvas
+                initialContent={form.content}
+                onChange={(content) => setForm((prev) => ({ ...prev, content }))}
+              />
+            </div>
+            <p className="text-xs text-gray-400 mt-2">블록 에디터: 블록 추가, 삭제, 위아래 이동 가능. 저장 시 기존 content 문자열로 직렬화됩니다.</p>
           </div>
 
           {/* Date + Published row */}

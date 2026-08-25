@@ -283,16 +283,287 @@ export default function AdminSiteContentPage() {
                 </button>
               </div>
             </div>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              spellCheck={false}
-              placeholder={activeSection.placeholder}
-              className="w-full min-h-[420px] font-mono text-xs leading-relaxed p-4 outline-none resize-y text-gray-900"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+              {/* Keys list */}
+              <div className="col-span-1 rounded-md border border-gray-100 bg-white p-3">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="text-xs font-medium text-gray-600">Keys</div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const key = prompt('New key name (e.g. "Overview" or "Power Solutions")');
+                      if (!key) return;
+                      if (values[active] && Object.prototype.hasOwnProperty.call(values[active] as any, key)) {
+                        alert('Key already exists');
+                        return;
+                      }
+                      const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                      copy[key] = [];
+                      setValues((v) => ({ ...v, [active]: copy }));
+                      const txt = JSON.stringify(copy, null, 2);
+                      setText(txt);
+                    }}
+                    className="text-xs px-2 py-1 rounded bg-gray-50 border border-gray-200 text-gray-700"
+                  >
+                    + Add
+                  </button>
+                </div>
+
+                <div className="space-y-1 max-h-[420px] overflow-auto">
+                  {values[active] != null && Object.keys(values[active] as Record<string, any>).length === 0 && (
+                    <div className="text-sm text-gray-400">No keys yet</div>
+                  )}
+                  {values[active] != null && Object.keys(values[active] as Record<string, any>).map((k) => (
+                    <div key={k} className="flex items-center justify-between gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setActive((s) => s)}
+                        className="w-full text-left text-sm text-gray-800 hover:text-black px-2 py-1 rounded"
+                      >
+                        {k}
+                      </button>
+                      <div className="flex gap-1">
+                        <button
+                          title="Rename"
+                          onClick={() => {
+                            const newName = prompt('Rename key', k);
+                            if (!newName || newName === k) return;
+                            const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                            if (copy[newName]) {
+                              alert('Key already exists');
+                              return;
+                            }
+                            copy[newName] = copy[k];
+                            delete copy[k];
+                            setValues((v) => ({ ...v, [active]: copy }));
+                            setText(JSON.stringify(copy, null, 2));
+                          }}
+                          className="text-[10px] px-2 py-1 rounded border border-gray-200 text-gray-600"
+                        >
+                          ✎
+                        </button>
+                        <button
+                          title="Delete"
+                          onClick={() => {
+                            if (!confirm(`Delete key '${k}'? This cannot be undone.`)) return;
+                            const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                            delete copy[k];
+                            setValues((v) => ({ ...v, [active]: copy }));
+                            setText(JSON.stringify(copy, null, 2));
+                          }}
+                          className="text-[10px] px-2 py-1 rounded border border-red-200 text-red-600"
+                        >
+                          🗑
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Editor pane */}
+              <div className="col-span-2 rounded-md border border-gray-100 bg-white p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="text-sm font-medium text-gray-700">Editor</div>
+                  <div className="text-xs text-gray-400">GUI editor (for non-coders)</div>
+                </div>
+
+                {!values[active] || Object.keys(values[active] as Record<string, any>).length === 0 ? (
+                  <div className="text-sm text-gray-400">No keys to edit. Add a key on the left.</div>
+                ) : (
+                  <div className="space-y-4">
+                    {Object.entries(values[active] as Record<string, any>).map(([k, v]) => (
+                      <div key={k} className="rounded-md border border-gray-100 p-3">
+                        <div className="mb-2 flex items-center justify-between">
+                          <div className="text-sm font-semibold text-gray-900">{k}</div>
+                          <div className="text-xs text-gray-500">{Array.isArray(v) ? 'List' : 'Map'}</div>
+                        </div>
+
+                        {Array.isArray(v) ? (
+                          <div>
+                            <div className="space-y-2">
+                              {v.map((item: any, idx: number) => (
+                                <div key={idx} className="flex items-center gap-2">
+                                  <input
+                                    value={String(item ?? '')}
+                                    onChange={(e) => {
+                                      const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                      copy[k] = copy[k].slice();
+                                      copy[k][idx] = e.target.value;
+                                      setValues((s) => ({ ...s, [active]: copy }));
+                                      setText(JSON.stringify(copy, null, 2));
+                                    }}
+                                    className="flex-1 rounded border border-gray-200 px-2 py-1 text-sm"
+                                  />
+                                  <button
+                                    onClick={() => {
+                                      const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                      copy[k] = copy[k].slice();
+                                      copy[k].splice(idx, 1);
+                                      setValues((s) => ({ ...s, [active]: copy }));
+                                      setText(JSON.stringify(copy, null, 2));
+                                    }}
+                                    className="text-xs px-2 py-1 rounded border border-red-200 text-red-600"
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="mt-3">
+                              <button
+                                onClick={() => {
+                                  const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                  copy[k] = Array.isArray(copy[k]) ? copy[k].concat('') : [''];
+                                  setValues((s) => ({ ...s, [active]: copy }));
+                                  setText(JSON.stringify(copy, null, 2));
+                                }}
+                                className="text-sm px-3 py-1 rounded bg-gray-50 border border-gray-200"
+                              >
+                                + Add item
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>
+                            {/* Map: subkey -> string[] */}
+                            <div className="space-y-2">
+                              {Object.entries(v as Record<string, any>).map(([subk, arr]) => (
+                                <div key={subk} className="rounded border border-gray-100 p-2">
+                                  <div className="mb-2 flex items-center justify-between">
+                                    <div className="text-sm font-medium text-gray-800">{subk}</div>
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => {
+                                          const newName = prompt('Rename subkey', subk);
+                                          if (!newName || newName === subk) return;
+                                          const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                          const map = { ...(copy[k] ?? {}) };
+                                          if (map[newName]) { alert('Subkey exists'); return; }
+                                          map[newName] = map[subk];
+                                          delete map[subk];
+                                          copy[k] = map;
+                                          setValues((s) => ({ ...s, [active]: copy }));
+                                          setText(JSON.stringify(copy, null, 2));
+                                        }}
+                                        className="text-[10px] px-2 py-1 rounded border border-gray-200 text-gray-600"
+                                      >
+                                        ✎
+                                      </button>
+                                      <button
+                                        onClick={() => {
+                                          if (!confirm(`Delete subkey '${subk}'?`)) return;
+                                          const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                          const map = { ...(copy[k] ?? {}) };
+                                          delete map[subk];
+                                          copy[k] = map;
+                                          setValues((s) => ({ ...s, [active]: copy }));
+                                          setText(JSON.stringify(copy, null, 2));
+                                        }}
+                                        className="text-[10px] px-2 py-1 rounded border border-red-200 text-red-600"
+                                      >
+                                        🗑
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    {Array.isArray(arr) && arr.map((it: any, j: number) => (
+                                      <div key={j} className="flex items-center gap-2">
+                                        <input
+                                          value={String(it ?? '')}
+                                          onChange={(e) => {
+                                            const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                            copy[k] = { ...(copy[k] ?? {}) };
+                                            copy[k][subk] = copy[k][subk].slice();
+                                            copy[k][subk][j] = e.target.value;
+                                            setValues((s) => ({ ...s, [active]: copy }));
+                                            setText(JSON.stringify(copy, null, 2));
+                                          }}
+                                          className="flex-1 rounded border border-gray-200 px-2 py-1 text-sm"
+                                        />
+                                        <button
+                                          onClick={() => {
+                                            const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                            copy[k] = { ...(copy[k] ?? {}) };
+                                            copy[k][subk] = copy[k][subk].slice();
+                                            copy[k][subk].splice(j, 1);
+                                            setValues((s) => ({ ...s, [active]: copy }));
+                                            setText(JSON.stringify(copy, null, 2));
+                                          }}
+                                          className="text-xs px-2 py-1 rounded border border-red-200 text-red-600"
+                                        >
+                                          Remove
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+
+                                  <div className="mt-2">
+                                    <button
+                                      onClick={() => {
+                                        const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                        copy[k] = { ...(copy[k] ?? {}) };
+                                        copy[k][subk] = Array.isArray(copy[k][subk]) ? copy[k][subk].concat('') : [''];
+                                        setValues((s) => ({ ...s, [active]: copy }));
+                                        setText(JSON.stringify(copy, null, 2));
+                                      }}
+                                      className="text-sm px-2 py-1 rounded bg-gray-50 border border-gray-200"
+                                    >
+                                      + Add item
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            <div className="mt-3">
+                              <button
+                                onClick={() => {
+                                  const sub = prompt('New subkey name (e.g. "Overview")');
+                                  if (!sub) return;
+                                  const copy = { ...(values[active] ?? {}) } as Record<string, any>;
+                                  copy[k] = { ...(copy[k] ?? {}) };
+                                  if (copy[k][sub]) { alert('Subkey exists'); return; }
+                                  copy[k][sub] = [];
+                                  setValues((s) => ({ ...s, [active]: copy }));
+                                  setText(JSON.stringify(copy, null, 2));
+                                }}
+                                className="text-sm px-3 py-1 rounded bg-gray-50 border border-gray-200"
+                              >
+                                + Add subkey
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    <div className="mt-3 border-t pt-3">
+                      <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium text-gray-700">Advanced</label>
+                        <button
+                          onClick={() => {
+                            // open fallback JSON editor in modal (for now, jump to textarea editing mode)
+                            const confirmed = confirm('Open raw JSON editor? This is for advanced users.');
+                            if (!confirmed) return;
+                            // show the raw JSON in the textarea by navigating the UI to show raw editor
+                            // we'll place the raw JSON into text and rely on existing save/format/reset controls
+                            setText(JSON.stringify(values[active] ?? {}, null, 2));
+                            // scroll into view: no-op in SSR; user can use Save
+                          }}
+                          className="text-xs px-2 py-1 rounded border border-gray-200 text-gray-600"
+                        >
+                          Open JSON
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="px-4 py-2 border-t border-gray-100 bg-gray-50 text-[11px] text-gray-400">
-              Tip: keep the shape consistent (objects with string keys, arrays of strings).
-              Removing a category also removes its route from the navigation menu.
+              Tip: GUI edits update the JSON preview automatically. Use "Open JSON" for advanced edits.
             </div>
           </div>
         )}

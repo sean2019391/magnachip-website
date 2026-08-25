@@ -10,34 +10,30 @@ export default function Footer() {
     <footer id="contact" className="bg-[#0a0a0a] text-white py-20 px-6 scroll-mt-20 print:hidden">
       <div className="max-w-[1100px] mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8 mb-14">
-          {/* Brand */}
           <div className="sm:col-span-2 md:col-span-1">
             <Link
               href="/"
-              className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity"
+              className="mb-4 flex items-center gap-2 transition-opacity hover:opacity-80"
             >
               <img src="/magnachip-white-letter-logo.png" alt="MagnaChip" className="h-8 w-auto" />
             </Link>
-            <p className="text-gray-500 text-sm mt-3 mb-6 leading-relaxed max-w-xs">
-              {t.footer.desc}
-            </p>
-            <div className="flex gap-3">
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-gray-400">{t.footer.desc}</p>
+            <div className="mt-6 flex gap-3">
               <a
                 href="mailto:info@magnachip.com"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium border border-white/20 text-white hover:bg-white hover:border-white transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-white/40 hover:bg-white/5"
               >
                 {t.footer.contactUs}
               </a>
             </div>
           </div>
 
-          {/* Products */}
           <div>
-            <h4 className="text-base font-semibold mb-4">{t.footer.productsTitle}</h4>
-            <ul className="space-y-2 text-sm text-gray-500">
+            <h4 className="mb-4 text-base font-semibold text-white">{t.footer.productsTitle}</h4>
+            <ul className="space-y-2.5 text-sm text-gray-400">
               {t.footer.products.map((item, i) => (
                 <li key={i}>
-                  <a href="#products" className="hover:text-white transition-colors">
+                  <a href="#products" className="transition-colors hover:text-white">
                     {item}
                   </a>
                 </li>
@@ -45,13 +41,12 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
           <div>
-            <h4 className="text-base font-semibold mb-4">{t.footer.companyTitle}</h4>
-            <ul className="space-y-2 text-sm text-gray-500">
+            <h4 className="mb-4 text-base font-semibold text-white">{t.footer.companyTitle}</h4>
+            <ul className="space-y-2.5 text-sm text-gray-400">
               {t.footer.company.map((item, i) => (
                 <li key={i}>
-                  <a href="#about" className="hover:text-white transition-colors">
+                  <a href="#about" className="transition-colors hover:text-white">
                     {item}
                   </a>
                 </li>
@@ -59,10 +54,9 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Investors */}
           <div>
-            <h4 className="text-base font-semibold mb-4">{t.footer.investorsTitle}</h4>
-            <ul className="space-y-2 text-sm text-gray-500">
+            <h4 className="mb-4 text-base font-semibold text-white">{t.footer.investorsTitle}</h4>
+            <ul className="space-y-2.5 text-sm text-gray-400">
               {t.footer.investors.map((item, i) => (
                 <li key={i}>
                   {item.href ? (
@@ -70,12 +64,12 @@ export default function Footer() {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hover:text-white transition-colors"
+                      className="transition-colors hover:text-white"
                     >
                       {item.label}
                     </a>
                   ) : (
-                    <a href="#" className="hover:text-white transition-colors">
+                    <a href="/" className="transition-colors hover:text-white">
                       {item.label}
                     </a>
                   )}
@@ -85,16 +79,16 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-gray-600 text-center sm:text-left">{t.footer.copyright}</p>
-          <div className="flex gap-4 text-xs text-gray-600">
-            <a href="#" className="hover:text-white transition-colors">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
+          <p className="text-center text-xs text-gray-500 sm:text-left">{t.footer.copyright}</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">
+            <a href="/" className="transition-colors hover:text-white">
               {t.footer.privacy}
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="/" className="transition-colors hover:text-white">
               {t.footer.terms}
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="/" className="transition-colors hover:text-white">
               {t.footer.cookies}
             </a>
           </div>

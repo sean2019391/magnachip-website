@@ -6,6 +6,7 @@ import {
   getDatasheetByPartNumber,
   createDatasheet,
 } from '@/lib/datasheets';
+import { hasRawDatasheetData } from '@/types/datasheet';
 
 /**
  * SECURITY NOTE: this project currently has NO authentication (no middleware,
@@ -36,7 +37,11 @@ export async function GET(request: NextRequest) {
         : publishedParam === 'false'
           ? datasheets.filter((d) => d.published === false)
           : datasheets;
-    return NextResponse.json({ datasheets: filtered });
+    const visibleOnlyWithRawData =
+      request.nextUrl.searchParams.get('withRawData') === 'true'
+        ? filtered.filter((d) => hasRawDatasheetData(d))
+        : filtered;
+    return NextResponse.json({ datasheets: visibleOnlyWithRawData });
   } catch {
     return NextResponse.json({ error: 'Failed to fetch datasheets' }, { status: 500 });
   }
