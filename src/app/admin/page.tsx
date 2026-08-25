@@ -18,8 +18,8 @@ export default function AdminPage() {
     setLoading(true);
     try {
       const [articlesRes, datasheetsRes] = await Promise.all([
-        fetch('/api/articles?admin=true'),
-        fetch('/api/datasheets?admin=true'),
+        fetch('/api/admin/articles'),
+        fetch('/api/admin/datasheets'),
       ]);
 
       const articleData = await articlesRes.json();
@@ -50,7 +50,7 @@ export default function AdminPage() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this article?')) return;
     try {
-      const res = await fetch(`/api/articles/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/articles/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setArticles((prev) => prev.filter((a) => a.id !== id));
       } else {

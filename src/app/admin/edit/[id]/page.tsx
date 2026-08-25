@@ -90,14 +90,13 @@ export default function EditArticlePage() {
 
       let res: Response;
       if (isNew) {
-        res = await fetch('/api/articles', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
-      } else {
-          // article endpoints remain public but PUT/DELETE should be behind admin in future
-          res = await fetch(`/api/articles/${params.id}`, {
+          res = await fetch('/api/admin/articles', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+        } else {
+          res = await fetch(`/api/admin/articles/${params.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),

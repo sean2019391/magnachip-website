@@ -1,18 +1,12 @@
 import { NextResponse } from 'next/server';
 
 /**
- * Admin uploads endpoint scaffold.
- * - If S3 environment is configured and AWS SDK is installed, this can be extended
- *   to upload to S3 and return a permanent URL.
- * - For now, the endpoint expects a FormData with a 'file' entry and returns 501
- *   if server-side upload is not configured. The editor will fall back to data-URL.
+ * Admin uploads endpoint — supports S3 when credentials and SDK are available.
  */
 
 export async function POST(request: Request) {
   try {
-    // Attempt to access form data
-    // Note: in Vercel, depending on runtime, Request.formData() should work
-    // Use any to avoid TS mismatch in this scaffold
+    // Access form data
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const form = await (request as any).formData();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,11 +15,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // If S3 is configured (placeholder), implement upload here.
-    if (process.env.S3_BUCKET && process.env.AWS_REGION) {
-      // Implement S3 upload logic when AWS SDK is available and configured.
-      // For now, return 501 to indicate server-side upload not set up.
-      return NextResponse.json({ error: 'Server upload not configured' }, { status: 501 });
+    // If S3 is configured, attempt to upload using @aws-sdk/client-s3
+    const bucket = process.env.S3_BUCKET;
+    const region = process.env.AWS_REGION;
+    const accessKey = process.env.AWS_ACCESS_KEY_ID;
+    const secretKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+    if (bucket && region && accessKey && secretKey) {
+      try {
+        // dynamic import to avoid hard dependency if not installed
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+        const s3 = new S3Client({ region, credentials: { accessKeyId: accessKey, secretAccessKey: secretKey } });
+
+        // file is a File-like object; get ArrayBuffer
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const filename = (file as any).name || `upload-${Date.now()}`;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const arrayBuffer = await (file as any).arrayBuffer();
+        const body = Buffer.from(arrayBuffer);
+        const key = `uploads/${Date.now()}-${filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+
+        await s3.send(new PutObjectCommand({ Bucket: bucket, Key: key, Body: body, ContentType: (file as any).type || 'application/octet-stream' }));
+
+        const url = `https://${bucket}.s3.${region}.amazonaws.com/${key}`;
+        return NextResponse.json({ url });
+      } catch (err) {
+        // If S3 upload fails, return 500
+        // eslint-disable-next-line no-console
+        console.error('S3 upload failed', err);
+        return NextResponse.json({ error: 'S3 upload failed' }, { status: 500 });
+      }
     }
 
     return NextResponse.json({ error: 'Server upload not configured' }, { status: 501 });
