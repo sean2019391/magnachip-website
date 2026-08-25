@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifyAdminToken } from './src/lib/admin-auth.server';
+import { verifyAdminToken } from './lib/admin-auth.server';
 
 // NOTE: verifyAdminToken is in src/lib and uses process.env.ADMIN_SECRET
 // Exclude auth endpoints from protection and handle API/browser differences
