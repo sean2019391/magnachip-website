@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import FadeIn from '@/components/FadeIn';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import NotionLayout from '@/components/NotionLayout';
 import { useI18n } from '@/i18n/context';
 import type { Article } from '@/types/article';
 import { getCategoryBySlug } from '@/lib/category';
@@ -39,8 +39,8 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title="Home">
+      <main className="min-h-screen">
 
       <section className="relative overflow-hidden px-6 pb-20 pt-32 section-gradient">
         <div className="absolute inset-0 soft-grid opacity-60" />
@@ -308,6 +308,7 @@ export default function HomePage() {
       </section>
 
       <Footer />
-    </main>
+      </main>
+    </NotionLayout>
   );
 }
