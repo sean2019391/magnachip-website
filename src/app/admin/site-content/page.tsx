@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import NotionLayout from '@/components/NotionLayout';
 
 type SectionKey = 'products' | 'applications' | 'designResources' | 'about';
 
@@ -157,7 +158,7 @@ export default function AdminSiteContentPage() {
   const activeSection = SECTIONS.find((s) => s.key === active)!;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <NotionLayout title="Site Content">
       <div className="max-w-[1200px] mx-auto px-6 py-12">
         {/* Section nav */}
         <nav className="flex items-center gap-1 mb-8 flex-wrap">
@@ -568,6 +569,6 @@ export default function AdminSiteContentPage() {
           </div>
         )}
       </div>
-    </div>
+    </NotionLayout>
   );
 }

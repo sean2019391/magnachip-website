@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { DatasheetRecord } from '@/types/datasheet';
 import { emptyDatasheetBody, hasRawDatasheetData } from '@/types/datasheet';
+import NotionLayout from '@/components/NotionLayout';
 
 export default function AdminDatasheetsPage() {
   const router = useRouter();
@@ -68,7 +69,7 @@ export default function AdminDatasheetsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <NotionLayout title="Datasheets">
       <div className="mx-auto max-w-[1100px] px-6 py-12">
         {/* Section nav */}
         <nav className="mb-8 flex flex-wrap items-center gap-1">
@@ -238,6 +239,6 @@ export default function AdminDatasheetsPage() {
           </div>
         )}
       </div>
-    </div>
+    </NotionLayout>
   );
 }
