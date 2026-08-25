@@ -96,12 +96,13 @@ export default function EditArticlePage() {
           body: JSON.stringify(body),
         });
       } else {
-        res = await fetch(`/api/articles/${params.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
-      }
+          // article endpoints remain public but PUT/DELETE should be behind admin in future
+          res = await fetch(`/api/articles/${params.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+        }
 
       if (res.ok) {
         router.push('/admin');

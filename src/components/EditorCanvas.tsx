@@ -75,10 +75,28 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Try server upload first (admin-protected endpoint). If upload fails or not configured,
+    // fall back to embedding data URL so admin can still use images.
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      const res = await fetch('/api/admin/uploads', { method: 'POST', body: form });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.url) {
+          addBlock(undefined, `![${file.name}](${data.url})`);
+          return;
+        }
+      }
+    } catch (err) {
+      // ignore and fall back to data URL
+    }
+
+    // fallback: embed as data URL
     const reader = new FileReader();
     reader.onload = async () => {
       const dataUrl = reader.result as string;
-      // For now embed the image as a data URL block (no server upload). This keeps admin-only images working immediately.
       addBlock(undefined, `![${file.name}](${dataUrl})`);
     };
     reader.readAsDataURL(file);

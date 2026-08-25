@@ -16,7 +16,7 @@ export default function AdminDatasheetsPage() {
   const fetchDatasheets = useCallback(() => {
     setLoading(true);
     setError(null);
-    fetch('/api/datasheets?admin=true')
+    fetch('/api/admin/datasheets')
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) {
@@ -38,7 +38,7 @@ export default function AdminDatasheetsPage() {
 
   const handleCreate = async () => {
     try {
-      const res = await fetch('/api/datasheets', {
+      const res = await fetch('/api/admin/datasheets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...emptyDatasheetBody(), published: true }),
@@ -57,7 +57,7 @@ export default function AdminDatasheetsPage() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this datasheet?')) return;
     try {
-      const res = await fetch(`/api/datasheets/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/datasheets/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setDatasheets((prev) => prev.filter((d) => d.id !== id));
       } else {
