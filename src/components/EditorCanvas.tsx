@@ -76,8 +76,33 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Try server upload first (admin-protected endpoint). If upload fails or not configured,
-    // fall back to embedding data URL so admin can still use images.
+    // 1) Try presign + direct S3 upload
+    try {
+      const presignRes = await fetch('/api/admin/uploads/presign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      });
+      if (presignRes.ok) {
+        const presignData = await presignRes.json();
+        if (presignData?.url && presignData?.publicUrl) {
+          // PUT file to presigned URL
+          const putRes = await fetch(presignData.url, {
+            method: 'PUT',
+            headers: { 'Content-Type': file.type || 'application/octet-stream' },
+            body: file,
+          });
+          if (putRes.ok) {
+            addBlock(undefined, `![${file.name}](${presignData.publicUrl})`);
+            return;
+          }
+        }
+      }
+    } catch (err) {
+      // ignore and continue to next fallback
+    }
+
+    // 2) Try server-side upload endpoint (/api/admin/uploads)
     try {
       const form = new FormData();
       form.append('file', file);
@@ -90,10 +115,10 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
         }
       }
     } catch (err) {
-      // ignore and fall back to data URL
+      // ignore
     }
 
-    // fallback: embed as data URL
+    // 3) fallback: embed as data URL
     const reader = new FileReader();
     reader.onload = async () => {
       const dataUrl = reader.result as string;
