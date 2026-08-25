@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BlockToolbar from './BlockToolbar';
 
 type Props = {
@@ -14,6 +14,8 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
   const fromBlocks = (blocks: string[]) => blocks.map((b) => b.trim()).join('\n\n');
 
   const [blocks, setBlocks] = useState<string[]>(() => toBlocks(initialContent));
+  const dragIndex = useRef<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setBlocks(toBlocks(initialContent));
@@ -27,11 +29,11 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
     setBlocks((prev) => prev.map((b, i) => (i === index ? value : b)));
   };
 
-  const addBlock = (index?: number) => {
+  const addBlock = (index?: number, content: string = '') => {
     setBlocks((prev) => {
       const copy = [...prev];
       const at = index !== undefined ? index + 1 : prev.length;
-      copy.splice(at, 0, '');
+      copy.splice(at, 0, content);
       return copy;
     });
   };
@@ -40,48 +42,75 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
     setBlocks((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const moveBlock = (index: number, dir: 'up' | 'down') => {
+  const moveBlock = (from: number, to: number) => {
     setBlocks((prev) => {
       const copy = [...prev];
-      const to = dir === 'up' ? index - 1 : index + 1;
-      if (to < 0 || to >= copy.length) return prev;
-      const tmp = copy[to];
-      copy[to] = copy[index];
-      copy[index] = tmp;
+      if (from < 0 || from >= copy.length || to < 0 || to > copy.length) return prev;
+      const [item] = copy.splice(from, 1);
+      copy.splice(to, 0, item);
       return copy;
     });
   };
 
+  // HTML5 drag & drop handlers
+  const onDragStart = (e: React.DragEvent, index: number) => {
+    dragIndex.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const onDrop = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    const from = dragIndex.current;
+    if (from === null || from === undefined) return;
+    if (from === index) return;
+    moveBlock(from, index);
+    dragIndex.current = null;
+  };
+
+  // simple image upload: POST base64 to /api/uploads, write to public/uploads and return URL
+  const triggerFile = () => fileInputRef.current?.click();
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result as string;
+      // For now embed the image as a data URL block (no server upload). This keeps admin-only images working immediately.
+      addBlock(undefined, `![${file.name}](${dataUrl})`);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const renderBlockContent = (b: string) => {
+    // detect image markdown pattern: ![alt](url)
+    const m = b.match(/^!\[(.*?)\]\((.*?)\)$/);
+    if (m) {
+      const alt = m[1];
+      const url = m[2];
+      return <img src={url} alt={alt} className="max-w-full rounded" />;
+    }
+    return (
+      <div
+        contentEditable
+        suppressContentEditableWarning
+        className="min-h-[80px] text-sm leading-relaxed outline-none"
+        onInput={(e) => updateBlock(iRef.current!, (e.target as HTMLElement).innerText)}
+        dangerouslySetInnerHTML={{ __html: (b || '').replace(/\n/g, '<br/>') }}
+      />
+    );
+  };
+
+  // need a stable ref for onInput handlers per block
+  const iRef = useRef<number | null>(null);
+
   return (
     <div className="space-y-4">
-      {blocks.length === 0 && (
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 text-sm text-gray-500">
-          빈 블록입니다. 아래 버튼으로 새 블록을 추가하세요.
-        </div>
-      )}
+      <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
 
-      {blocks.map((b, i) => (
-        <div key={i} className="rounded-xl border border-gray-200 bg-white p-4">
-          <div className="mb-2 flex items-start justify-between">
-            <div className="text-xs text-gray-500">Block {i + 1}</div>
-            <BlockToolbar
-              onAdd={() => addBlock(i)}
-              onRemove={() => removeBlock(i)}
-              onMoveUp={() => moveBlock(i, 'up')}
-              onMoveDown={() => moveBlock(i, 'down')}
-            />
-          </div>
-          <div
-            contentEditable
-            suppressContentEditableWarning
-            className="min-h-[80px] text-sm leading-relaxed outline-none"
-            onInput={(e) => updateBlock(i, (e.target as HTMLElement).innerText)}
-            dangerouslySetInnerHTML={{ __html: (b || '').replace(/\n/g, '<br/>') }}
-          />
-        </div>
-      ))}
-
-      <div>
+      <div className="flex gap-2">
         <button
           type="button"
           onClick={() => addBlock()}
@@ -89,7 +118,60 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
         >
           + Add block
         </button>
+        <button
+          type="button"
+          onClick={triggerFile}
+          className="px-3 py-2 rounded-xl border border-gray-200 bg-gray-50 text-sm"
+        >
+          ↑ Upload image
+        </button>
       </div>
+
+      {blocks.length === 0 && (
+        <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 text-sm text-gray-500">
+          빈 블록입니다. 아래 버튼으로 새 블록을 추가하세요.
+        </div>
+      )}
+
+      {blocks.map((b, i) => (
+        <div
+          key={i}
+          draggable
+          onDragStart={(e) => onDragStart(e, i)}
+          onDragOver={onDragOver}
+          onDrop={(e) => onDrop(e, i)}
+          className="rounded-xl border border-gray-200 bg-white p-4"
+        >
+          <div className="mb-2 flex items-start justify-between">
+            <div className="text-xs text-gray-500">Block {i + 1}</div>
+            <BlockToolbar
+              onAdd={() => addBlock(i)}
+              onRemove={() => removeBlock(i)}
+              onMoveUp={() => moveBlock(i, i - 1)}
+              onMoveDown={() => moveBlock(i, i + 1)}
+            />
+          </div>
+          {(() => {
+            // render content, but need to capture index for handlers
+            iRef.current = i;
+            const m = b.match(/^!\[(.*?)\]\((.*?)\)$/);
+            if (m) {
+              const alt = m[1];
+              const url = m[2];
+              return <img src={url} alt={alt} className="max-w-full rounded" />;
+            }
+            return (
+              <div
+                contentEditable
+                suppressContentEditableWarning
+                className="min-h-[80px] text-sm leading-relaxed outline-none"
+                onInput={(e) => updateBlock(i, (e.target as HTMLElement).innerText)}
+                dangerouslySetInnerHTML={{ __html: (b || '').replace(/\n/g, '<br/>') }}
+              />
+            );
+          })()}
+        </div>
+      ))}
     </div>
   );
 }
