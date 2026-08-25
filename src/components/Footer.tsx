@@ -7,7 +7,7 @@ export default function Footer() {
   const { t } = useI18n();
 
   return (
-    <footer id="contact" className="bg-[#0a0a0a] text-white py-20 px-6 scroll-mt-20 print:hidden">
+    <footer id="contact" className="bg-white text-gray-800 py-14 px-6 scroll-mt-20 print:hidden border-t border-gray-100">
       <div className="max-w-[1100px] mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8 mb-14">
           <div className="sm:col-span-2 md:col-span-1">
