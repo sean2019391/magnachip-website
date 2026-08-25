@@ -4,7 +4,7 @@ import { verifyAdminToken } from './lib/admin-auth.server';
 
 // NOTE: verifyAdminToken is in src/lib and uses process.env.ADMIN_SECRET
 // Exclude auth endpoints from protection and handle API/browser differences
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow auth endpoints and static files
@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
     // For API auth we already allowed /api/auth above
     const token = request.cookies.get('admin_session')?.value;
-    const valid = verifyAdminToken(token);
+    const valid = await verifyAdminToken(token);
 
     if (valid) {
       return NextResponse.next();
