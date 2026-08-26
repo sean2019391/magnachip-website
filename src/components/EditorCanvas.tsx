@@ -106,6 +106,31 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
     }
   };
 
+  const setBlockType = (index: number, type: 'h1' | 'ul' | 'code') => {
+    const cur = blocks[index] ?? '';
+    if (type === 'h1') {
+      if (cur.startsWith('h1:')) {
+        updateBlock(index, cur.replace(/^h1:\s*/, ''));
+      } else {
+        updateBlock(index, `h1: ${cur}`);
+      }
+    } else if (type === 'ul') {
+      if (cur.startsWith('ul:')) {
+        updateBlock(index, cur.replace(/^ul:\s*/, ''));
+      } else {
+        const lines = cur.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+        const listText = lines.length ? lines.map((l) => `- ${l}`).join('\n') : '- ';
+        updateBlock(index, `ul: ${listText}`);
+      }
+    } else if (type === 'code') {
+      if (cur.startsWith('code:')) {
+        updateBlock(index, cur.replace(/^code:\s*/, ''));
+      } else {
+        updateBlock(index, `code: ${cur}`);
+      }
+    }
+  };
+
   const renderBlockContent = (b: string, idx: number) => {
     // detect image markdown pattern: ![alt](url)
     const m = b.match(/^!\[(.*?)\]\((.*?)\)$/);
@@ -190,6 +215,7 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
                       onMoveUp={() => moveBlock(i, i - 1)}
                       onMoveDown={() => moveBlock(i, i + 1)}
                       onFormat={(fmt) => applyFormat(i, fmt)}
+                      onSetType={(t) => setBlockType(i, t)}
                     />
                   </div>
                   {renderBlockContent(b, i)}

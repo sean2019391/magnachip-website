@@ -8,9 +8,10 @@ type Props = {
   onMoveUp?: () => void;
   onMoveDown?: () => void;
   onFormat?: (format: 'bold' | 'italic') => void;
+  onSetType?: (type: 'h1' | 'ul' | 'code') => void;
 };
 
-export default function BlockToolbar({ onAdd, onRemove, onMoveUp, onMoveDown, onFormat }: Props) {
+export default function BlockToolbar({ onAdd, onRemove, onMoveUp, onMoveDown, onFormat, onSetType }: Props) {
   return (
     <div className="flex items-center gap-2">
       <button
@@ -28,6 +29,31 @@ export default function BlockToolbar({ onAdd, onRemove, onMoveUp, onMoveDown, on
         className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50 italic"
       >
         i
+      </button>
+
+      <button
+        type="button"
+        onClick={() => onSetType?.('h1')}
+        title="Heading 1"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50"
+      >
+        H1
+      </button>
+      <button
+        type="button"
+        onClick={() => onSetType?.('ul')}
+        title="Bulleted list"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50"
+      >
+        •
+      </button>
+      <button
+        type="button"
+        onClick={() => onSetType?.('code')}
+        title="Code block"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50 font-mono"
+      >
+        {'<' + '/>'}
       </button>
 
       <button
