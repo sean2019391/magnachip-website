@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import BlockToolbar from './BlockToolbar';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import MediaLibrary from './MediaLibrary';
 
 type Props = {
   initialContent?: string;
@@ -14,62 +18,17 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
   const fromBlocks = (blocks: string[]) => blocks.map((b) => b.trim()).join('\n\n');
 
   const [blocks, setBlocks] = useState<string[]>(() => toBlocks(initialContent));
-  const dragIndex = useRef<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [showLibrary, setShowLibrary] = useState(false);
+  useEffect(() => {    setBlocks(toBlocks(initialContent));  }, [initialContent]);
+  useEffect(() => {    onChange?.(fromBlocks(blocks));  }, [blocks, onChange]);
+  const updateBlock = (index: number, value: string) => {    setBlocks((prev) => prev.map((b, i) => (i === index ? value : b)));  };
+  const addBlock = (index?: number, content: string = '') => {    setBlocks((prev) => {      const copy = [...prev];      const at = index !== undefined ? index + 1 : prev.length;      copy.splice(at, 0, content);      return copy;    });  };
+  const removeBlock = (index: number) => {    setBlocks((prev) => prev.filter((_, i) => i !== index));  };
+  const moveBlock = (from: number, to: number) => {    setBlocks((prev) => arrayMove(prev, from, to));  };
 
-  useEffect(() => {
-    setBlocks(toBlocks(initialContent));
-  }, [initialContent]);
-
-  useEffect(() => {
-    onChange?.(fromBlocks(blocks));
-  }, [blocks, onChange]);
-
-  const updateBlock = (index: number, value: string) => {
-    setBlocks((prev) => prev.map((b, i) => (i === index ? value : b)));
-  };
-
-  const addBlock = (index?: number, content: string = '') => {
-    setBlocks((prev) => {
-      const copy = [...prev];
-      const at = index !== undefined ? index + 1 : prev.length;
-      copy.splice(at, 0, content);
-      return copy;
-    });
-  };
-
-  const removeBlock = (index: number) => {
-    setBlocks((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const moveBlock = (from: number, to: number) => {
-    setBlocks((prev) => {
-      const copy = [...prev];
-      if (from < 0 || from >= copy.length || to < 0 || to > copy.length) return prev;
-      const [item] = copy.splice(from, 1);
-      copy.splice(to, 0, item);
-      return copy;
-    });
-  };
-
-  // HTML5 drag & drop handlers
-  const onDragStart = (e: React.DragEvent, index: number) => {
-    dragIndex.current = index;
-    e.dataTransfer.effectAllowed = 'move';
-  };
-  const onDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-  const onDrop = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    const from = dragIndex.current;
-    if (from === null || from === undefined) return;
-    if (from === index) return;
-    moveBlock(from, index);
-    dragIndex.current = null;
-  };
-
+  // sortable helper (dnd-kit)
+  function SortableItem({ id, children }: { id: string; children: React.ReactNode }) {    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });    const style = {      transform: CSS.Transform.toString(transform),      transition,    } as React.CSSProperties;    return (      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>        {children}      </div>    );  }
   // simple image upload: POST base64 to /api/uploads, write to public/uploads and return URL
   const triggerFile = () => fileInputRef.current?.click();
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -207,32 +166,39 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
         </div>
       )}
 
-      {blocks.map((b, i) => (
-        <div
-          key={i}
-          draggable
-          onDragStart={(e) => onDragStart(e, i)}
-          onDragOver={onDragOver}
-          onDrop={(e) => onDrop(e, i)}
-          className="rounded-xl border border-gray-200 bg-white p-4"
-        >
-          <div className="mb-2 flex items-start justify-between">
-            <div className="text-xs text-gray-500">Block {i + 1}</div>
-            <BlockToolbar
-              onAdd={() => addBlock(i)}
-              onRemove={() => removeBlock(i)}
-              onMoveUp={() => moveBlock(i, i - 1)}
-              onMoveDown={() => moveBlock(i, i + 1)}
-              onFormat={(fmt) => applyFormat(i, fmt)}
-            />
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={(event) => {
+          const { active, over } = event;
+          if (active.id && over?.id && active.id !== over.id) {
+            const from = Number(String(active.id).split(':')[1]);
+            const to = Number(String(over.id).split(':')[1]);
+            moveBlock(from, to);
+          }
+        }}
+      >
+        <SortableContext items={blocks.map((_, i) => `block:${i}`)} strategy={verticalListSortingStrategy}>
+          <div className="space-y-4">
+            {blocks.map((b, i) => (
+              <SortableItem key={`block:${i}`} id={`block:${i}`}>
+                <div className="rounded-xl border border-gray-200 bg-white p-4">
+                  <div className="mb-2 flex items-start justify-between">
+                    <div className="text-xs text-gray-500">Block {i + 1}</div>
+                    <BlockToolbar
+                      onAdd={() => addBlock(i)}
+                      onRemove={() => removeBlock(i)}
+                      onMoveUp={() => moveBlock(i, i - 1)}
+                      onMoveDown={() => moveBlock(i, i + 1)}
+                      onFormat={(fmt) => applyFormat(i, fmt)}
+                    />
+                  </div>
+                  {renderBlockContent(b, i)}
+                </div>
+              </SortableItem>
+            ))}
           </div>
-          {(() => {
-            // render content, but need to capture index for handlers
-            iRef.current = i;
-            return renderBlockContent(b, i);
-          })()}
-        </div>
-      ))}
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }
