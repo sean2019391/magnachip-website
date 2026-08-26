@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useMemo, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import { toSlug } from '@/lib/products';
 import {
@@ -82,8 +82,7 @@ export default function ProductVariantPage() {
   }
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title={voltageDisplay}>
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
@@ -295,6 +294,6 @@ export default function ProductVariantPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }

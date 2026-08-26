@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import { toSlug } from '@/lib/products';
 import ApplicationsSidebar from '@/components/ApplicationsSidebar';
@@ -43,8 +43,7 @@ export default function ApplicationCategoryPage() {
 
   if (!category) {
     return (
-      <main className="min-h-screen">
-        <Navbar />
+      <NotionLayout title="Category not found">
         <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
           <div className="max-w-[1200px] mx-auto">
             <div className="flex flex-col lg:flex-row gap-10">
@@ -62,15 +61,14 @@ export default function ApplicationCategoryPage() {
           </div>
         </section>
         <Footer />
-      </main>
+      </NotionLayout>
     );
   }
 
   const subs = Object.keys(applications[category]).filter((s) => s !== 'Overview');
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title={category}>
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
@@ -133,6 +131,6 @@ export default function ApplicationCategoryPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }

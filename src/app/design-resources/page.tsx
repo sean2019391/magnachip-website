@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import { toSlug } from '@/lib/products';
 import DesignResourcesSidebar from '@/components/DesignResourcesSidebar';
@@ -36,8 +36,7 @@ export default function DesignResourcesPage() {
   const categories = Object.keys(designResources).filter((c) => c !== 'Overview');
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title="Design Resources">
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
@@ -87,6 +86,6 @@ export default function DesignResourcesPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }

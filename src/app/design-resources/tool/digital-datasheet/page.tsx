@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import FadeIn from '@/components/FadeIn';
 import { DatasheetViewer } from '@/components/datasheet/DatasheetViewer';
@@ -165,8 +165,7 @@ export default function DesignDigitalDatasheetPage() {
   };
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title="Digital Datasheet">
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen print:bg-white print:pt-0 print:pb-0 print:min-h-0">
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
@@ -267,7 +266,7 @@ export default function DesignDigitalDatasheetPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }
 

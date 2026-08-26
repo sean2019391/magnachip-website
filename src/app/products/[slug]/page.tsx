@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import { toSlug } from '@/lib/products';
 import ProductsSidebar from '@/components/ProductsSidebar';
@@ -51,8 +51,7 @@ export default function ProductFamilyPage() {
 
   if (!family) {
     return (
-      <main className="min-h-screen">
-        <Navbar />
+      <NotionLayout title="Product not found">
         <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
           <div className="max-w-[1200px] mx-auto">
             <div className="flex flex-col lg:flex-row gap-10">
@@ -67,15 +66,14 @@ export default function ProductFamilyPage() {
           </div>
         </section>
         <Footer />
-      </main>
+      </NotionLayout>
     );
   }
 
   const variants = items.filter((v) => v !== 'Overview');
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title={family}>
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
@@ -133,6 +131,6 @@ export default function ProductFamilyPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }
