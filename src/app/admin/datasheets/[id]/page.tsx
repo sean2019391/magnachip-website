@@ -22,6 +22,7 @@ import type {
   SectionType,
 } from '@/types/datasheet';
 import { DatasheetViewer } from '@/components/datasheet/DatasheetViewer';
+import NotionLayout from '@/components/NotionLayout';
 import { MetaEditor } from '@/components/datasheet-editor/MetaEditor';
 import { CoverEditor } from '@/components/datasheet-editor/CoverEditor';
 import { SectionsEditor } from '@/components/datasheet-editor/SectionsEditor';
@@ -500,30 +501,35 @@ export default function DatasheetEditorPage({ params }: { params: Promise<{ id: 
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <p className="text-sm text-gray-400">Loading...</p>
-      </div>
+      <NotionLayout title="Datasheet">
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <p className="text-sm text-gray-400">Loading...</p>
+        </div>
+      </NotionLayout>
     );
   }
-
+  
   if (!doc) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <p className="mb-4 text-sm text-red-500">{saveError ?? 'Datasheet not found.'}</p>
-          <Link
-            href="/admin/datasheets"
-            className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
-          >
-            Back to datasheets
-          </Link>
+      <NotionLayout title="Datasheet">
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <p className="mb-4 text-sm text-red-500">{saveError ?? 'Datasheet not found.'}</p>
+            <Link
+              href="/admin/datasheets"
+              className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+            >
+              Back to datasheets
+            </Link>
+          </div>
         </div>
-      </div>
+      </NotionLayout>
     );
   }
-
+  
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <NotionLayout title={doc.meta.partNumber}>
+      <div className="flex min-h-screen flex-col bg-gray-50">
       {/* Top bar */}
       <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/80 px-4 py-2 backdrop-blur">
         <div className="flex flex-wrap items-center gap-2">
@@ -733,5 +739,6 @@ export default function DatasheetEditorPage({ params }: { params: Promise<{ id: 
         </div>
       )}
     </div>
+    </NotionLayout>
   );
 }

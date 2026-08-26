@@ -1,0 +1,93 @@
+'use client';
+
+import React from 'react';
+
+type Props = {
+  onAdd?: () => void;
+  onRemove?: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  onFormat?: (format: 'bold' | 'italic') => void;
+  onSetType?: (type: 'h1' | 'ul' | 'code') => void;
+};
+
+export default function BlockToolbar({ onAdd, onRemove, onMoveUp, onMoveDown, onFormat, onSetType }: Props) {
+  return (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={() => onFormat?.('bold')}
+        title="Bold (Ctrl/Cmd+B)"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50 font-semibold"
+      >
+        B
+      </button>
+      <button
+        type="button"
+        onClick={() => onFormat?.('italic')}
+        title="Italic (Ctrl/Cmd+I)"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50 italic"
+      >
+        i
+      </button>
+
+      <button
+        type="button"
+        onClick={() => onSetType?.('h1')}
+        title="Heading 1"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50"
+      >
+        H1
+      </button>
+      <button
+        type="button"
+        onClick={() => onSetType?.('ul')}
+        title="Bulleted list"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50"
+      >
+        •
+      </button>
+      <button
+        type="button"
+        onClick={() => onSetType?.('code')}
+        title="Code block"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50 font-mono"
+      >
+        {'<' + '/>'}
+      </button>
+
+      <button
+        type="button"
+        onClick={onMoveUp}
+        title="Move up"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50"
+      >
+        ↑
+      </button>
+      <button
+        type="button"
+        onClick={onMoveDown}
+        title="Move down"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50"
+      >
+        ↓
+      </button>
+      <button
+        type="button"
+        onClick={onAdd}
+        title="Add block"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50"
+      >
+        +
+      </button>
+      <button
+        type="button"
+        onClick={onRemove}
+        title="Remove block"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-red-50 text-red-600"
+      >
+        ✕
+      </button>
+    </div>
+  );
+}

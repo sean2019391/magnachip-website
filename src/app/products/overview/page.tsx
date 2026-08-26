@@ -3,7 +3,7 @@
 import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import ProductsSidebar from '@/components/ProductsSidebar';
 import FadeIn from '@/components/FadeIn';
@@ -73,8 +73,7 @@ function ProductsOverviewContent() {
 
 export default function ProductOverviewPage() {
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title="Product Overview">
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen print:bg-white print:pt-0 print:pb-0 print:min-h-0">
         <div className="max-w-[1200px] mx-auto">
           <Suspense fallback={null}>
@@ -83,6 +82,6 @@ export default function ProductOverviewPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }

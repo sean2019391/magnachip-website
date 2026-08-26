@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import FadeIn from '@/components/FadeIn';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import NotionLayout from '@/components/NotionLayout';
 import { useI18n } from '@/i18n/context';
 import type { Article } from '@/types/article';
 import { getCategoryBySlug } from '@/lib/category';
@@ -39,102 +39,143 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title="Home">
+      <main className="min-h-screen">
 
-      {/* Newsroom (replaces Hero) */}
-      <section className="pt-36 pb-28 px-6 section-gradient relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-black/[0.03] to-transparent pointer-events-none" />
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-black/[0.02] blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-black/[0.02] blur-3xl pointer-events-none" />
-        <div className="max-w-[1100px] mx-auto relative">
-          {loading ? (
-            <div className="rounded-2xl bg-white border border-gray-200 animate-pulse h-96 shadow-sm" />
-          ) : !article ? (
-            <p className="text-gray-500 text-center py-16">No articles yet.</p>
-          ) : (
-            <FadeIn key={article.id} delay={0.3}>
-              <article className="group bg-white rounded-3xl border border-gray-200/80 shadow-sm hover:shadow-lg hover:border-gray-300 transition-all duration-300 overflow-hidden">
-                {/* Clickable link to full article */}
-                <Link href={`/news/${article.slug}`} className="block p-8 md:p-10 lg:p-12">
-                  {/* Meta row */}
-                  <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-900 text-white tracking-wide">
-                      {getCategoryBySlug(article.slug)}
-                    </span>
-                    <time className="text-sm text-gray-400 font-medium">
-                      {new Date(article.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </time>
-                  </div>
+      <section className="relative overflow-hidden px-6 pb-20 pt-32 section-gradient">
+        <div className="absolute inset-0 soft-grid opacity-60" />
+        <div className="absolute -left-28 top-1/3 h-56 w-56 rounded-full bg-black/5 blur-3xl" />
+        <div className="absolute -right-10 bottom-0 h-64 w-64 rounded-full bg-black/5 blur-3xl" />
 
-                  {/* Title */}
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-[1.15] tracking-tight group-hover:text-black/70 transition-colors duration-200">
-                    {article.title}
-                  </h2>
-
-                  {/* Divider */}
-                  <div className="w-12 h-0.5 bg-gray-200 my-5" />
-
-                  {/* Excerpt */}
-                  <p className="text-gray-500 leading-relaxed text-base">{article.excerpt}</p>
-                </Link>
-
-                {/* Navigation */}
-                <div className="flex items-center justify-between px-8 md:px-10 lg:px-12 py-4 border-t border-gray-100 bg-gray-50/50">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      goPrev();
-                    }}
-                    disabled={!hasPrev}
-                    className={`p-3 rounded-lg transition-colors ${
-                      hasPrev
-                        ? 'text-gray-600 hover:text-black hover:bg-gray-200/60'
-                        : 'text-gray-300 cursor-not-allowed'
-                    }`}
-                    aria-label="Previous article"
-                  >
-                    <IconChevronLeft className="w-5 h-5" />
-                  </button>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      goNext();
-                    }}
-                    disabled={!hasNext}
-                    className={`p-3 rounded-lg transition-colors ${
-                      hasNext
-                        ? 'text-gray-600 hover:text-black hover:bg-gray-200/60'
-                        : 'text-gray-300 cursor-not-allowed'
-                    }`}
-                    aria-label="Next article"
-                  >
-                    <IconChevronRight className="w-5 h-5" />
-                  </button>
+        <div className="relative mx-auto max-w-[1200px]">
+          <div className="section-shell rounded-[32px] border border-black/5 bg-white/75 p-3 sm:p-4 md:p-6">
+            <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+              <div className="rounded-[26px] bg-[#f5f5f3] p-7 md:p-9 lg:p-10">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-700">
+                  Powering Magnificent Moments
                 </div>
-              </article>
-            </FadeIn>
-          )}
+
+                <h1 className="max-w-xl text-4xl font-black tracking-[-0.06em] text-gray-950 md:text-5xl lg:text-[4rem] lg:leading-[0.98]">
+                  Electronics that move <span className="text-gradient">performance</span> forward.
+                </h1>
+
+                <p className="mt-6 max-w-xl text-base leading-8 text-gray-600 md:text-lg">
+                  MagnaChip delivers efficient, reliable semiconductor solutions for automotive,
+                  industrial, cloud, and consumer innovation — from power conversion to system-level
+                  intelligence.
+                </p>
+
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  <a href="#products" className="btn-gradient">
+                    Explore Products
+                  </a>
+                  <a href="#about" className="btn-gradient btn-gradient-light">
+                    About MagnaChip
+                  </a>
+                </div>
+
+                <div className="mt-10 grid gap-3 sm:grid-cols-3">
+                  {t.metrics.slice(0, 3).map((metric) => (
+                    <div key={metric.label} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+                      <div className="text-2xl font-bold tracking-tight text-gray-950">{metric.value}</div>
+                      <div className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-gray-500">
+                        {metric.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[26px] border border-black/5 bg-gradient-to-br from-[#0e1116] via-[#131922] to-[#1a212b] p-6 text-white md:p-7">
+                {loading ? (
+                  <div className="h-full min-h-[340px] animate-pulse rounded-2xl bg-white/5" />
+                ) : !article ? (
+                  <p className="py-16 text-center text-sm text-gray-300">No articles yet.</p>
+                ) : (
+                  <FadeIn key={article.id} delay={0.25}>
+                    <article className="flex h-full flex-col">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80">
+                          {getCategoryBySlug(article.slug)}
+                        </span>
+                        <time className="text-xs font-medium text-gray-300">
+                          {new Date(article.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </time>
+                      </div>
+
+                      <h2 className="mt-6 text-2xl font-bold leading-tight tracking-[-0.04em] text-white md:text-[2rem]">
+                        {article.title}
+                      </h2>
+
+                      <p className="mt-4 text-sm leading-7 text-gray-300">{article.excerpt}</p>
+
+                      <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4">
+                        <button
+                          onClick={goPrev}
+                          disabled={!hasPrev}
+                          className={`flex h-11 w-11 items-center justify-center rounded-full border transition-colors ${
+                            hasPrev
+                              ? 'border-white/20 bg-white/5 text-white hover:bg-white/10'
+                              : 'cursor-not-allowed border-white/10 bg-transparent text-white/25'
+                          }`}
+                          aria-label="Previous article"
+                        >
+                          <IconChevronLeft className="h-5 w-5" />
+                        </button>
+
+                        <Link
+                          href={`/news/${article.slug}`}
+                          className="inline-flex items-center gap-2 text-sm font-medium text-white hover:text-gray-200"
+                        >
+                          Read story
+                          <IconChevronRight className="h-4 w-4" />
+                        </Link>
+
+                        <button
+                          onClick={goNext}
+                          disabled={!hasNext}
+                          className={`flex h-11 w-11 items-center justify-center rounded-full border transition-colors ${
+                            hasNext
+                              ? 'border-white/20 bg-white/5 text-white hover:bg-white/10'
+                              : 'cursor-not-allowed border-white/10 bg-transparent text-white/25'
+                          }`}
+                          aria-label="Next article"
+                        >
+                          <IconChevronRight className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </article>
+                  </FadeIn>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Key Metrics */}
       <section className="py-20 px-6 section-gradient">
-        <div className="max-w-[1100px] mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+        <div className="mx-auto max-w-[1100px]">
+          <div className="mb-10 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium uppercase tracking-[0.2em] text-gray-500">Impact</p>
+              <h2 className="mt-3 text-3xl font-bold tracking-[-0.05em] text-gray-950 md:text-4xl">
+                Built for modern power systems.
+              </h2>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-8">
             {t.metrics.map((m, i) => (
-              <FadeIn key={i} delay={i * 0.1}>
-                <div className="card-mk p-6 md:p-8 text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-black mb-1 tabular-nums">
+              <FadeIn key={i} delay={i * 0.08}>
+                <div className="card-mk rounded-[24px] border border-black/5 bg-white p-6 text-center shadow-[0_12px_32px_rgba(17,24,39,0.05)] md:p-8">
+                  <div className="mb-1 text-3xl font-black tracking-[-0.06em] text-gray-950 md:text-4xl">
                     {m.value}
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">{m.label}</div>
+                  <div className="mt-1 text-sm text-gray-500">{m.label}</div>
                 </div>
               </FadeIn>
             ))}
@@ -142,34 +183,49 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Products */}
-      <section id="products" className="py-24 px-6 bg-white scroll-mt-20">
-        <div className="max-w-[1100px] mx-auto">
+      <section id="products" className="scroll-mt-20 bg-white px-6 py-24">
+        <div className="mx-auto max-w-[1100px]">
           <FadeIn>
-            <div className="max-w-2xl mb-14">
-              <p className="text-sm font-medium tracking-[0.2em] uppercase text-black mb-3">
+            <div className="mb-12 max-w-2xl">
+              <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-black/70">
                 {t.products.sectionTag}
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 text-balance">
+              <h2 className="text-balance text-3xl font-bold tracking-[-0.05em] text-gray-900 md:text-4xl">
                 {t.products.sectionTitle}
               </h2>
-              <p className="text-gray-500 leading-relaxed">{t.products.sectionDesc}</p>
+              <p className="mt-4 text-gray-600 leading-relaxed">{t.products.sectionDesc}</p>
             </div>
           </FadeIn>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+          <div className="mb-8 flex flex-wrap gap-2">
+            {['Power Conversion', 'Automotive', 'Industrial', 'SiC', 'AI Infrastructure'].map((chip) => (
+              <span
+                key={chip}
+                className="inline-flex items-center rounded-full border border-black/10 bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-700"
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {t.products.items.map((p, i) => (
               <FadeIn key={i} delay={i * 0.06}>
-                <div className="card-mk p-6 h-full">
-                  <span className="badge-mk bg-gray-100 text-gray-500 mb-3">{p.category}</span>
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <h3 className="text-base font-semibold text-gray-900">{p.title}</h3>
+                <div className="card-mk group h-full rounded-[26px] border border-black/5 bg-gradient-to-br from-white to-[#f9fafb] p-6 transition-all duration-300 hover:border-black/10 hover:bg-white">
+                  <span className="badge-mk mb-4 bg-[#111827] text-white">{p.category}</span>
+                  <div className="mb-3 flex items-center gap-2 flex-wrap">
+                    <h3 className="text-lg font-semibold text-gray-900">{p.title}</h3>
                     {p.tag && (
-                      <span className="badge-mk bg-black/[0.08] text-black text-[10px] px-2 py-0.5">
+                      <span className="rounded-full bg-black/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-700">
                         {p.tag}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 leading-relaxed">{p.desc}</p>
+                  <p className="text-sm leading-relaxed text-gray-600">{p.desc}</p>
+                  <div className="mt-5 flex items-center gap-2 text-sm font-medium text-gray-900">
+                    Learn more
+                    <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+                  </div>
                 </div>
               </FadeIn>
             ))}
@@ -177,49 +233,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* About */}
-      <section id="about" className="py-24 px-6 section-gradient scroll-mt-20">
-        <div className="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+      <section id="about" className="scroll-mt-20 bg-[#f3f4f6] px-6 py-24">
+        <div className="mx-auto grid max-w-[1100px] items-center gap-12 md:grid-cols-2 md:gap-16">
           <div>
             <FadeIn>
-              <span className="badge-mk bg-gray-200 text-gray-600 mb-4">{t.about.sectionTag}</span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 text-balance">
+              <span className="badge-mk mb-4 bg-gray-200 text-gray-700">{t.about.sectionTag}</span>
+              <h2 className="mb-6 text-3xl font-bold tracking-[-0.05em] text-gray-900 md:text-4xl">
                 {t.about.sectionTitle}
               </h2>
-              <p className="text-gray-500 mb-4 leading-relaxed">{t.about.p1}</p>
-              <p className="text-gray-500 leading-relaxed">{t.about.p2}</p>
+              <p className="mb-4 leading-relaxed text-gray-600">{t.about.p1}</p>
+              <p className="leading-relaxed text-gray-600">{t.about.p2}</p>
             </FadeIn>
           </div>
           <FadeIn delay={0.1}>
-            <div className="card-mk aspect-[4/3] flex items-center justify-center p-6">
-              <img
-                src="/magnachip_image.png"
-                alt="MagnaChip"
-                className="w-full h-full object-contain"
-              />
+            <div className="card-mk flex aspect-[4/3] items-center justify-center rounded-[28px] border border-black/5 bg-white p-6">
+              <img src="/magnachip_image.png" alt="MagnaChip" className="h-full w-full object-contain" />
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* News */}
-      <section id="news" className="py-24 px-6 bg-white scroll-mt-20">
-        <div className="max-w-[1100px] mx-auto">
+      <section id="news" className="scroll-mt-20 bg-white px-6 py-24">
+        <div className="mx-auto max-w-[1100px]">
           <FadeIn>
-            <div className="max-w-2xl mb-14">
-              <span className="badge-mk bg-gray-100 text-gray-500 mb-4">{t.news.sectionTag}</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-balance">
+            <div className="mb-14 max-w-2xl">
+              <span className="badge-mk mb-4 bg-gray-100 text-gray-600">{t.news.sectionTag}</span>
+              <h2 className="text-3xl font-bold tracking-[-0.05em] text-gray-900 md:text-4xl">
                 {t.news.sectionTitle}
               </h2>
             </div>
           </FadeIn>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
             {t.news.items.map((n, i) => (
               <FadeIn key={i} delay={i * 0.08}>
-                <article className="card-mk p-6 h-full">
-                  <time className="text-xs text-gray-400">{n.date}</time>
-                  <h3 className="text-base font-semibold text-gray-900 mt-2 mb-2">{n.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{n.desc}</p>
+                <article className="card-mk h-full rounded-[24px] border border-black/5 bg-[#fafafa] p-6">
+                  <time className="text-xs font-medium uppercase tracking-[0.12em] text-gray-400">{n.date}</time>
+                  <h3 className="mt-3 mb-2 text-lg font-semibold text-gray-900">{n.title}</h3>
+                  <p className="text-sm leading-relaxed text-gray-600">{n.desc}</p>
                 </article>
               </FadeIn>
             ))}
@@ -258,6 +308,7 @@ export default function HomePage() {
       </section>
 
       <Footer />
-    </main>
+      </main>
+    </NotionLayout>
   );
 }

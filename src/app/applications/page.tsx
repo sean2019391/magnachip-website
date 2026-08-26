@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import { toSlug } from '@/lib/products';
 import ApplicationsSidebar from '@/components/ApplicationsSidebar';
@@ -35,8 +35,7 @@ export default function ApplicationsPage() {
   const categories = Object.keys(applications);
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title="Applications">
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
@@ -107,6 +106,6 @@ export default function ApplicationsPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }

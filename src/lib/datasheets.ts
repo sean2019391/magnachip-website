@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import type { DatasheetRecord, DatasheetBody } from '@/types/datasheet';
+import { hasRawDatasheetData } from '@/types/datasheet';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'datasheets.json');
@@ -30,11 +31,11 @@ function writeData(datasheets: DatasheetRecord[]): void {
   fs.writeFileSync(DATA_FILE, JSON.stringify(datasheets, null, 2), 'utf-8');
 }
 
-/** Datasheets visible on the public site (published), newest first */
+/** Datasheets visible on the public site (published + raw data), newest first */
 export function getDatasheets(): DatasheetRecord[] {
   const datasheets = readData();
   return datasheets
-    .filter((d) => d.published !== false)
+    .filter((d) => d.published !== false && hasRawDatasheetData(d))
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 }
 
@@ -55,15 +56,18 @@ export function getDatasheetByPartNumber(partNumber: string): DatasheetRecord | 
   const datasheets = readData();
   return (
     datasheets.find(
-      (d) => d.meta.partNumber.toLowerCase() === partNumber.toLowerCase() && d.published !== false,
+      (d) =>
+        d.meta.partNumber.toLowerCase() === partNumber.toLowerCase() &&
+        d.published !== false &&
+        hasRawDatasheetData(d),
     ) ?? null
   );
 }
 
-/** Part numbers that have a published digital datasheet (for product pages) */
+/** Part numbers that have a published digital datasheet with raw data (for product pages) */
 export function getPublishedPartNumbers(): string[] {
   return readData()
-    .filter((d) => d.published !== false)
+    .filter((d) => d.published !== false && hasRawDatasheetData(d))
     .map((d) => d.meta.partNumber);
 }
 
