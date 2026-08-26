@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
+import NotionLayout from '@/components/NotionLayout';
 import Footer from '@/components/Footer';
 import { toSlug } from '@/lib/products';
 import DesignResourcesSidebar from '@/components/DesignResourcesSidebar';
@@ -44,8 +44,7 @@ export default function DesignResourceCategoryPage() {
 
   if (!category || category === 'Overview') {
     return (
-      <main className="min-h-screen">
-        <Navbar />
+      <NotionLayout title="Design Resources">
         <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
           <div className="max-w-[1200px] mx-auto">
             <div className="flex flex-col lg:flex-row gap-10">
@@ -63,15 +62,14 @@ export default function DesignResourceCategoryPage() {
           </div>
         </section>
         <Footer />
-      </main>
+      </NotionLayout>
     );
   }
 
   const items = designResources[category] ?? [];
 
   return (
-    <main className="min-h-screen">
-      <Navbar />
+    <NotionLayout title={category}>
       <section className="pt-32 pb-28 px-6 bg-[#f9fafb] min-h-screen">
         <div className="max-w-[1200px] mx-auto">
           <FadeIn>
@@ -150,6 +148,6 @@ export default function DesignResourceCategoryPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </NotionLayout>
   );
 }
