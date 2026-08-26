@@ -7,11 +7,29 @@ type Props = {
   onRemove?: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onFormat?: (format: 'bold' | 'italic') => void;
 };
 
-export default function BlockToolbar({ onAdd, onRemove, onMoveUp, onMoveDown }: Props) {
+export default function BlockToolbar({ onAdd, onRemove, onMoveUp, onMoveDown, onFormat }: Props) {
   return (
     <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={() => onFormat?.('bold')}
+        title="Bold (Ctrl/Cmd+B)"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50 font-semibold"
+      >
+        B
+      </button>
+      <button
+        type="button"
+        onClick={() => onFormat?.('italic')}
+        title="Italic (Ctrl/Cmd+I)"
+        className="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-50 italic"
+      >
+        i
+      </button>
+
       <button
         type="button"
         onClick={onMoveUp}

@@ -127,7 +127,27 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
     reader.readAsDataURL(file);
   };
 
-  const renderBlockContent = (b: string) => {
+  const applyFormat = (index: number, format: 'bold' | 'italic') => {
+    const wrapper = format === 'bold' ? '**' : '*';
+    const sel = typeof window !== 'undefined' ? window.getSelection()?.toString() : null;
+    const cur = blocks[index] ?? '';
+    if (sel && sel.length > 0) {
+      // naive: replace first occurrence of selected text in block with wrapped version
+      const escaped = sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(escaped);
+      const replaced = cur.replace(re, `${wrapper}${sel}${wrapper}`);
+      updateBlock(index, replaced);
+    } else {
+      // toggle wrapper around whole block
+      if (cur.startsWith(wrapper) && cur.endsWith(wrapper)) {
+        updateBlock(index, cur.slice(wrapper.length, cur.length - wrapper.length));
+      } else {
+        updateBlock(index, `${wrapper}${cur}${wrapper}`);
+      }
+    }
+  };
+
+  const renderBlockContent = (b: string, idx: number) => {
     // detect image markdown pattern: ![alt](url)
     const m = b.match(/^!\[(.*?)\]\((.*?)\)$/);
     if (m) {
@@ -140,7 +160,18 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
         contentEditable
         suppressContentEditableWarning
         className="min-h-[80px] text-sm leading-relaxed outline-none"
-        onInput={(e) => updateBlock(iRef.current!, (e.target as HTMLElement).innerText)}
+        onKeyDown={(e) => {
+          const isMod = e.ctrlKey || e.metaKey;
+          if (isMod && (e.key === 'b' || e.key === 'B')) {
+            e.preventDefault();
+            applyFormat(idx, 'bold');
+          }
+          if (isMod && (e.key === 'i' || e.key === 'I')) {
+            e.preventDefault();
+            applyFormat(idx, 'italic');
+          }
+        }}
+        onInput={(e) => updateBlock(idx, (e.target as HTMLElement).innerText)}
         dangerouslySetInnerHTML={{ __html: (b || '').replace(/\n/g, '<br/>') }}
       />
     );
@@ -192,26 +223,13 @@ export default function EditorCanvas({ initialContent = '', onChange }: Props) {
               onRemove={() => removeBlock(i)}
               onMoveUp={() => moveBlock(i, i - 1)}
               onMoveDown={() => moveBlock(i, i + 1)}
+              onFormat={(fmt) => applyFormat(i, fmt)}
             />
           </div>
           {(() => {
             // render content, but need to capture index for handlers
             iRef.current = i;
-            const m = b.match(/^!\[(.*?)\]\((.*?)\)$/);
-            if (m) {
-              const alt = m[1];
-              const url = m[2];
-              return <img src={url} alt={alt} className="max-w-full rounded" />;
-            }
-            return (
-              <div
-                contentEditable
-                suppressContentEditableWarning
-                className="min-h-[80px] text-sm leading-relaxed outline-none"
-                onInput={(e) => updateBlock(i, (e.target as HTMLElement).innerText)}
-                dangerouslySetInnerHTML={{ __html: (b || '').replace(/\n/g, '<br/>') }}
-              />
-            );
+            return renderBlockContent(b, i);
           })()}
         </div>
       ))}
